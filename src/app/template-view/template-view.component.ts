@@ -1,7 +1,7 @@
+import { switchMap } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router} from '@angular/router';
-import { switchMap } from 'rxjs/operators';
-import { TemplatesService } from '../templates-service';
+import { TemplatesService } from '../services/templates.service';
 import { DocTemplate, TableField, InputField } from '../models';
 
 @Component({
@@ -11,9 +11,9 @@ import { DocTemplate, TableField, InputField } from '../models';
 })
 export class TemplateViewComponent implements OnInit {
   template?: DocTemplate;
-  private id: number = -1;
-  status?: string;
   selectedIndex: number = -1;
+  status?: string; 
+  private id: number = -1;
 
   constructor(private templateServ: TemplatesService, 
     private route: ActivatedRoute, 

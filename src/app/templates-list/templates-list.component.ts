@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { TemplatesService } from '../templates-service';
-import { DocTemplate } from '../models';
 import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { TemplatesService } from '../services/templates.service';
+import { DocTemplate } from '../models';
 
 @Component({
   selector: 'templates-list',
@@ -10,13 +10,14 @@ import { Router } from '@angular/router';
 })
 export class TemplatesListComponent implements OnInit {
   templates: DocTemplate[] = [];
-  types: string[] = ["Документ"];
+  types: Array<[number, string]> = [];
 
   constructor(private templateServ: TemplatesService, private router: Router) {
   }
 
   ngOnInit(): void {
     this.loadTemplates();
+    this.templateServ.getTypes().subscribe(next => this.types);
   }
 
   private loadTemplates(): void {
@@ -34,5 +35,10 @@ export class TemplatesListComponent implements OnInit {
         this.templates = this.templates.filter((t) => t.id !== id);
       }
     );
+  }
+
+  getTemplateType(typeId: number){
+    let type = this.types.find(t => t[0] == typeId)
+    return type ? type[1] : "Без типа";
   }
 }
