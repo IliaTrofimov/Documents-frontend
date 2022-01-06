@@ -1,0 +1,72 @@
+{
+  "templates": [
+    {
+      "id": 14,
+      "name": "Паспорт ИС",
+      "fields": [
+        {
+          "name": "Название",
+          "restrictions": "",
+          "_class": "InputField"
+        },
+        {
+          "name": "Дни работы",
+          "restrictions": "",
+          "_class": "InputField",
+          "restriction": "пн;вт;ср;чт;пт;cб"
+        },
+        {
+          "name": "Хостинг",
+          "restrictions": "",
+          "_class": "InputField",
+          "restriction": "&название_хостинга"
+        },
+        {
+          "name": "Бизнес-владельцы",
+          "columns": [
+            {
+              "name": "Имя",
+              "restrictions": "",
+              "_class": "InputField"
+            },
+            {
+              "name": "Фамилия",
+              "restrictions": "",
+              "_class": "InputField"
+            },
+            {
+              "name": "Отчество",
+              "restrictions": "",
+              "_class": "InputField"
+            }
+          ],
+          "rows": 3,
+          "_class": "TableField"
+        }
+      ],
+      "author": "Вася Васин",
+      "type": "1",
+      "updateDate": "2022-01-04T20:08:45.353Z"
+    },
+    {
+      "id": 21,
+      "name": "Новый шаблон",
+      "fields": [],
+      "author": "",
+      "type": 0,
+      "updateDate": "2022-01-04T20:22:12.214Z"
+    },
+    {
+      "id": 22,
+      "name": "Новый шаблон",
+      "fields": [],
+      "author": "",
+      "type": 0,
+      "updateDate": "2022-01-04T20:51:58.929Z"
+    }
+  ],
+  "templates_types": [
+    "Документ",
+    "Паспорт"
+  ]
+}

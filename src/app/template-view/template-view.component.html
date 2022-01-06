@@ -1,0 +1,107 @@
+<div class="container panel" *ngIf="template != undefined">
+    <h1>Редактирование шаблона</h1>
+    <h6><a [routerLink]="['/templates']">К шаблонам</a></h6>
+    <hr>
+    <table class="table-sm table-borderless">
+        <tr>
+            <td><b>Название</b></td>
+            <td><b>Автор</b></td>
+            <td><b>Тип</b></td>
+            <td><button class="btn btn-success btn-sm" (click)="save()">Сохранить</button></td>
+            <td rowspan="2" valign="middle">
+                <div class="alert alert-success alert-dismissible fade show" role="alert" *ngIf="status == 'ok'">
+                    Шаблон сохранён
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert" *ngIf="status && status != 'ok'">
+                    Не удалось сохранить шаблон
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td><input class="form-control form-control-sm" [(ngModel)]="template.name"/></td>
+            <td><input class="form-control form-control-sm" [(ngModel)]="template.author"/></td>
+            <td><input class="form-control form-control-sm" [(ngModel)]="template.type"/></td>
+            <td><button class="btn btn-danger btn-sm" (click)="delete()">Удалить</button></td>
+        </tr>
+    </table>
+    <hr>
+</div>
+<div class="container panel" *ngIf="template != undefined && template != null">
+    <h4>Список полей ({{template.fields.length}})</h4>
+    <button class="btn btn-success btn-sm" (click)="addField()">Добавить поле</button> или 
+    <button class="btn btn-success btn-sm" (click)="addTable()">Добавить таблицу</button>
+    <br>
+    <br>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Ограничение</th>
+                <th width="120px">Действия</th>
+            </tr>
+        </thead>
+        <tbody> 
+            <tr *ngIf="template.fields.length == 0">
+                <td colspan="4" align="center"><b>Пусто</b></td>
+            </tr>                
+            <tr *ngFor="let f of template.fields; let fi = index">
+                <ng-template [ngIf]="f._class == 'InputField'" [ngIfElse]="table">
+                    <ng-template [ngIf]="selectedIndex == fi" [ngIfElse]="viewing_field">
+                        <td><input class="form-control" placeholder="Название" [(ngModel)]="f.name"/></td>
+                        <td><input class="form-control" placeholder="Ограничения" [(ngModel)]="$any(f).restriction"/></td>
+                    </ng-template>
+                    <ng-template #viewing_field>
+                        <td>{{f.name}}</td>
+                        <td>{{$any(f).restriction}}</td>
+                    </ng-template>    
+                </ng-template>
+                <ng-template #table>
+                    <ng-template [ngIf]="selectedIndex == fi" [ngIfElse]="viewing_table">
+                        <td colspan="2">
+                            <table class="table-sm table-borderless">
+                                <tr>
+                                    <td><b>Название: </b></td>
+                                    <td><b>Кол-во строк: </b></td>
+                                </tr>
+                                <tr>
+                                    <td><input class="form-control form-control-sm" [(ngModel)]="f.name"/></td>
+                                    <td><input type="number" class="form-control form-control-sm" [(ngModel)]="$any(f).rows"/></td>
+                                </tr>
+                            </table>
+                            <br>
+                            <button class="btn btn-success btn-sm" (click)="addTableColumn(fi)"><b>+</b></button>&nbsp;&nbsp;Столбцы таблицы ({{$any(f).columns.length}}):
+                            <table class="table table-sm table-borderless">
+                                <tr *ngFor="let c of $any(f).columns; let ci = index">
+                                    <td><input class="form-control" placeholder="Название" [(ngModel)]="c.name"/></td>
+                                    <td><input class="form-control" placeholder="Ограничения" [(ngModel)]="c.restriction"/></td>
+                                    <td width="50px">
+                                        <button class="btn btn-danger btn-sm" (click)="deleteTableColumn(fi, ci)"><b>✕</b></button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </ng-template>
+                    <ng-template #viewing_table>
+                        <td colspan="2">
+                            {{f.name}} (строк: {{$any(f).rows}}, столбцов: {{$any(f).columns.length}})
+                        </td>
+                    </ng-template>     
+                </ng-template>                 
+                <td>
+                    <button *ngIf="selectedIndex != fi" class="btn btn-info btn-sm" (click)="editField(fi)">✎</button>&nbsp;
+                    <button *ngIf="selectedIndex == fi" class="btn btn-success btn-sm" (click)="editField(fi)"><b>✓</b></button>&nbsp;
+                    <button class="btn btn-danger btn-sm" (click)="deleteField(fi)"><b>✕</b></button>
+                </td>          
+            </tr>
+        </tbody>
+    </table>    
+</div>
+<div class="container panel" *ngIf="template == undefined">
+    Ошибка, не удалось загурзить шаблон
+</div>

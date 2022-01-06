@@ -1,0 +1,35 @@
+<div class="panel">
+    <h2>Шаблоны документов</h2>
+    <h6 class="card-subtitle mb-2 text-muted">
+        Всего {{templates.length}} элементов&emsp;<span class="">
+            <button class="btn btn-success btn-sm" (click)="addTemplate()">Создать</button>
+        </span></h6>
+    <br>
+    <table class="table table-sm">
+        <tbody>
+            <tr *ngFor="let t of templates">
+                <td>
+                    <h5 class="card-title">{{t.name}}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{types[t.type]}}</h6>
+                </td> 
+                <td>
+                    <h6 class="">{{t.author}}</h6>
+                </td>  
+                <td>
+                    <h6 class="">{{t.updateDate | date:'longDate'}}</h6>
+                </td>  
+                <td>
+                    <a class="btn btn-info btn-sm" [routerLink]="['/templates', t.id]">Изменить</a><br>
+                    <button class="btn btn-danger btn-sm" (click)="removeTemplate(t.id)">Удалить</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <div class="card" *ngIf="!templates">
+        <div class="card-body">
+            <h5 class="card-title">Здесь ничего нет</h5>
+            <p class="card-text">Пока не был создан ни один шаблон документа</p>
+        </div>
+    </div>
+</div>
