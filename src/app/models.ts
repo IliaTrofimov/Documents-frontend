@@ -54,5 +54,5 @@ export class DocumentInfo {
 }
 
 export class DocumentData {
-    constructor(public id: number, public data: string[] = []) { }
+    constructor(public id: number, public data: Array<string | string[][]> = []) { }
 }

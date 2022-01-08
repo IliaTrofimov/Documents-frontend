@@ -10,7 +10,7 @@ import { DocTemplate, TableField, InputField, RestrictionTypes, TemplateType } f
   providers: [TemplatesService]
 })
 export class TemplateViewComponent implements OnInit {
-  template?: DocTemplate;
+  template: DocTemplate = new DocTemplate(-1, "");
   templateTypes: TemplateType[] = [];
   selectedIndex: number = -1;
   status?: string; 
@@ -50,15 +50,15 @@ export class TemplateViewComponent implements OnInit {
   }
 
   addField(){
-    this.template?.fields.push(new InputField("Новое поле"));
+    this.selectedIndex = this.template.fields.push(new InputField("")) - 1;
   }
 
   addTable(){
-    this.template?.fields.push(new TableField("Новая таблица", [], 5));
+    this.selectedIndex = this.template.fields.push(new TableField("", [], 5)) - 1;
   }
 
   deleteField(id: number){
-    this.template?.fields.splice(id, 1);
+    this.template.fields.splice(id, 1);
   }
 
   onTableChanged(table: any, index: number){
@@ -67,18 +67,14 @@ export class TemplateViewComponent implements OnInit {
   }
 
   save(){
-    if(this.template)
-      this.templateServ.updateTemplate(this.template).subscribe({
-        error: error => this.status = error,
-        complete: () => this.status = "ok"
-      }
-    );
+    this.templateServ.updateTemplate(this.template).subscribe({
+      error: error => this.status = error,
+      complete: () => this.status = "ok"
+    });
   }
 
   delete(){
-    if(this.template){
-      this.templateServ.deleteTemplate(this.template.id).subscribe();
-      this.router.navigate(["/templates"]);
-    }
+    this.templateServ.deleteTemplate(this.template.id).subscribe();
+    this.router.navigate(["/templates"]);
   }
 }

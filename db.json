@@ -55,21 +55,6 @@
       "updateDate": "2022-01-04T20:08:45.353Z"
     },
     {
-      "id": 21,
-      "name": "Шаблон документа",
-      "fields": [
-        {
-          "name": "Любой текст",
-          "restrictions": "",
-          "restrictType": 0,
-          "_class": "InputField"
-        }
-      ],
-      "author": "Иван Иванов",
-      "type": 0,
-      "updateDate": "2022-01-04T20:22:12.214Z"
-    },
-    {
       "id": 22,
       "name": "Паспорт РФ",
       "fields": [
@@ -102,11 +87,63 @@
           "restrictions": "муж;жен",
           "restrictType": 1,
           "_class": "InputField"
+        },
+        {
+          "name": "Предыдущие документы",
+          "columns": [
+            {
+              "name": "Серия и номер",
+              "restrictions": "",
+              "restrictType": 0,
+              "_class": "InputField"
+            }
+          ],
+          "rows": 5,
+          "_class": "TableField"
+        },
+        {
+          "name": "Серия и номер",
+          "restrictions": "",
+          "restrictType": 0,
+          "_class": "InputField"
         }
       ],
       "author": "Пётр Петров",
       "type": 1,
       "updateDate": "2022-01-06T13:05:53.816Z"
+    },
+    {
+      "id": 23,
+      "name": "Пропуск на завод",
+      "fields": [
+        {
+          "name": "Куда",
+          "restrictions": "",
+          "restrictType": 0,
+          "_class": "InputField"
+        },
+        {
+          "name": "Кому",
+          "restrictions": "",
+          "restrictType": 0,
+          "_class": "InputField"
+        },
+        {
+          "name": "С какого времени",
+          "restrictions": "",
+          "restrictType": 0,
+          "_class": "InputField"
+        },
+        {
+          "name": "По какое время",
+          "restrictions": "",
+          "restrictType": 0,
+          "_class": "InputField"
+        }
+      ],
+      "author": "Михаил Горшенёв",
+      "type": 0,
+      "updateDate": "2022-01-08T14:24:32.538Z"
     }
   ],
   "templates_types": [
@@ -120,15 +157,6 @@
     }
   ],
   "documents": [
-    {
-      "id": 1,
-      "name": "Документ по шаблону 21",
-      "templateId": 21,
-      "author": "Петя",
-      "type": 1,
-      "expireDate": "2010-01-20",
-      "updateDate": "2022-01-06T13:12:01.984Z"
-    },
     {
       "id": 2,
       "name": "Мой паспорт",
@@ -153,7 +181,25 @@
         "08-01-2022",
         "Трофимов Илья Сергеевич",
         "Ташкент",
-        "муж"
+        "муж",
+        [
+          [
+            "0001-123456"
+          ],
+          [
+            ""
+          ],
+          [
+            ""
+          ],
+          [
+            ""
+          ],
+          [
+            ""
+          ]
+        ],
+        "1001-654321"
       ]
     }
   ]

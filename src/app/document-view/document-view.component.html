@@ -41,14 +41,11 @@
             </ng-template>
             <ng-template #table>
                 <td width="200px"><b>{{f.name}}:</b></td>
-                <td>Таблица (зашлушка)</td>
+                <td><doc-table [data]="$any(documentData.data[fi])" [template]="$any(template.fields[fi])"></doc-table></td>
             </ng-template>                          
         </tr>
     </table>    
 </div>
 <div class="container panel" *ngIf="!documentData || !documentInfo || !template">
     Ошибка, не удалось загурзить документ
-    <p *ngIf="!documentData">documentData is Null</p>
-    <p *ngIf="!documentInfo">documentInfo is Null</p>
-    <p *ngIf="!template">template is Null</p>
 </div>

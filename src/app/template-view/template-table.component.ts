@@ -11,15 +11,15 @@ import { InputField, TableField, RestrictionTypes } from '../models';
                 <td><b>Количество строк: </b></td>
             </tr>
             <tr>
-                <td><input class="form-control form-control-sm" [(ngModel)]="table.name" (ngModelChange)="onChange()"/></td>
-                <td><input type="number" class="form-control form-control-sm" [(ngModel)]="table.rows" (ngModelChange)="onChange()"/></td>
+                <td><input class="form-control form-control-sm" placeholder="Название" [(ngModel)]="table.name"/></td>
+                <td><input type="number" class="form-control form-control-sm" [(ngModel)]="table.rows"/></td>
             </tr>
         </table>
         <br>
         <button class="btn badge badge-success" (click)="addTableColumn()"><b>+</b></button>&nbsp;Столбцы таблицы ({{table.columns.length}}):
         <table class="table table-sm table-borderless">
             <tr *ngFor="let c of table.columns; let i = index">
-                <td width="200px"><input class="form-control form-control-sm" placeholder="Название" [(ngModel)]="c.name" (ngModelChange)="onChange()"/></td>
+                <td width="200px"><input class="form-control form-control-sm" placeholder="Название" [(ngModel)]="c.name"/></td>
                 <td><div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <select class="form-control form-control-sm" [(ngModel)]="c.restrictType">
@@ -40,9 +40,8 @@ import { InputField, TableField, RestrictionTypes } from '../models';
   `
 })
 export class TemplateTableComponent{
-    @Input() table: TableField = new TableField("Новая таблица", []); 
+    @Input() table: TableField = new TableField("", []); 
     @Input() editing: boolean = false; 
-    @Output() tableChanged = new EventEmitter<TableField>();
 
     static _restrictionTypes = [
         RestrictionTypes.None,
@@ -56,15 +55,9 @@ export class TemplateTableComponent{
 
     deleteTableColumn(columnId: number){
         this.table.columns.splice(columnId, 1);
-        //this.tableChanged.emit(this.table);
     }
     
     addTableColumn(){
-        this.table.columns.push(new InputField("Новый столбец"));
-        //this.tableChanged.emit(this.table);
+        this.table.columns.push(new InputField(""));
     }
-
-    onChange(){
-        //this.tableChanged.emit(this.table);
-    } 
 }

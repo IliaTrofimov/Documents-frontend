@@ -13,6 +13,7 @@ import { TemplateViewComponent } from './template-view/template-view.component';
 import { DocumentsListComponent } from './documents-list/documents-list.component';
 import { DocumentViewComponent } from './document-view/document-view.component';
 import { TemplateTableComponent } from './template-view/template-table.component';
+import { DocumentTableComponent } from './document-view/document-table.component';
 import { DocumentTypePipe } from './pipes/doctype.pipe';
 import { RestrictionPipe } from './pipes/restriction.pipe';
 
@@ -29,7 +30,8 @@ import { RestrictionPipe } from './pipes/restriction.pipe';
     DocumentViewComponent,
     DocumentTypePipe,
     RestrictionPipe,
-    TemplateTableComponent
+    TemplateTableComponent,
+    DocumentTableComponent
   ],
   imports: [
     BrowserModule,
