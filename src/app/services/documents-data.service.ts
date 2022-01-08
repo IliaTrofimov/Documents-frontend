@@ -18,10 +18,10 @@ export class DocumentsDataService{
         return this.http.get<DocumentData>(`${this.url}/${id}`);
     }
 
-    createDocument(){
+    createDocument(infoId: number = -1){
         const myHeaders = new HttpHeaders().set("Content-Type", "application/json");
         return this.http.post<DocumentData>(this.url, 
-            JSON.stringify(new DocumentData(0, [])), 
+            JSON.stringify(new DocumentData(infoId, [])), 
             {headers: myHeaders}
         )
     }

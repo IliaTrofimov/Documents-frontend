@@ -1,6 +1,5 @@
 <div class="container panel" *ngIf="documentInfo">
     <h1>Редактирование документа</h1>
-    <small>Шаблон   {{documentInfo.templateId}}</small>
     <hr>
     <table class="table-sm table-borderless">
         <tr>
@@ -34,12 +33,11 @@
 </div>
 <div class="container panel" *ngIf="template && documentData">
     <h4>Список полей</h4>
-    <br>
     <table class="table table-bordered">
         <tr *ngFor="let f of template.fields; let fi = index">
             <ng-template [ngIf]="f._class == 'InputField'" [ngIfElse]="table">
                 <td width="200px"><b>{{f.name}}:</b></td>
-                <td><input class="form-control"/></td>
+                <td><input class="form-control" [(ngModel)]="documentData.data[fi]"/></td>
             </ng-template>
             <ng-template #table>
                 <td width="200px"><b>{{f.name}}:</b></td>

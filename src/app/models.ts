@@ -1,7 +1,11 @@
+export enum RestrictionTypes{
+    None, Only, Except, Registry
+}
+
 export class InputField {
     readonly _class: string = "InputField";
 
-    constructor(public name: string, public restrictions: string = "") {}
+    constructor(public name: string, public restrictions: string = "", public restrictType: RestrictionTypes = 0) {}
 }
 
 export class TableField {
@@ -20,6 +24,10 @@ export class DocTemplate {
         public fields: (InputField | TableField)[] = [],
         public author: string = "Неизвестно",
         public type: number = 0) { }
+}
+
+export class TemplateType{
+    constructor(public id: number, public name: string) {}
 }
 
 

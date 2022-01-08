@@ -23,7 +23,7 @@ export class DocumentsListComponent implements OnInit {
   }
   
   addDocument() {
-    this.documentsServ.createDocument().subscribe((t: DocumentInfo) => 
+    this.documentsServ.createDocument(-1).subscribe((t: DocumentInfo) => 
       this.router.navigate(["documents/" + t.id])
     );
   }

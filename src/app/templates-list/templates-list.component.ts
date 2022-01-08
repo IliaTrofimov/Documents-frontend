@@ -1,23 +1,28 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { TemplatesService } from '../services/templates.service';
-import { DocTemplate } from '../models';
+import { DocumentsDataService } from '../services/documents-data.service';
+import { DocumentsInfoService } from '../services/documents-info.service';
+import { DocTemplate, TemplateType, DocumentInfo } from '../models';
 
 @Component({
   selector: 'templates-list',
   templateUrl: 'templates-list.component.html',
-  providers: [TemplatesService]
+  providers: [TemplatesService, DocumentsDataService, DocumentsInfoService]
 })
 export class TemplatesListComponent implements OnInit {
   templates: DocTemplate[] = [];
-  types: Array<[number, string]> = [];
+  templateTypes: TemplateType[] = [];
 
-  constructor(private templateServ: TemplatesService, private router: Router) {
-  }
+  constructor(private templateServ: TemplatesService, 
+    private router: Router,
+    private infoServ: DocumentsInfoService, 
+    private dataServ: DocumentsDataService, ) {
+  } 
 
   ngOnInit(): void {
     this.loadTemplates();
-    this.templateServ.getTypes().subscribe(next => this.types);
+    this.templateServ.getTypes().subscribe(data => this.templateTypes = data);
   }
 
   private loadTemplates(): void {
@@ -38,7 +43,17 @@ export class TemplatesListComponent implements OnInit {
   }
 
   getTemplateType(typeId: number){
-    let type = this.types.find(t => t[0] == typeId)
-    return type ? type[1] : "Без типа";
+    for(let t of this.templateTypes)
+      if(t.id == typeId) return t.name;
+    return "Без типа";
+  }
+
+  createDocument(templateId: number){
+    this.infoServ.createDocument(templateId).subscribe((d: DocumentInfo) => {
+      this.dataServ.createDocument(d.id).subscribe(() => 
+        this.router.navigate(["documents/" + d.id])
+      );
+    });
+    
   }
 }

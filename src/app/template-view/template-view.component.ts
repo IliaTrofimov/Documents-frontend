@@ -2,7 +2,7 @@ import { switchMap } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router} from '@angular/router';
 import { TemplatesService } from '../services/templates.service';
-import { DocTemplate, TableField, InputField } from '../models';
+import { DocTemplate, TableField, InputField, RestrictionTypes, TemplateType } from '../models';
 
 @Component({
   selector: 'app-templates-view',
@@ -11,9 +11,21 @@ import { DocTemplate, TableField, InputField } from '../models';
 })
 export class TemplateViewComponent implements OnInit {
   template?: DocTemplate;
+  templateTypes: TemplateType[] = [];
   selectedIndex: number = -1;
   status?: string; 
   private id: number = -1;
+
+  static _restrictionTypes = [
+    RestrictionTypes.None,
+    RestrictionTypes.Only,
+    RestrictionTypes.Except,
+    RestrictionTypes.Registry
+  ]
+  
+  get restrictionTypes(){
+    return TemplateViewComponent._restrictionTypes;
+  }
 
   constructor(private templateServ: TemplatesService, 
     private route: ActivatedRoute, 
@@ -30,6 +42,7 @@ export class TemplateViewComponent implements OnInit {
         } 
       })
     });
+    this.templateServ.getTypes().subscribe(data => this.templateTypes = data);
   }
 
   editField(id: number){
@@ -48,12 +61,9 @@ export class TemplateViewComponent implements OnInit {
     this.template?.fields.splice(id, 1);
   }
 
-  deleteTableColumn(tableId: number, columnId: number){
-    (this.template?.fields[tableId] as TableField).columns.splice(columnId, 1);
-  }
-
-  addTableColumn(tableId: number){
-    (this.template?.fields[tableId] as TableField).columns.push(new InputField("Новый столбец"));
+  onTableChanged(table: any, index: number){
+    if(this.template)
+      this.template.fields[index] = table;
   }
 
   save(){
@@ -71,5 +81,4 @@ export class TemplateViewComponent implements OnInit {
       this.router.navigate(["/templates"]);
     }
   }
-
 }

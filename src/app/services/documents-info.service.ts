@@ -26,10 +26,10 @@ export class DocumentsInfoService{
         return this.http.get<DocumentInfo>(`${this.url}/${id}`);
     }
 
-    createDocument(){
+    createDocument(templateId: number){
         const myHeaders = new HttpHeaders().set("Content-Type", "application/json");
         return this.http.post<DocumentInfo>(this.url, 
-            JSON.stringify(new DocumentInfo(0, "Новый документ", -1)), 
+            JSON.stringify(new DocumentInfo(0, "Новый документ", templateId)), 
             {headers: myHeaders}
         ); 
     }

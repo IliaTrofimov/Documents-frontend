@@ -1,7 +1,5 @@
 <div class="container panel" *ngIf="template != undefined">
     <h1>Редактирование шаблона</h1>
-    <h6><a [routerLink]="['/templates']">К шаблонам</a></h6>
-    <hr>
     <table class="table-sm table-borderless">
         <tr>
             <td><b>Название</b></td>
@@ -26,7 +24,11 @@
         <tr>
             <td><input class="form-control form-control-sm" [(ngModel)]="template.name"/></td>
             <td><input class="form-control form-control-sm" [(ngModel)]="template.author"/></td>
-            <td><input class="form-control form-control-sm" [(ngModel)]="template.type"/></td>
+            <td>
+                <select class="form-control form-control-sm" [(ngModel)]="template.type">
+                    <option *ngFor="let t of templateTypes" [ngValue]="t.id">{{t.name}}</option>
+                </select>
+            </td>
             <td><button class="btn btn-danger btn-sm" (click)="delete()">Удалить</button></td>
         </tr>
     </table>
@@ -34,14 +36,14 @@
 </div>
 <div class="container panel" *ngIf="template != undefined && template != null">
     <h4>Список полей ({{template.fields.length}})</h4>
-    <button class="btn btn-success btn-sm" (click)="addField()">Добавить поле</button> или 
-    <button class="btn btn-success btn-sm" (click)="addTable()">Добавить таблицу</button>
+    <button class="btn badge badge-success" (click)="addField()">Добавить поле</button> или 
+    <button class="btn badge badge-success" (click)="addTable()">добавить таблицу</button>
     <br>
     <br>
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Название</th>
+                <th>Название поля</th>
                 <th>Ограничение</th>
                 <th width="120px">Действия</th>
             </tr>
@@ -53,46 +55,29 @@
             <tr *ngFor="let f of template.fields; let fi = index">
                 <ng-template [ngIf]="f._class == 'InputField'" [ngIfElse]="table">
                     <ng-template [ngIf]="selectedIndex == fi" [ngIfElse]="viewing_field">
-                        <td><input class="form-control" placeholder="Название" [(ngModel)]="f.name"/></td>
-                        <td><input class="form-control" placeholder="Ограничения" [(ngModel)]="$any(f).restriction"/></td>
+                        <td><input class="form-control form-control-sm" placeholder="Название" [(ngModel)]="f.name"/></td>
+                        <td>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <select class="form-control form-control-sm" [(ngModel)]="$any(f).restrictType">
+                                        <option *ngFor="let r of restrictionTypes" [ngValue]="r">{{r | restriction}}</option>
+                                    </select>
+                                </div>
+                                <input class="form-control form-control-sm" placeholder="Ограничение" [readonly]="$any(f).restrictType == 0" [(ngModel)]="$any(f).restrictions"/>
+                            </div>
+                        </td>
                     </ng-template>
                     <ng-template #viewing_field>
                         <td>{{f.name}}</td>
-                        <td>{{$any(f).restriction}}</td>
+                        <td>
+                            <span class="badge badge-warning badge-pill">{{$any(f).restrictType | restriction}}</span>
+                            {{$any(f).restrictions}}
+                        </td>
                     </ng-template>    
                 </ng-template>
-                <ng-template #table>
-                    <ng-template [ngIf]="selectedIndex == fi" [ngIfElse]="viewing_table">
-                        <td colspan="2">
-                            <table class="table-sm table-borderless">
-                                <tr>
-                                    <td><b>Название: </b></td>
-                                    <td><b>Кол-во строк: </b></td>
-                                </tr>
-                                <tr>
-                                    <td><input class="form-control form-control-sm" [(ngModel)]="f.name"/></td>
-                                    <td><input type="number" class="form-control form-control-sm" [(ngModel)]="$any(f).rows"/></td>
-                                </tr>
-                            </table>
-                            <br>
-                            <button class="btn btn-success btn-sm" (click)="addTableColumn(fi)"><b>+</b></button>&nbsp;&nbsp;Столбцы таблицы ({{$any(f).columns.length}}):
-                            <table class="table table-sm table-borderless">
-                                <tr *ngFor="let c of $any(f).columns; let ci = index">
-                                    <td><input class="form-control" placeholder="Название" [(ngModel)]="c.name"/></td>
-                                    <td><input class="form-control" placeholder="Ограничения" [(ngModel)]="c.restriction"/></td>
-                                    <td width="50px">
-                                        <button class="btn btn-danger btn-sm" (click)="deleteTableColumn(fi, ci)"><b>✕</b></button>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </ng-template>
-                    <ng-template #viewing_table>
-                        <td colspan="2">
-                            {{f.name}} (строк: {{$any(f).rows}}, столбцов: {{$any(f).columns.length}})
-                        </td>
-                    </ng-template>     
-                </ng-template>                 
+                <ng-template #table><td colspan="2">
+                    <table-template [editing]="selectedIndex == fi" [table]="$any(f)"></table-template>
+                </td></ng-template>                 
                 <td>
                     <button *ngIf="selectedIndex != fi" class="btn btn-info btn-sm" (click)="editField(fi)">✎</button>&nbsp;
                     <button *ngIf="selectedIndex == fi" class="btn btn-success btn-sm" (click)="editField(fi)"><b>✓</b></button>&nbsp;

@@ -15,5 +15,4 @@ export class DocumentTypePipe implements PipeTransform {
       default: return "неизвестно";
     }
   }
-
 }

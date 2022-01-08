@@ -1,10 +1,11 @@
-import { switchMap } from 'rxjs/operators';
+import { delay, switchMap } from 'rxjs/operators';
 import { Component, OnInit} from '@angular/core';
 import { ActivatedRoute, Router} from '@angular/router';
 import { DocumentInfo, DocumentData, DocTemplate } from '../models';
 import { DocumentsDataService } from '../services/documents-data.service';
 import { DocumentsInfoService } from '../services/documents-info.service';
 import { TemplatesService } from '../services/templates.service';
+import { Subscriber, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-document-view',
@@ -26,18 +27,48 @@ export class DocumentViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.pipe(switchMap(params => params.getAll('id'))).subscribe(data => this.id = +data);
+    this.loadData();
+    if(this.documentInfo){
+      this.templateServ.getTemplateById(this.documentInfo.templateId).subscribe({
+        next: data => this.template = data,
+      });
+    }   
+  }
+
+  private loadData(){
     this.infoServ.getDocumentById(this.id).subscribe({
-      next: data => this.documentInfo = data,
-    });
+      next: data => {
+        this.documentInfo = data;
+        if(data){
+          this.templateServ.getTemplateById(data.templateId).subscribe({
+            next: data => this.template = data,
+          });
+        }  
+      }
+    }); 
     this.dataServ.getDocumentById(this.id).subscribe({
       next: data => this.documentData = data,
     });
-    this.templateServ.getTemplateById(21).subscribe({
-      next: data => this.template = data,
-    });
+  }
+  save(){
+    if(this.documentInfo && this.documentData){
+      this.dataServ.updateDocument(this.documentData).subscribe({
+        error: error => this.status = error,
+        complete: () => this.status = "ok"
+      });
+      this.infoServ.updateDocument(this.documentInfo).subscribe({
+        error: error => this.status = error,
+        complete: () => this.status = "ok"
+      });
+    }
   }
 
-  save(){}
-  delete(){}
+  delete(){
+    if(this.documentInfo && this.documentData){
+      this.dataServ.deleteDocument(this.documentData.id).subscribe();
+      this.infoServ.deleteDocument(this.documentInfo.id).subscribe();
+      this.router.navigate(["/documents"]);
+    }
+  }
 
 }

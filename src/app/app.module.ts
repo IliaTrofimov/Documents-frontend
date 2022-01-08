@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { FormsModule }   from '@angular/forms';
+import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
@@ -12,7 +12,10 @@ import { TemplatesListComponent } from './templates-list/templates-list.componen
 import { TemplateViewComponent } from './template-view/template-view.component';
 import { DocumentsListComponent } from './documents-list/documents-list.component';
 import { DocumentViewComponent } from './document-view/document-view.component';
+import { TemplateTableComponent } from './template-view/template-table.component';
 import { DocumentTypePipe } from './pipes/doctype.pipe';
+import { RestrictionPipe } from './pipes/restriction.pipe';
+
 
 @NgModule({
   declarations: [
@@ -25,12 +28,15 @@ import { DocumentTypePipe } from './pipes/doctype.pipe';
     DocumentsListComponent,
     DocumentViewComponent,
     DocumentTypePipe,
+    RestrictionPipe,
+    TemplateTableComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

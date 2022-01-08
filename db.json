@@ -7,19 +7,20 @@
         {
           "name": "Название",
           "restrictions": "",
+          "restrictType": 0,
           "_class": "InputField"
         },
         {
           "name": "Дни работы",
-          "restrictions": "",
+          "restrictType": 1,
           "_class": "InputField",
-          "restriction": "пн;вт;ср;чт;пт;cб"
+          "restrictions": "пн;вт;ср;чт;пт;cб"
         },
         {
           "name": "Хостинг",
-          "restrictions": "",
+          "restrictType": 3,
           "_class": "InputField",
-          "restriction": "&название_хостинга"
+          "restrictions": "название_хостинга"
         },
         {
           "name": "Бизнес-владельцы",
@@ -27,17 +28,22 @@
             {
               "name": "Имя",
               "restrictions": "",
+              "restrictType": 0,
               "_class": "InputField"
             },
             {
               "name": "Фамилия",
               "restrictions": "",
-              "_class": "InputField"
+              "type": 0,
+              "_class": "InputField",
+              "restrictType": 0
             },
             {
               "name": "Отчество",
               "restrictions": "",
-              "_class": "InputField"
+              "type": 0,
+              "_class": "InputField",
+              "restrictType": 0
             }
           ],
           "rows": 3,
@@ -45,7 +51,7 @@
         }
       ],
       "author": "Вася Васин",
-      "type": "1",
+      "type": 1,
       "updateDate": "2022-01-04T20:08:45.353Z"
     },
     {
@@ -55,6 +61,7 @@
         {
           "name": "Любой текст",
           "restrictions": "",
+          "restrictType": 0,
           "_class": "InputField"
         }
       ],
@@ -64,38 +71,90 @@
     },
     {
       "id": 22,
-      "name": "Ещё один шаблон",
-      "fields": [],
+      "name": "Паспорт РФ",
+      "fields": [
+        {
+          "name": "Кем выдан",
+          "restrictions": "",
+          "restrictType": 0,
+          "_class": "InputField"
+        },
+        {
+          "name": "Когда выдан",
+          "restrictions": "",
+          "restrictType": 0,
+          "_class": "InputField"
+        },
+        {
+          "name": "ФИО",
+          "restrictions": "",
+          "restrictType": 0,
+          "_class": "InputField"
+        },
+        {
+          "name": "Место рождения",
+          "restrictions": "",
+          "restrictType": 0,
+          "_class": "InputField"
+        },
+        {
+          "name": "Пол",
+          "restrictions": "муж;жен",
+          "restrictType": 1,
+          "_class": "InputField"
+        }
+      ],
       "author": "Пётр Петров",
-      "type": "1",
+      "type": 1,
       "updateDate": "2022-01-06T13:05:53.816Z"
     }
   ],
   "templates_types": [
-    [
-      0,
-      "Документ"
-    ],
-    [
-      1,
-      "Паспорт"
-    ]
+    {
+      "id": 0,
+      "name": "Обычный документ"
+    },
+    {
+      "id": 1,
+      "name": "Паспорт"
+    }
   ],
   "documents": [
     {
       "id": 1,
       "name": "Документ по шаблону 21",
       "templateId": 21,
-      "author": "Неизвестно",
+      "author": "Петя",
       "type": 1,
-      "expireDate": "2023-01-03T19:00:00.000Z",
+      "expireDate": "2010-01-20",
       "updateDate": "2022-01-06T13:12:01.984Z"
+    },
+    {
+      "id": 2,
+      "name": "Мой паспорт",
+      "templateId": 22,
+      "author": "Илья Трофимов",
+      "type": 1,
+      "expireDate": "2026-01-08",
+      "updateDate": "2022-01-08T14:15:36.277Z"
     }
   ],
   "documents_data": [
     {
       "id": 1,
-      "data": ["Текст какой-то"]
+      "data": [
+        "Что-то написано"
+      ]
+    },
+    {
+      "id": 2,
+      "data": [
+        "МВД РФ",
+        "08-01-2022",
+        "Трофимов Илья Сергеевич",
+        "Ташкент",
+        "муж"
+      ]
     }
   ]
 }

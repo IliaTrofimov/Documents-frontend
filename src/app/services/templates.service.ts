@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { DocTemplate } from '../models';
+import { DocTemplate, TemplateType } from '../models';
 import { map } from 'rxjs';
 
 
@@ -14,7 +14,8 @@ export class TemplatesService{
     constructor(private http: HttpClient){}
     
     getTypes(){
-        return this.http.get<Array<[number, string]>>(this.typesUrl);
+        console.log("!!!!")
+        return this.http.get<Array<TemplateType>>(this.typesUrl);
     }
     
     getTemplates(author?: string){
