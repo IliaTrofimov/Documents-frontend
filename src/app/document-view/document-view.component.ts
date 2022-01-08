@@ -27,12 +27,7 @@ export class DocumentViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.pipe(switchMap(params => params.getAll('id'))).subscribe(data => this.id = +data);
-    this.loadData();
-    if(this.documentInfo){
-      this.templateServ.getTemplateById(this.documentInfo.templateId).subscribe({
-        next: data => this.template = data,
-      });
-    }   
+    this.loadData();   
   }
 
   private loadData(){
