@@ -1,15 +1,21 @@
 import { switchMap } from 'rxjs/operators';
 import { Component, OnInit} from '@angular/core';
 import { ActivatedRoute, Router} from '@angular/router';
-import { DocumentInfo, DocumentData, DocTemplate, TableField } from '../models';
+import { DocumentInfo, DocumentData, DocTemplate, TableField, DocTypes, InputField } from '../models';
 import { DocumentsDataService } from '../services/documents-data.service';
 import { DocumentsInfoService } from '../services/documents-info.service';
 import { TemplatesService } from '../services/templates.service';
+import { ValidationService } from '../services/validation.service';
 
 @Component({
   selector: 'app-document-view',
   templateUrl: './document-view.component.html',
-  providers: [DocumentsDataService, DocumentsInfoService, TemplatesService]
+  providers: [
+    DocumentsDataService, 
+    DocumentsInfoService, 
+    TemplatesService, 
+    ValidationService
+  ]
 })
 export class DocumentViewComponent implements OnInit {
   documentInfo: DocumentInfo = new DocumentInfo(-1, "", -1);
@@ -21,6 +27,7 @@ export class DocumentViewComponent implements OnInit {
   constructor(private infoServ: DocumentsInfoService, 
     private dataServ: DocumentsDataService, 
     private templateServ: TemplatesService, 
+    private validationServ: ValidationService,
     private route: ActivatedRoute, 
     private router: Router) { }
 
@@ -33,20 +40,24 @@ export class DocumentViewComponent implements OnInit {
     this.infoServ.getDocumentById(this.id).subscribe({
       next: data => {
         this.documentInfo = data;
+        
         this.templateServ.getTemplateById(data.templateId).subscribe({
-          next: data => this.template = data,
+          next: data => {
+            this.template = data;
+           
+            this.dataServ.getDocumentById(this.id).subscribe({
+              next: data => {
+                this.documentData = data;
+                this.initData();
+              },
+              error: () => this.getErrorPage()
+            });
+          },
           error: () => this.router.navigate(['not-found']) 
         }); 
       },
       error: () => this.getErrorPage()
     }); 
-    this.dataServ.getDocumentById(this.id).subscribe({
-      next: data => {
-        this.documentData = data;
-        this.initData();
-      },
-      error: () => this.getErrorPage()
-    });
   }
 
   private getErrorPage(){
@@ -67,10 +78,15 @@ export class DocumentViewComponent implements OnInit {
           // инициализируем таблицы, чтобы в JSON не было null
           let templateTable = f as TableField;
           let temp = new Array<string[]>(templateTable.rows);
+          
           for(let j = 0; j < templateTable.columns.length; j++)
             temp[j] = new Array<string>(templateTable.columns.length);
+
+          this.documentData.data.push(temp);
         }
       }
+
+      this.dataServ.updateDocument(this.documentData).subscribe();
     }
   }
 
@@ -95,17 +111,17 @@ export class DocumentViewComponent implements OnInit {
     }
   }
 
-  getTableSlice(index: number){
-    let table = this.template.fields[index] as TableField;
-    if(table._class == "TableField")
-      return this.documentData.data.slice(index, index + table.rows * table.columns.length)
-    return []
-  }
-
-  updateTable(data: string[][], index: number){
-    for(let i = 0; i < data.length; i++){
-      for(let j = 0; j < data[i].length; j++)
-        this.documentData.data[index + i*data.length + j];
+  nextType(){
+    if(this.documentInfo.type != DocTypes.Old){
+      this.documentInfo.type++;
+      this.infoServ.updateDocument(this.documentInfo).subscribe({
+        error: error => this.status = error,
+        complete: () => this.status = "ok"
+      });
     }
   }
+
+  validate(input: string, field: InputField){
+    return this.validationServ.checkInput(field, input);
+  } 
 }

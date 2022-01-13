@@ -7,14 +7,13 @@ import { map } from 'rxjs';
 
 @Injectable()
 export class TemplatesService{
-     
+
     private url = environment.apiUrl + "/templates";
     private typesUrl = environment.apiUrl + "/templates_types";
     
     constructor(private http: HttpClient){}
     
     getTypes(){
-        console.log("!!!!")
         return this.http.get<Array<TemplateType>>(this.typesUrl);
     }
     

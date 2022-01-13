@@ -19,7 +19,15 @@ import { InputField, TableField, RestrictionTypes } from '../models';
         <button class="btn badge badge-success" (click)="addTableColumn()"><b>+</b></button>&nbsp;Столбцы таблицы ({{table.columns.length}}):
         <table class="table table-sm table-borderless">
             <tr *ngFor="let c of table.columns; let i = index">
-                <td width="200px"><input class="form-control form-control-sm" placeholder="Название" [(ngModel)]="c.name"/></td>
+                <td width="200px">
+                    <input class="form-control form-control-sm" placeholder="Название" [(ngModel)]="c.name"/>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="flexCheckDefault" [(ngModel)]="c.required">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Обязательное
+                        </label>
+                    </div>
+                </td>
                 <td><div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <select class="form-control form-control-sm" [(ngModel)]="c.restrictType">

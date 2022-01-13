@@ -5,14 +5,17 @@ export enum RestrictionTypes{
 export class InputField {
     readonly _class: string = "InputField";
 
-    constructor(public name: string, public restrictions: string = "", public restrictType: RestrictionTypes = 0) {}
+    constructor(public name: string, 
+        public restrictions: string = "", 
+        public required: boolean = true,
+        public restrictType: RestrictionTypes = 0) { }
 }
 
 export class TableField {
     readonly _class: string = "TableField";
 
     constructor(public name: string, 
-        public columns: InputField[],
+        public columns: InputField[] = [],
         public rows: number = 1) { }
 }
 
@@ -32,7 +35,7 @@ export class TemplateType{
 
 
 export enum DocTypes {
-    InUse, InWork, Old, Signing
+    InWork, Signing, InUse, Old
 }
 
 export class DocumentInfo {
@@ -44,6 +47,7 @@ export class DocumentInfo {
         public registryId?: number,
         public author: string = "Неизвестно",
         public type: DocTypes = DocTypes.InWork,
+        public previousDoc: number = -1,
         public expireDate?: Date) {
         
         if(!this.expireDate)

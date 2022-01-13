@@ -34,4 +34,13 @@ export class DocumentsDataService{
     deleteDocument(id: number){
         return this.http.delete<DocumentData>(`${this.url}/${id}`);
     }
+
+    createNewVersion(document: DocumentData){
+        const myHeaders = new HttpHeaders().set("Content-Type", "application/json");
+        let newDoc = new DocumentData(0, document.data);
+        return this.http.post<DocumentData>(this.url, 
+            JSON.stringify(newDoc), 
+            {headers: myHeaders}
+        )
+    }
 }

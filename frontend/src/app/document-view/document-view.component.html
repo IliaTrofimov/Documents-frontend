@@ -1,12 +1,20 @@
 <div class="container panel" *ngIf="documentInfo">
     <h1>Редактирование документа</h1>
+    <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Действия</button>
+    <div class="dropdown-menu">
+        <button class="dropdown-item btn-sm" (click)="save()">Сохранить</button>
+        <button class="dropdown-item btn-sm" (click)="delete()">Удалить</button>
+    </div>
+    <a class="btn btn-sm" *ngIf="documentInfo.type == 0" (click)="nextType()">Передать на подписание</a>
+    <a class="btn btn-sm" *ngIf="documentInfo.type == 1" (click)="nextType()">Подписать</a>
+    <a class="btn btn-sm" *ngIf="documentInfo.type == 2" (click)="nextType()">Вывести из оборота</a>
     <hr>
     <table class="table-sm table-borderless">
         <tr>
             <td><b>Название</b></td>
             <td><b>Автор</b></td>
             <td><b>Завершение использования</b></td>
-            <td><button class="btn btn-success btn-sm" (click)="save()">Сохранить</button></td>
+            
             <td rowspan="2" valign="middle">
                 <div class="alert alert-success alert-dismissible fade show" role="alert" *ngIf="status == 'ok'">
                     Документ сохранён
@@ -26,7 +34,6 @@
             <td><input class="form-control form-control-sm" [(ngModel)]="documentInfo.name"/></td>
             <td><input class="form-control form-control-sm" [(ngModel)]="documentInfo.author"/></td>
             <td><input type="date" class="form-control form-control-sm" [(ngModel)]="documentInfo.expireDate"/></td>
-            <td><button class="btn btn-danger btn-sm" (click)="delete()">Удалить</button></td>
         </tr>
     </table>
     <hr>
@@ -36,12 +43,20 @@
     <table class="table table-bordered">
         <tr *ngFor="let f of template.fields; let fi = index">
             <ng-template [ngIf]="f._class == 'InputField'" [ngIfElse]="table">
-                <td width="200px"><b>{{f.name}}:</b></td>
-                <td><input class="form-control" [(ngModel)]="documentData.data[fi]"/></td>
+                <td width="200px"><b>{{f.name}}<ng-template [ngIf]="$any(f).required">*</ng-template>:</b></td>
+                <td><input  class="form-control" 
+                        [(ngModel)]="documentData.data[fi]" 
+                        [readOnly]="documentInfo.type != 0"
+                        [required]="$any(f).required"/>
+                </td>
             </ng-template>
             <ng-template #table>
                 <td width="200px"><b>{{f.name}}:</b></td>
-                <td><doc-table [data]="$any(documentData.data[fi])" [template]="$any(template.fields[fi])"></doc-table></td>
+                <td><doc-table 
+                    [data]="$any(documentData.data[fi])" 
+                    [template]="$any(template.fields[fi])"
+                    [readOnly]="documentInfo.type != 0">
+                </doc-table></td>
             </ng-template>                          
         </tr>
     </table>    

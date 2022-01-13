@@ -42,4 +42,14 @@ export class DocumentsInfoService{
     deleteDocument(id: number){
         return this.http.delete<DocumentInfo>(`${this.url}/${id}`);
     }
+
+    createNewVersion(document: DocumentInfo){
+        const myHeaders = new HttpHeaders().set("Content-Type", "application/json");
+        let newDoc = new DocumentInfo(0, document.name + '*', document.templateId, document.registryId, 
+            document.author, DocTypes.InWork, document.id);
+        return this.http.post<DocumentInfo>(this.url, 
+            JSON.stringify(newDoc), 
+            {headers: myHeaders}
+        ); 
+    }
 }
