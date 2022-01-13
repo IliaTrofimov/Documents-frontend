@@ -32,10 +32,11 @@ export class DocumentsListComponent implements OnInit {
   }
 
   removeDocument(id: number) {
-    this.infoServ.deleteDocument(id).subscribe((_) => 
-        this.documents = this.documents.filter((t) => t.id !== id)
+    this.infoServ.deleteDocument(id).subscribe((_) => {
+        this.documents = this.documents.filter((t) => t.id !== id);
+        this.dataServ.deleteDocument(id).subscribe();
+      }
     );
-    this.dataServ.deleteDocument(id).subscribe();
   }
 
   createNewVersion(document: DocumentInfo){
@@ -43,7 +44,7 @@ export class DocumentsListComponent implements OnInit {
       next: info => {
         this.dataServ.getDocumentById(document.id).subscribe({
           next: data => {
-            this.dataServ.createNewVersion(data).subscribe(() => 
+            this.dataServ.createDocument(info.id, data.data).subscribe(() => 
               this.router.navigate(['documents/' + info.id])
             );
           }

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { DocumentData } from '../models';
+import { map } from 'rxjs';
 
 
 @Injectable()
@@ -15,32 +16,28 @@ export class DocumentsDataService{
     }
 
     getDocumentById(id: number){
-        return this.http.get<DocumentData>(`${this.url}/${id}`);
+        return this.http.get<DocumentData>(`${this.url}/${id}`).pipe(
+            map((t: any) => {
+                t.data = (JSON.parse(t.data) as Array<any>);
+                return t;
+            }) 
+        );
     }
 
-    createDocument(infoId: number = -1){
+    createDocument(infoId: number, data?: Array<string | string[][]>){
         const myHeaders = new HttpHeaders().set("Content-Type", "application/json");
         return this.http.post<DocumentData>(this.url, 
-            JSON.stringify(new DocumentData(infoId, [])), 
+            {id: infoId, data: data ?? []}, 
             {headers: myHeaders}
         )
     }
 
     updateDocument(document: DocumentData) {
         const myHeaders = new HttpHeaders().set("Content-Type", "application/json");
-        return this.http.put<DocumentData>(`${this.url}/${document.id}`, JSON.stringify(document), {headers:myHeaders});
+        return this.http.put<DocumentData>(`${this.url}/${document.id}`, document, {headers:myHeaders});
     }
 
     deleteDocument(id: number){
         return this.http.delete<DocumentData>(`${this.url}/${id}`);
-    }
-
-    createNewVersion(document: DocumentData){
-        const myHeaders = new HttpHeaders().set("Content-Type", "application/json");
-        let newDoc = new DocumentData(0, document.data);
-        return this.http.post<DocumentData>(this.url, 
-            JSON.stringify(newDoc), 
-            {headers: myHeaders}
-        )
     }
 }

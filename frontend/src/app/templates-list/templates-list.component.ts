@@ -30,14 +30,14 @@ export class TemplatesListComponent implements OnInit {
   }
   
   addTemplate() {
-    this.templateServ.createTemplate().subscribe((t: DocTemplate) => 
-      this.router.navigate(["templates/" + t.id])
-    );
+    this.templateServ.createTemplate().subscribe((t: DocTemplate) => {
+      this.router.navigate(["templates/" + t.id]);
+    });
   }
 
   removeTemplate(id: number) {
     this.templateServ.deleteTemplate(id).subscribe((_) => {
-        this.templates = this.templates.filter((t) => t.id !== id);
+        this.templates = this.templates.filter(template => template.id !== id);
       }
     );
   }
@@ -49,10 +49,10 @@ export class TemplatesListComponent implements OnInit {
   }
 
   createDocument(templateId: number){
-    this.infoServ.createDocument(templateId).subscribe((d: DocumentInfo) => {
-      this.dataServ.createDocument(d.id).subscribe(() => 
-        this.router.navigate(["documents/" + d.id])
-      );
+    this.infoServ.createDocument(templateId).subscribe((info: DocumentInfo) => {
+      this.dataServ.createDocument(info.id).subscribe((data) => {
+        this.router.navigate(["documents/" + info.id]);
+      });
     });
     
   }

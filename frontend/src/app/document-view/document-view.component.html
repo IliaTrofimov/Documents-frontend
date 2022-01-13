@@ -40,6 +40,7 @@
 </div>
 <div class="container panel" *ngIf="template && documentData">
     <h4>Список полей</h4>
+    <h6 class="text-muted">Шаблон: {{template.name}}</h6>
     <table class="table table-bordered">
         <tr *ngFor="let f of template.fields; let fi = index">
             <ng-template [ngIf]="f._class == 'InputField'" [ngIfElse]="table">

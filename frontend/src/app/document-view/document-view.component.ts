@@ -44,16 +44,13 @@ export class DocumentViewComponent implements OnInit {
         this.templateServ.getTemplateById(data.templateId).subscribe({
           next: data => {
             this.template = data;
-           
             this.dataServ.getDocumentById(this.id).subscribe({
               next: data => {
                 this.documentData = data;
                 this.initData();
-              },
-              error: () => this.getErrorPage()
+              }
             });
-          },
-          error: () => this.router.navigate(['not-found']) 
+          }
         }); 
       },
       error: () => this.getErrorPage()
@@ -70,7 +67,7 @@ export class DocumentViewComponent implements OnInit {
   }
 
   private initData(){
-    if(this.documentData.data.length == 0){
+    if(this.documentData.data == null || this.documentData.data.length == 0){
       for(let f of this.template.fields){
         if(f._class == "InputField")
           this.documentData.data.push("");

@@ -28,7 +28,7 @@
     </table>
     <hr>
 </div>
-<div class="container panel" *ngIf="template != undefined && template != null">
+<div class="container panel" *ngIf="template != undefined && template.fields != undefined">
     <h4>Список полей ({{template.fields.length}})</h4>
     <button class="btn badge badge-success" (click)="addField()">Добавить поле</button> или 
     <button class="btn badge badge-success" (click)="addTable()">добавить таблицу</button>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { DocTemplate, TemplateType } from '../models';
+import { DocTemplate, InputField, TableField, TemplateType } from '../models';
 import { map } from 'rxjs';
 
 
@@ -29,13 +29,17 @@ export class TemplatesService{
     }
     
     getTemplateById(id: number){
-        return this.http.get<DocTemplate>(`${this.url}/${id}`);
+        return this.http.get<DocTemplate>(`${this.url}/${id}`).pipe(
+            map((t: any) => {
+                t.fields = (JSON.parse(t.fields) as Array<InputField | TableField>);
+                return t;
+            }) 
+        );
     }
 
     createTemplate(){
         const myHeaders = new HttpHeaders().set("Content-Type", "application/json");
-        let newTemp = new DocTemplate(0, "Новый шаблон");
-        return this.http.post<DocTemplate>(this.url, JSON.stringify(newTemp), {headers: myHeaders}); 
+        return this.http.post<DocTemplate>(this.url, {}, {headers: myHeaders}); 
     }
 
     updateTemplate(template: DocTemplate) {
