@@ -76,7 +76,7 @@ export class DocumentViewComponent implements OnInit {
           let templateTable = f as TableField;
           let temp = new Array<string[]>(templateTable.rows);
           
-          for(let j = 0; j < templateTable.columns.length; j++)
+          for(let j = 0; j < templateTable.rows; j++)
             temp[j] = new Array<string>(templateTable.columns.length);
 
           this.documentData.data.push(temp);

@@ -227,7 +227,6 @@ app.delete("/documents/:id", async function(req, res){
 app.get("/documents_data/:id", async function(req, res){
     await db.DocumentData.findByPk(req.params.id).then(data => {
         if(data != undefined){
-            console.log(`200 GET /documents_data/${req.params.id}`);
             res.json(data);
         } 
         else{
