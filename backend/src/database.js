@@ -38,15 +38,15 @@ module.exports.Template = sequelize.define("template", {
     },   
     fields: {
         type: Sequelize.TEXT,
-        default: "[]",
+        defaultValue: "[]",
     },
     type: {
         type: Sequelize.INTEGER,
-        default: 0,
+        defaultValue: 0,
     },
     updateDate: {
         type: Sequelize.DATEONLY,
-        default: Sequelize.NOW
+        defaultValue: Sequelize.NOW
     }
 });
 
@@ -69,11 +69,11 @@ module.exports.DocumentInfo = sequelize.define("documents_infos", {
     },
     type: {
         type: Sequelize.INTEGER,
-        default: 0,
+        defaultValue: 0,
     },
     updateDate: {
         type: Sequelize.DATEONLY,
-        default: Sequelize.NOW,
+        defaultValue: Sequelize.NOW,
     },
     expireDate: {
         type: Sequelize.DATEONLY,
@@ -93,7 +93,7 @@ module.exports.DocumentData = sequelize.define("documents_data", {
     },
     data: {
       type: Sequelize.TEXT,
-      default: "[]",
+      defaultValue: "[]",
     },   
 });
 

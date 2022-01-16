@@ -32,6 +32,7 @@ export class TemplatesService{
         return this.http.get<DocTemplate>(`${this.url}/${id}`).pipe(
             map((t: any) => {
                 t.fields = (JSON.parse(t.fields) as Array<InputField | TableField>);
+                console.log("(trap-templates) templatyById: " + JSON.stringify(t, null, 2));
                 return t;
             }) 
         );
