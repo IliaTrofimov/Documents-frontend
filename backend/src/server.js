@@ -114,13 +114,74 @@ app.delete("/documents_data/:id", async function(req, res){
 });
 
 
+// Using associations to get three items joined in one response
+app.get("/document-joined/:id",  async function(req, res){
+    let merged = {
+        info: null,
+        data: null,
+        template: null
+    }
+    await db.DocumentInfo.findByPk(req.params.id).then(info => {
+        if(info == undefined){
+            res.status(404).json(info);
+            console.log(`404 GET /document-joined/${req.params.id}`);
+            return;
+        }
+        merged.info = info;
+
+        info.getDocumentData().then(data => {
+            if(data == undefined){
+                res.status(404).json(data);
+                console.log(`404 GET /document-joined/${req.params.id}`);
+                return;
+            }
+            merged.data = data;
+
+            info.getTemplate().then(temp => {
+                if(temp == undefined){
+                    res.status(404).json(temp);
+                    console.log(`404 GET /document-joined/${req.params.id}`);
+                    return;
+                }
+                merged.template = temp;
+                console.log(`200 GET /document-joined/${req.params.id}`);
+                res.status(200).json(merged);
+            });
+        });
+    }).catch(err => {
+        console.log(`500 GET /document-joined/${req.params.id}:\n${err}`);
+        res.sendStatus(500);
+    })
+})
+
+
 // Test route
 app.get("/", async function(req, res){
-    console.log(`200 GET /`)
-    res.send("<h2>Server is working!</h2>")
+    let info = JSON.stringify(SETTINGS, null, '<br>&nbsp;&nbsp;');
+    let dataCount = await db.DocumentData.count();
+    let infoCount = await db.DocumentInfo.count();
+    let templateCount = await db.Template.count();
+    let typeCount = await db.TemplateType.count();
+
+    console.log(`200 GET /`);
+    res.status(200).send(`
+        <h2>Server is working!</h2>
+        <code>
+            <b>Server info</b>: ${info}<br><br>
+            <b>Stats</b><br>
+            'DocumentData' items: ${dataCount}<br>
+            'DocumentInfo' items: ${infoCount}<br>
+            'Template' items: ${templateCount}<br>
+            'TemplateType' items: ${typeCount}<br>
+        </code>
+    `);
 });
 
+
 app.listen(SETTINGS.host, () => {
+    if (SETTINGS.flush_console) 
+        process.stdout.write('\033c');
+        
     console.log("Server info: " + JSON.stringify(SETTINGS, null, 2));
     console.log("Express server is runnig.");
 });

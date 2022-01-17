@@ -37,7 +37,7 @@ export class DocumentViewComponent implements OnInit {
   }
 
   private loadData(){
-    this.infoServ.getDocumentById(this.id).subscribe({
+    /*this.infoServ.getDocumentById(this.id).subscribe({
       next: data => {
         this.documentInfo = data;
         
@@ -54,7 +54,13 @@ export class DocumentViewComponent implements OnInit {
         }); 
       },
       error: () => this.getErrorPage()
-    }); 
+    });*/
+
+    this.infoServ.getJoinedDocument(this.id).subscribe(merged => {
+      this.documentInfo = merged.info;
+      this.documentData = merged.data;
+      this.template = merged.template;
+    });
   }
 
   private getErrorPage(){
@@ -103,7 +109,7 @@ export class DocumentViewComponent implements OnInit {
   delete(){
     if(this.documentInfo && this.documentData){
       this.dataServ.deleteDocument(this.documentData.id).subscribe();
-      this.infoServ.deleteDocument(this.documentInfo.id).subscribe();
+      //this.infoServ.deleteDocument(this.documentInfo.id).subscribe();
       this.router.navigate(["/documents"]);
     }
   }

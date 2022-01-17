@@ -2,7 +2,8 @@
     "name": "backend",
     "version": "1.0.0",
     "scripts": {
-        "start": "node src/server.js"
+        "start": "node src/server.js",
+        "test": "node src/test.js"
       },
     "dependencies": {
         "express": "^4.17.2",

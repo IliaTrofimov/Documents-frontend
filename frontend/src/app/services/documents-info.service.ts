@@ -1,9 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { DocumentInfo, DocTypes } from '../models';
+import { DocumentInfo, DocTypes, DocumentData, DocTemplate, InputField, TableField } from '../models';
 import { map } from 'rxjs';
 
+interface Merged{
+    info: DocumentInfo;
+    data: DocumentData;
+    template: DocTemplate;
+}
 
 @Injectable()
 export class DocumentsInfoService{
@@ -24,6 +29,16 @@ export class DocumentsInfoService{
 
     getDocumentById(id: number){
         return this.http.get<DocumentInfo>(`${this.url}/${id}`);
+    }
+
+    getJoinedDocument(id: number){
+        return this.http.get<Merged>(`${environment.apiUrl}/document-joined/${id}`).pipe(
+            map((item: any) => {
+                item.data.data = (JSON.parse(item.data.data) as Array<any>);
+                item.template.fields = (JSON.parse(item.template.fields) as Array<InputField | TableField>);
+                return item;
+            })
+        );
     }
 
     createDocument(templateId: number){

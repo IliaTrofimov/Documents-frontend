@@ -3,12 +3,17 @@ module.exports.APIObject = class APIObject{
         this.db_table = db_table;
         this._name = name;
     }
-   
+    
+
+
     async getAll(res){
         await this.db_table.findAll({raw: true}).then(data => {
             console.log(`200 GET ${this._name}`);
             res.status(200).json(data);
-        }).catch(err => this.error(res, err));
+        }).catch(err => {
+            console.log(`500 GET ${this._name}:\n${err}`);
+            res.sendStatus(500);
+        });
     }
     
     async getOne(id, res){

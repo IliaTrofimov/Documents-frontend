@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const SETTINGS = require("../server.config").SETTINGS
 
-sequelize = new Sequelize({
+const sequelize = new Sequelize({
     dialect: SETTINGS.sql_dialect,
     storage: SETTINGS.sql_connection,
     logging: SETTINGS.db_logging,
@@ -9,7 +9,7 @@ sequelize = new Sequelize({
 });
 
 
-module.exports.TemplateType = sequelize.define("template_types", {
+const TemplateType = sequelize.define("template_types", {
     id: {
       type: Sequelize.INTEGER,
       autoIncrement: true,
@@ -22,7 +22,7 @@ module.exports.TemplateType = sequelize.define("template_types", {
     },   
 });
 
-module.exports.Template = sequelize.define("template", {
+const Template = sequelize.define("template", {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -50,7 +50,7 @@ module.exports.Template = sequelize.define("template", {
     }
 });
 
-module.exports.DocumentInfo = sequelize.define("documents_infos", {
+const DocumentInfo = sequelize.define("documents_infos", {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -79,12 +79,12 @@ module.exports.DocumentInfo = sequelize.define("documents_infos", {
         type: Sequelize.DATEONLY,
         allowNull: true
     },
-    templateId: {
+    /*templateId: {
         type: Sequelize.INTEGER,
-    }
+    }*/
 });
 
-module.exports.DocumentData = sequelize.define("documents_data", {
+const DocumentData = sequelize.define("documents_data", {
     id: {
       type: Sequelize.INTEGER,
       autoIncrement: true,
@@ -97,4 +97,28 @@ module.exports.DocumentData = sequelize.define("documents_data", {
     },   
 });
 
+// FK_documentData_documentInfo
+DocumentInfo.hasOne(DocumentData, {
+    foreignKey: 'id',
+    as: 'DocumentData'
+});
+DocumentData.belongsTo(DocumentInfo, {
+    foreignKey: 'id'
+});
+
+
+// FK_documentInfo_template
+Template.hasMany(DocumentInfo);
+DocumentInfo.belongsTo(Template, {
+    foreignKey: 'templateId'
+});
+
+// TODO: FK_template_templateType
+
+
+
 module.exports.sequelize = sequelize;
+module.exports.DocumentData = DocumentData;
+module.exports.DocumentInfo = DocumentInfo;
+module.exports.Template = Template;
+module.exports.TemplateType = TemplateType;
