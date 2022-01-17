@@ -109,7 +109,7 @@ export class DocumentViewComponent implements OnInit {
   delete(){
     if(this.documentInfo && this.documentData){
       this.dataServ.deleteDocument(this.documentData.id).subscribe();
-      //this.infoServ.deleteDocument(this.documentInfo.id).subscribe();
+      this.infoServ.deleteDocument(this.documentInfo.id).subscribe();
       this.router.navigate(["/documents"]);
     }
   }
