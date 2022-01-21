@@ -2,20 +2,12 @@ import { switchMap } from 'rxjs/operators';
 import { Component, OnInit} from '@angular/core';
 import { ActivatedRoute, Router} from '@angular/router';
 import { DocumentInfo, DocumentData, DocTemplate, TableField, DocTypes, InputField } from '../models';
-import { DocumentsDataService } from '../services/documents-data.service';
-import { DocumentsInfoService } from '../services/documents-info.service';
-import { TemplatesService } from '../services/templates.service';
-import { ValidationService } from '../services/validation.service';
+import { DocumentsService } from '../services/documents.service';
 
 @Component({
   selector: 'app-document-view',
   templateUrl: './document-view.component.html',
-  providers: [
-    DocumentsDataService, 
-    DocumentsInfoService, 
-    TemplatesService, 
-    ValidationService
-  ]
+  providers: [DocumentsService]
 })
 export class DocumentViewComponent implements OnInit {
   documentInfo: DocumentInfo = new DocumentInfo(-1, "", -1);
@@ -24,39 +16,18 @@ export class DocumentViewComponent implements OnInit {
   status?: string;
   private id: number = -1;
 
-  constructor(private infoServ: DocumentsInfoService, 
-    private dataServ: DocumentsDataService, 
-    private templateServ: TemplatesService, 
-    private validationServ: ValidationService,
+  constructor(private docServ: DocumentsService,
     private route: ActivatedRoute, 
     private router: Router) { }
 
   ngOnInit(): void {
     this.route.paramMap.pipe(switchMap(params => params.getAll('id'))).subscribe(data => this.id = +data);
     this.loadData();   
+    this.initData();
   }
 
   private loadData(){
-    /*this.infoServ.getDocumentById(this.id).subscribe({
-      next: data => {
-        this.documentInfo = data;
-        
-        this.templateServ.getTemplateById(data.templateId).subscribe({
-          next: data => {
-            this.template = data;
-            this.dataServ.getDocumentById(this.id).subscribe({
-              next: data => {
-                this.documentData = data;
-                this.initData();
-              }
-            });
-          }
-        }); 
-      },
-      error: () => this.getErrorPage()
-    });*/
-
-    this.infoServ.getJoinedDocument(this.id).subscribe(merged => {
+    this.docServ.getJoinedDocument(this.id).subscribe(merged => {
       this.documentInfo = merged.info;
       this.documentData = merged.data;
       this.template = merged.template;
@@ -73,7 +44,7 @@ export class DocumentViewComponent implements OnInit {
   }
 
   private initData(){
-    if(this.documentData.data == null || this.documentData.data.length == 0){
+    if(this.documentData.data == null || this.documentData.data.length < this.template.fields.length){
       for(let f of this.template.fields){
         if(f._class == "InputField")
           this.documentData.data.push("");
@@ -89,35 +60,26 @@ export class DocumentViewComponent implements OnInit {
         }
       }
 
-      this.dataServ.updateDocument(this.documentData).subscribe();
+      this.docServ.updateJoinedDocument(this.documentData, this.documentInfo).subscribe();
     }
   }
 
   save(){
-    if(this.documentInfo && this.documentData){
-      this.dataServ.updateDocument(this.documentData).subscribe({
-        error: error => this.status = error,
-        complete: () => this.status = "ok"
-      });
-      this.infoServ.updateDocument(this.documentInfo).subscribe({
-        error: error => this.status = error,
-        complete: () => this.status = "ok"
-      });
-    }
+    this.docServ.updateJoinedDocument(this.documentData, this.documentInfo).subscribe({
+      error: error => this.status = error,
+      complete: () => this.status = "ok"
+    });
   }
 
   delete(){
-    if(this.documentInfo && this.documentData){
-      this.dataServ.deleteDocument(this.documentData.id).subscribe();
-      this.infoServ.deleteDocument(this.documentInfo.id).subscribe();
-      this.router.navigate(["/documents"]);
-    }
+    this.docServ.deleteJoinedDocument(this.documentData.id).subscribe();
+    this.router.navigate(["/documents"]);
   }
 
   nextType(){
     if(this.documentInfo.type != DocTypes.Old){
       this.documentInfo.type++;
-      this.infoServ.updateDocument(this.documentInfo).subscribe({
+      this.docServ.updateJoinedDocument(this.documentData, this.documentInfo).subscribe({
         error: error => this.status = error,
         complete: () => this.status = "ok"
       });
@@ -125,6 +87,6 @@ export class DocumentViewComponent implements OnInit {
   }
 
   validate(input: string, field: InputField){
-    return this.validationServ.checkInput(field, input);
+    return true;
   } 
 }

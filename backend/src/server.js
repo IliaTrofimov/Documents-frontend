@@ -4,10 +4,13 @@ const SETTINGS = require("../server.config").SETTINGS;
 
 const { TemplatesAPI, TemplateTypesAPI } = require("./api-objects/templates-api");
 const { DocumentsDataAPI, DocumentsInfoAPI } = require("./api-objects/documents-api");
+const JoinedDocumentAPI = require("./api-objects/joinedDoc-api").JoinedDocument;
+
 const templatesAPI = new TemplatesAPI(db.Template);
 const templateTypesAPI = new TemplateTypesAPI(db.TemplateType);
 const documentsDataAPI = new DocumentsDataAPI(db.DocumentData);
 const documentsInfoAPI = new DocumentsInfoAPI(db.DocumentInfo);
+const joinedDocumentAPI = new JoinedDocumentAPI(db.DocumentData, db.DocumentInfo, db.Template);
 
 const app = express();
 const jsonParser = express.json();
@@ -45,7 +48,7 @@ app.delete("/templates_types/:id", async function(req, res){
 
 
 // Templates routing
-app.get("/templates", async function(req, res){
+app.get("/templates", jsonParser, async function(req, res){
     await templatesAPI.getAll(res);
 });
 
@@ -114,44 +117,25 @@ app.delete("/documents_data/:id", async function(req, res){
 });
 
 
-// Using associations to get three items joined in one response
-app.get("/document-joined/:id",  async function(req, res){
-    let merged = {
-        info: null,
-        data: null,
-        template: null
-    }
-    await db.DocumentInfo.findByPk(req.params.id).then(info => {
-        if(info == undefined){
-            res.status(404).json(info);
-            console.log(`404 GET /document-joined/${req.params.id}`);
-            return;
-        }
-        merged.info = info;
+// Routes for joined-documents requests (to edit document data & info at the same time)
+app.get("/document_joined/:id",  async function(req, res){
+    await joinedDocumentAPI.get(req.params.id, res);
+})
 
-        info.getDocumentData().then(data => {
-            if(data == undefined){
-                res.status(404).json(data);
-                console.log(`404 GET /document-joined/${req.params.id}`);
-                return;
-            }
-            merged.data = data;
+app.delete("/document_joined/:id",  async function(req, res){
+    await joinedDocumentAPI.delete(req.params.id, res); 
+})
 
-            info.getTemplate().then(temp => {
-                if(temp == undefined){
-                    res.status(404).json(temp);
-                    console.log(`404 GET /document-joined/${req.params.id}`);
-                    return;
-                }
-                merged.template = temp;
-                console.log(`200 GET /document-joined/${req.params.id}`);
-                res.status(200).json(merged);
-            });
-        });
-    }).catch(err => {
-        console.log(`500 GET /document-joined/${req.params.id}:\n${err}`);
-        res.sendStatus(500);
-    })
+app.put("/document_joined/:id", jsonParser, async function(req, res){
+    req.body.data.data = JSON.stringify(req.body.data.data);
+    await joinedDocumentAPI.put(req.body.info, req.body.data, res); 
+})
+
+app.post("/document_joined/", jsonParser, async function(req, res){
+    if(req.body.previousVerionId)
+        await joinedDocumentAPI.post(req.body.templateId, res, req.body.previousVerionId); 
+    else
+        await joinedDocumentAPI.post(req.body.templateId, res); 
 })
 
 
@@ -176,6 +160,7 @@ app.get("/", async function(req, res){
         </code>
     `);
 });
+
 
 
 app.listen(SETTINGS.host, () => {

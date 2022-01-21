@@ -4,7 +4,6 @@ import { environment } from '../../environments/environment';
 import { DocumentData } from '../models';
 import { map } from 'rxjs';
 
-
 @Injectable()
 export class DocumentsDataService{
     private url = environment.apiUrl + "/documents_data";
