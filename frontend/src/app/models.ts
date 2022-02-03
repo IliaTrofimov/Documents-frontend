@@ -2,13 +2,19 @@ export enum RestrictionTypes{
     None, Only, Except, Registry
 }
 
+export enum InputFieldType{
+    Text, Date, Number, Registry
+}
+
 export class InputField {
     readonly _class: string = "InputField";
 
     constructor(public name: string, 
         public restrictions: string = "", 
         public required: boolean = true,
-        public restrictType: RestrictionTypes = 0) { }
+        public restrictionType: RestrictionTypes = RestrictionTypes.None,
+        public dataType: InputFieldType = InputFieldType.Text,
+        public order: number = 0) { }
 }
 
 export class TableField {
@@ -16,7 +22,8 @@ export class TableField {
 
     constructor(public name: string, 
         public columns: InputField[] = [],
-        public rows: number = 1) { }
+        public rows: number = 1,
+        public order: number = 0) { }
 }
 
 export class DocTemplate {

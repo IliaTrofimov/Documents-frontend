@@ -34,60 +34,15 @@
     <button class="btn badge badge-success" (click)="addTable()">добавить таблицу</button>
     <br>
     <br>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Название поля</th>
-                <th>Ограничение</th>
-                <th width="120px">Действия</th>
-            </tr>
-        </thead>
-        <tbody> 
-            <tr *ngIf="template.fields.length == 0">
-                <td colspan="4" align="center"><b>Пусто</b></td>
-            </tr>                
-            <tr *ngFor="let f of template.fields; let fi = index">
-                <ng-template [ngIf]="f._class == 'InputField'" [ngIfElse]="table">
-                    <ng-template [ngIf]="selectedIndex == fi" [ngIfElse]="viewing_field">
-                        <td><input class="form-control form-control-sm" placeholder="Название" [(ngModel)]="f.name"/></td>
-                        <td>
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <select class="form-control form-control-sm" [(ngModel)]="$any(f).restrictType">
-                                        <option *ngFor="let r of restrictionTypes" [ngValue]="r">{{r | restriction}}</option>
-                                    </select>
-                                </div>
-                                <input class="form-control form-control-sm" placeholder="Ограничение" [readonly]="$any(f).restrictType == 0" [(ngModel)]="$any(f).restrictions"/>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="flexCheckDefault" [(ngModel)]="$any(f).required">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Обязательное
-                                </label>
-                            </div>
-                        </td>
-                    </ng-template>
-                    <ng-template #viewing_field>
-                        <td>{{f.name}}</td>
-                        <td>
-                            <span class="badge badge-warning badge-pill">{{$any(f).restrictType | restriction}}</span>
-                            {{$any(f).restrictions}}<br>
-                            <label *ngIf="$any(f).required"><small>Обязательное поле</small></label>
-                            <label *ngIf="!$any(f).required"><small>Необязательное поле</small></label>
-                        </td>
-                    </ng-template>    
-                </ng-template>
-                <ng-template #table><td colspan="2">
-                    <table-template [editing]="selectedIndex == fi" [table]="$any(f)"></table-template>
-                </td></ng-template>                 
-                <td>
-                    <button *ngIf="selectedIndex != fi" class="btn btn-info btn-sm" (click)="editField(fi)">✎</button>&nbsp;
-                    <button *ngIf="selectedIndex == fi" class="btn btn-success btn-sm" (click)="editField(fi)"><b>✓</b></button>&nbsp;
-                    <button class="btn btn-danger btn-sm" (click)="deleteField(fi)"><b>✕</b></button>
-                </td>          
-            </tr>
-        </tbody>
-    </table>    
+    <ul class="list-group">
+        <li *ngIf="template.fields.length == 0" class="list-group-item">
+            <td colspan="4" align="center"><b>Пусто</b></td>
+        </li>                
+        <li *ngFor="let f of template.fields; let fi = index" class="list-group-item">
+            <field-template *ngIf="f._class == 'InputField'" [field]="$any(f)" (onDelete)="deleteField(fi)" (onChangeOrder)="changeOrder(fi, $event)"></field-template>   
+            <table-template *ngIf="f._class == 'TableField'" [table]="$any(f)" (onDelete)="deleteField(fi)" (onChangeOrder)="changeOrder(fi, $event)"></table-template>      
+        </li>
+    </ul>    
 </div>
 <div class="container panel" *ngIf="template == undefined">
     Ошибка, не удалось загурзить шаблон

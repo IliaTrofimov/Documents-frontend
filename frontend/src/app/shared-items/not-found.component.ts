@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 export class NotFoundComponent {
   requestedId?: number;
   requestedObject?: string;
+
   private querySubscription: Subscription;
 
   constructor(private route: ActivatedRoute){

@@ -1,14 +1,13 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { TemplatesService } from '../services/templates.service';
-import { DocumentsDataService } from '../services/documents-data.service';
-import { DocumentsInfoService } from '../services/documents-info.service';
+import { DocumentsService } from '../services/documents.service';
 import { DocTemplate, TemplateType, DocumentInfo } from '../models';
 
 @Component({
   selector: 'templates-list',
   templateUrl: 'templates-list.component.html',
-  providers: [TemplatesService, DocumentsDataService, DocumentsInfoService]
+  providers: [TemplatesService, DocumentsService]
 })
 export class TemplatesListComponent implements OnInit {
   templates: DocTemplate[] = [];
@@ -16,8 +15,7 @@ export class TemplatesListComponent implements OnInit {
 
   constructor(private templateServ: TemplatesService, 
     private router: Router,
-    private infoServ: DocumentsInfoService, 
-    private dataServ: DocumentsDataService, ) {
+    private documentsServ: DocumentsService) {
   } 
 
   ngOnInit(): void {
@@ -49,11 +47,8 @@ export class TemplatesListComponent implements OnInit {
   }
 
   createDocument(templateId: number){
-    this.infoServ.createDocument(templateId).subscribe((info: DocumentInfo) => {
-      this.dataServ.createDocument(info.id).subscribe((data) => {
-        this.router.navigate(["documents/" + info.id]);
-      });
+    this.documentsServ.createJoinedDocument(templateId).subscribe((id) => {
+        this.router.navigate(["documents/" + id]);
     });
-    
   }
 }

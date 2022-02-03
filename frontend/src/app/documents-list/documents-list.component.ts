@@ -25,8 +25,8 @@ export class DocumentsListComponent implements OnInit {
   }
 
   createNewVersion(document: DocumentInfo){
-    this.docServ.createJoinedDocument(document.templateId, document.id).subscribe(obj =>
-      this.router.navigate(['/documents', obj.info.id])
+    this.docServ.createJoinedDocument(document.templateId, document.id).subscribe(id =>
+      this.router.navigate(['/documents', id])
     );
   }
 

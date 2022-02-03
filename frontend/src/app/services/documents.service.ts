@@ -46,6 +46,6 @@ export class DocumentsService{
     createJoinedDocument(templateId: number, previousVersionId?: number){
         const myHeaders = new HttpHeaders().set("Content-Type", "application/json");
         const body = {templateId: templateId, previousVersionId: previousVersionId};
-        return this.http.post<Merged>(this.joinUrl, JSON.stringify(body),  {headers: myHeaders});
+        return this.http.post<number>(this.joinUrl, JSON.stringify(body),  {headers: myHeaders});
     }
 }

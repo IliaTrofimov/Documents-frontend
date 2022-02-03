@@ -1,55 +1,40 @@
-import { Component, EventEmitter , Output, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { InputField, TableField, RestrictionTypes } from '../models';
 
 @Component({
   selector: 'table-template',
   template: `
-    <ng-template [ngIf]="editing" [ngIfElse]="viewing_table">
-        <table class="table-sm table-borderless">
-            <tr>
-                <td><b>Название таблицы: </b></td>
-                <td><b>Количество строк: </b></td>
-            </tr>
-            <tr>
-                <td><input class="form-control form-control-sm" placeholder="Название" [(ngModel)]="table.name"/></td>
-                <td><input type="number" class="form-control form-control-sm" [(ngModel)]="table.rows"/></td>
-            </tr>
-        </table>
-        <br>
-        <button class="btn badge badge-success" (click)="addTableColumn()"><b>+</b></button>&nbsp;Столбцы таблицы ({{table.columns.length}}):
-        <table class="table table-sm table-borderless">
-            <tr *ngFor="let c of table.columns; let i = index">
-                <td width="200px">
-                    <input class="form-control form-control-sm" placeholder="Название" [(ngModel)]="c.name"/>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="flexCheckDefault" [(ngModel)]="c.required">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Обязательное
-                        </label>
-                    </div>
-                </td>
-                <td><div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <select class="form-control form-control-sm" [(ngModel)]="c.restrictType">
-                            <option *ngFor="let r of restrictionTypes" [ngValue]="  r">{{r | restriction}}</option>
-                        </select>
-                    </div>
-                    <input class="form-control form-control-sm" placeholder="Ограничение" [readonly]="c.restrictType == 0" [(ngModel)]="c.restrictions"/>
-                </div></td>
-                <td width="50px">
-                    <button class="btn btn-danger btn-sm" (click)="deleteTableColumn(i)"><b>✕</b></button>
-                </td>
-            </tr>
-        </table>
-    </ng-template>
-    <ng-template #viewing_table>
-        {{table.name}} <span class="badge badge-secondary">таблица</span>
-    </ng-template>     
+    <table class="table-sm table-borderless">
+        <tr>
+            <td><b>Название таблицы: </b></td>
+            <td><b>Количество строк: </b></td>
+            <td>
+            <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Действия</button>
+            <div class="dropdown-menu">
+                <button class="dropdown-item btn-sm" (click)="changeOrder(-1)">Двигать вверх</button>
+                <button class="dropdown-item btn-sm" (click)="changeOrder(1)">Двигать вниз</button>
+                <button class="dropdown-item btn-sm" (click)="deleteField()">Удалить</button>
+            </div>
+            </td>
+        </tr>
+        <tr>
+            <td><input class="form-control form-control-sm" placeholder="Название" [(ngModel)]="table.name"/></td>
+            <td><input type="number" class="form-control form-control-sm" [(ngModel)]="table.rows"/></td>
+        </tr>
+    </table>
+    <br>
+    <button class="btn badge badge-success" (click)="addColumn()"><b>+</b></button>&nbsp;Столбцы таблицы ({{table.columns.length}}):
+    <table class="table table-sm table-borderless">
+        <tr *ngFor="let c of table.columns; let i = index">
+            <field-template [field]="c" (onDelete)="deleteColumn(i)"></field-template>
+        </tr>
+    </table>   
   `
 })
 export class TemplateTableComponent{
     @Input() table: TableField = new TableField("", []); 
-    @Input() editing: boolean = false; 
+    @Output() onDelete = new EventEmitter();
+    @Output() onChangeOrder = new EventEmitter<number>();
 
     static _restrictionTypes = [
         RestrictionTypes.None,
@@ -61,11 +46,19 @@ export class TemplateTableComponent{
         return TemplateTableComponent._restrictionTypes;
     }
 
-    deleteTableColumn(columnId: number){
+    deleteColumn(columnId: number){
         this.table.columns.splice(columnId, 1);
     }
     
-    addTableColumn(){
+    addColumn(){
         this.table.columns.push(new InputField(""));
+    }
+
+    deleteField(){
+        this.onDelete.emit();
+    }
+
+    changeOrder(delta: number){
+        this.onChangeOrder.emit(delta);
     }
 }

@@ -27,10 +27,13 @@ export class DocumentViewComponent implements OnInit {
   }
 
   private loadData(){
-    this.docServ.getJoinedDocument(this.id).subscribe(merged => {
-      this.documentInfo = merged.info;
-      this.documentData = merged.data;
-      this.template = merged.template;
+    this.docServ.getJoinedDocument(this.id).subscribe({
+      next: (merged) => {
+        this.documentInfo = merged.info;
+        this.documentData = merged.data;
+        this.template = merged.template;
+      },
+      error: (e) => this.getErrorPage()
     });
   }
 

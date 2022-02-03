@@ -2,7 +2,7 @@ import { switchMap } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router} from '@angular/router';
 import { TemplatesService } from '../services/templates.service';
-import { DocTemplate, TableField, InputField, RestrictionTypes, TemplateType } from '../models';
+import { DocTemplate, TableField, InputField, RestrictionTypes, TemplateType, InputFieldType } from '../models';
 
 @Component({
   selector: 'app-templates-view',
@@ -43,6 +43,15 @@ export class TemplateViewComponent implements OnInit {
       })
     });
     this.templateServ.getTypes().subscribe(data => this.templateTypes = data);
+  }
+
+  changeOrder(oldOrder: number, delta: number){
+    let newOrder = oldOrder + delta;
+    if (newOrder < this.template.fields.length - 1 && newOrder >= 0){
+      this.template.fields[newOrder].order = oldOrder;
+      this.template.fields[oldOrder].order = newOrder;
+      [this.template.fields[newOrder], this.template.fields[oldOrder]] = [this.template.fields[oldOrder], this.template.fields[newOrder]];
+    }
   }
 
   editField(id: number){

@@ -56,7 +56,7 @@ module.exports.JoinedDocument = class JoinedDocument {
         await this.info_table.create({templateId: templateId}).then(info => {
             info.createDocumentData({data: data}).then((_data) => {
                 console.log(`200 POST ${this._name}`);
-                res.status(200).json(undefined);
+                res.status(200).json(_data.id);
             }).catch(err => {
                 console.log(`500 POST ${this._name}:\n${err}`);
                 res.sendStatus(500); 

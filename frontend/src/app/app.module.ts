@@ -9,6 +9,7 @@ import { SiteHeaderComponent } from './shared-items/site-header.component';
 import { SiteFooterComponent } from './shared-items/site-footer.component';
 import { NotFoundComponent } from './shared-items/not-found.component';
 import { TemplatesListComponent } from './templates-list/templates-list.component';
+import { TemplateFieldComponent } from './template-view/template-field.component';
 import { TemplateViewComponent } from './template-view/template-view.component';
 import { DocumentsListComponent } from './documents-list/documents-list.component';
 import { DocumentViewComponent } from './document-view/document-view.component';
@@ -16,6 +17,7 @@ import { TemplateTableComponent } from './template-view/template-table.component
 import { DocumentTableComponent } from './document-view/document-table.component';
 import { DocumentTypePipe } from './pipes/doctype.pipe';
 import { RestrictionPipe } from './pipes/restriction.pipe';
+import { FieldTypePipe } from './pipes/field-type.pipe';
 
 
 @NgModule({
@@ -24,12 +26,14 @@ import { RestrictionPipe } from './pipes/restriction.pipe';
     SiteHeaderComponent,
     SiteFooterComponent,
     TemplatesListComponent,
+    TemplateFieldComponent,
     NotFoundComponent,
     TemplateViewComponent,
     DocumentsListComponent,
     DocumentViewComponent,
     DocumentTypePipe,
     RestrictionPipe,
+    FieldTypePipe,
     TemplateTableComponent,
     DocumentTableComponent
   ],
