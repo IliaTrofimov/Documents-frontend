@@ -54,7 +54,6 @@ export class TemplateViewComponent implements OnInit {
     }
   }
 
-
   addField(){
     this.template.fields.push(new InputField("", undefined, true, RestrictionTypes.None, InputFieldType.Text, this.template.fields.length)) - 1;
   }
@@ -80,7 +79,9 @@ export class TemplateViewComponent implements OnInit {
   }
 
   delete(){
-    this.templateServ.deleteTemplate(this.template.id).subscribe();
-    this.router.navigate(["/templates"]);
+    this.templateServ.deleteTemplate(this.template.id).subscribe({
+      next: (data) =>  this.router.navigate(["/templates"]),
+      error: (err) => this.status = err.error
+    });
   }
 }

@@ -12,6 +12,7 @@ import { DocTemplate, TemplateType, DocumentInfo } from '../models';
 export class TemplatesListComponent implements OnInit {
   templates: DocTemplate[] = [];
   templateTypes: TemplateType[] = [];
+  status?: string;
 
   constructor(private templateServ: TemplatesService, 
     private router: Router,
@@ -34,10 +35,10 @@ export class TemplatesListComponent implements OnInit {
   }
 
   removeTemplate(id: number) {
-    this.templateServ.deleteTemplate(id).subscribe((_) => {
-        this.templates = this.templates.filter(template => template.id !== id);
-      }
-    );
+    this.templateServ.deleteTemplate(id).subscribe({
+      next: () => this.templates = this.templates.filter(template => template.id !== id),
+      error: (err) => this.status = err.error 
+    });
   }
 
   getTemplateType(typeId: number){

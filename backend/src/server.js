@@ -67,7 +67,14 @@ app.put("/templates/:id", jsonParser, async function(req, res){
 });
 
 app.delete("/templates/:id", async function(req, res){
-    await templatesAPI.delete(req.params.id, res);
+    let doc = await db.DocumentInfo.findOne({where: {templateId: req.params.id}});
+    if(!doc){
+        await templatesAPI.delete(req.params.id, res);
+    }
+    else{
+        console.log(`409 DELETE template/${req.params.id} (is still in use)`)
+        res.status(409).send("Cannot delete template, some documents are still using it.");
+    }
 });
 
 
