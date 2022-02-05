@@ -9,12 +9,12 @@ import { InputField, TableField, RestrictionTypes } from '../models';
             <td><b>Название таблицы: </b></td>
             <td><b>Количество строк: </b></td>
             <td>
-            <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Действия</button>
-            <div class="dropdown-menu">
-                <button class="dropdown-item btn-sm" (click)="changeOrder(-1)">Двигать вверх</button>
-                <button class="dropdown-item btn-sm" (click)="changeOrder(1)">Двигать вниз</button>
-                <button class="dropdown-item btn-sm" (click)="deleteField()">Удалить</button>
-            </div>
+                <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Действия</button>
+                <div class="dropdown-menu">
+                    <button class="dropdown-item btn-sm" (click)="changeOrder(-1)">Двигать вверх</button>
+                    <button class="dropdown-item btn-sm" (click)="changeOrder(1)">Двигать вниз</button>
+                    <button class="dropdown-item btn-sm" (click)="deleteField()">Удалить</button>
+                </div>
             </td>
         </tr>
         <tr>

@@ -54,16 +54,13 @@ export class TemplateViewComponent implements OnInit {
     }
   }
 
-  editField(id: number){
-    this.selectedIndex = id == this.selectedIndex ? -1 : id; 
-  }
 
   addField(){
-    this.selectedIndex = this.template.fields.push(new InputField("")) - 1;
+    this.template.fields.push(new InputField("", undefined, true, RestrictionTypes.None, InputFieldType.Text, this.template.fields.length)) - 1;
   }
 
   addTable(){
-    this.selectedIndex = this.template.fields.push(new TableField("", [], 5)) - 1;
+    this.template.fields.push(new TableField("", [], 5, this.template.fields.length));
   }
 
   deleteField(id: number){

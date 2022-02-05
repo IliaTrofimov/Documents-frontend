@@ -8,13 +8,13 @@ module.exports.JoinedDocument = class JoinedDocument {
     
     async get(id, res){
         await this.info_table.findByPk(id).then(info => {
-            if(!this._checkData(info, res)) return;
+            if(!this._checkData(info, id, res)) return;
 
             info.getDocumentData().then(data => {
-                if(!this._checkData(data, res)) return;
+                if(!this._checkData(data, id, res)) return;
 
                 info.getTemplate().then(temp => {
-                    if(!this._checkData(temp, res)) return;
+                    if(!this._checkData(temp, id, res)) return;
 
                     console.log(`200 GET ${this._name}/${id}`);
                     res.status(200).json({info: info, data: data, template: temp});
@@ -88,9 +88,9 @@ module.exports.JoinedDocument = class JoinedDocument {
     }
     
     
-    _checkData(data, res) {
+    _checkData(data, id, res) {
         if(!data){
-            res.status(404).json(temp);
+            res.status(404).json(data);
             console.log(`404 GET ${this._name}/${id}`);
             return false;
         }

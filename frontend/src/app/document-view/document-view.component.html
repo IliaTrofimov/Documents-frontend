@@ -14,7 +14,6 @@
             <td><b>Название</b></td>
             <td><b>Автор</b></td>
             <td><b>Завершение использования</b></td>
-            
             <td rowspan="2" valign="middle">
                 <div class="alert alert-success alert-dismissible fade show" role="alert" *ngIf="status == 'ok'">
                     Документ сохранён
@@ -23,7 +22,8 @@
                     </button>
                 </div>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert" *ngIf="status && status != 'ok'">
-                    Не удалось сохранить документ
+                    Не удалось сохранить документ!<br>
+                    {{status}}
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -41,26 +41,25 @@
 <div class="container panel" *ngIf="template && documentData">
     <h4>Список полей</h4>
     <h6 class="text-muted">Шаблон: {{template.name}}</h6>
-    <table class="table table-bordered">
-        <tr *ngFor="let f of template.fields; let fi = index">
-            <ng-template [ngIf]="f._class == 'InputField'" [ngIfElse]="table">
-                <td width="200px"><b>{{f.name}}<ng-template [ngIf]="$any(f).required">*</ng-template>:</b></td>
-                <td><input  class="form-control" 
-                        [(ngModel)]="documentData.data[fi]" 
-                        [readOnly]="documentInfo.type != 0"
-                        [required]="$any(f).required"/>
-                </td>
-            </ng-template>
-            <ng-template #table>
-                <td width="200px"><b>{{f.name}}:</b></td>
-                <td><doc-table 
-                    [data]="$any(documentData.data[fi])" 
-                    [template]="$any(template.fields[fi])"
-                    [readOnly]="documentInfo.type != 0">
-                </doc-table></td>
-            </ng-template>                          
-        </tr>
-    </table>    
+    <ul class="list-group">
+        <li *ngFor="let f of template.fields; let fi = index" class="list-group-item ">
+            <doc-field *ngIf="f._class == 'InputField'" 
+                [field]="$any(f)" 
+                [data]="$any(documentData.data[fi])"
+                [readOnly]="documentInfo.type != 0"
+                (changed)="updateField(fi, $event)">
+            </doc-field>
+            <doc-table *ngIf="f._class == 'TableField'"
+                [data]="$any(documentData.data[fi])" 
+                [table]="$any(template.fields[fi])"
+                [readOnly]="documentInfo.type != 0"
+                (changed)="updateTable(fi, $event)">
+            </doc-table>                     
+        </li>
+    </ul>  
+    <p class="text-muted">
+        Обязательные поля отмечены <span class="badge badge-pill badge-info">*</span>
+    </p>  
 </div>
 <div class="container panel" *ngIf="!documentData || !documentInfo || !template">
     Ошибка, не удалось загурзить документ

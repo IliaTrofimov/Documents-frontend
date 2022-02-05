@@ -14,5 +14,4 @@ export class FieldTypePipe implements PipeTransform {
       case InputFieldType.Number: return "число";
     }
   }
-
 }
