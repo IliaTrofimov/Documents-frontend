@@ -135,7 +135,7 @@ app.post("/document_joined/", jsonParser, async function(req, res){
 
 // Users routing
 app.get("/users/:id", async function(req, res){
-    await usersAPI.getOne(req.params.id, res);
+    await usersAPI.getOneUser(req.params.id, res);
 });
 
 app.get("/users/", async function(req, res){
@@ -145,7 +145,7 @@ app.get("/users/", async function(req, res){
 
 // Signs routing
 app.get("/signs/", jsonParser, async function(req, res){
-    await usersAPI.getOne(req.body.userId, req.body.documentsInfoID, res);
+    await usersAPI.getOneSign(req.body.userId, req.body.documentsInfoID, res);
 });
 
 app.get("/signers/:id", async function(req, res){

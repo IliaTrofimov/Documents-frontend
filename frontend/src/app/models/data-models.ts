@@ -75,3 +75,10 @@ export class User {
 export class Signatory {
     constructor(public userId: number, public documentId: number) { }
 }
+
+export interface Merged{
+    info: DocumentInfo;
+    data?: DocumentData;
+    template?: DocTemplate;
+    user?: User;
+}

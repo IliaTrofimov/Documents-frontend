@@ -17,7 +17,7 @@ class UsersAPI{
         await this.users_table.findByPk(id).then(data => {
             if(!data){
                 console.log(`404 GET ${this.users_url}/${id}`);
-                res.status(404).json(null);
+                return res.status(404).json(null);
             }
             console.log(`200 GET ${this.users_url}/${id}`);
             res.status(200).json(data);
@@ -61,7 +61,7 @@ class UsersAPI{
             res.status(200).json(data != undefined);
         }).catch(err => {
             console.log(`500 GET ${this.signs_url}/?userId=${userId};documentId=${userId}:\n${err}`);
-            res.sendStatus(500);
+            return res.sendStatus(500);
         });
     }
 

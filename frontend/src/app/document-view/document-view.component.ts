@@ -1,9 +1,10 @@
 import { switchMap } from 'rxjs/operators';
 import { Component, OnInit} from '@angular/core';
 import { ActivatedRoute, Router} from '@angular/router';
-import { DocumentInfo, DocumentData, DocTemplate, TableField, DocTypes } from '../models/data-models';
+import { DocumentInfo, DocumentData, DocTemplate, TableField, DocTypes, User } from '../models/data-models';
 import { DocumentsService } from '../services/documents.service';
 import { ValidationService } from '../services/validation.service';
+import { UsersService } from '../services/users.service';
 
 
 @Component({
@@ -14,6 +15,7 @@ import { ValidationService } from '../services/validation.service';
 export class DocumentViewComponent implements OnInit {
   documentInfo: DocumentInfo = new DocumentInfo(-1, "", -1);
   documentData: DocumentData = new DocumentData(-1, []); 
+  documentAuthor: User = new User(-1, "неизвестно");
   template: DocTemplate = new DocTemplate(-1, "");
   status?: string;
   validated: boolean = true;
@@ -21,6 +23,7 @@ export class DocumentViewComponent implements OnInit {
 
   constructor(private docServ: DocumentsService,
     private validServ: ValidationService,
+    private usersServ: UsersService,
     private route: ActivatedRoute, 
     private router: Router) { }
 
@@ -35,6 +38,7 @@ export class DocumentViewComponent implements OnInit {
         this.documentInfo = merged.info;
         this.documentData = merged.data;
         this.template = merged.template;
+        this.usersServ.getUser(this.documentInfo.author).subscribe(user => this.documentAuthor = user);
         this.initData();
       },
       error: (e) => this.getErrorPage()

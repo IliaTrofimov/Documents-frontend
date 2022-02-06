@@ -8,16 +8,12 @@ import { DocumentInfo,
     InputField, 
     TableField, 
     User,
-    Signatory
+    Signatory,
+    Merged
 } from '../models/data-models';
 import { map } from 'rxjs';
+import { UsersService } from './users.service';
 
-
-interface Merged{
-    info: DocumentInfo;
-    data: DocumentData;
-    template?: DocTemplate;
-}
 
 @Injectable()
 export class DocumentsService{
@@ -25,10 +21,19 @@ export class DocumentsService{
     private dataUrl = environment.apiUrl + "/documents_data";
     private joinUrl = environment.apiUrl + "/document_joined";
     
-    constructor(private http: HttpClient){}
+    constructor(private http: HttpClient, private usersServ: UsersService){}
     
     getInfos(type?: DocTypes){
-       return this.http.get<DocumentInfo[]>(this.infoUrl);
+        return this.http.get<any[]>(this.infoUrl).pipe(map(items => {
+            return items.map(info => {
+                info = {info: info, user: null}
+                this.usersServ.getUser(info.info.author).subscribe({
+                    next: user => info.user = user,
+                    error: err => info.user = new User(-1, "неизвестно")
+                });
+                return info;
+            })
+        }));
     }
 
     getJoinedDocument(id: number){

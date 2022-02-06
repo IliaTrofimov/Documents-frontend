@@ -1,6 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { InputField, RestrictionTypes } from '../models/data-models';
-import { EventTransportService } from '../services/event-transport.service';
 import { ValidationService } from '../services/validation.service';
 
 @Component({
@@ -17,8 +16,7 @@ export class DocumentFieldComponent implements OnInit {
   error?: string; 
   unvalidated: string = "";
 
-  constructor(private eventServ: EventTransportService, 
-    private validServ: ValidationService) {}
+  constructor(private validServ: ValidationService) {}
 
   ngOnInit(): void {
     if(this.field.restrictionType == 1 || this.field.restrictionType == 2)
@@ -36,6 +34,7 @@ export class DocumentFieldComponent implements OnInit {
       this.choices.includes(this.unvalidated) && this.field.required){
       this.error = "except";
       this.changed.emit();
+
     }
     else if(this.field.restrictionType == RestrictionTypes.Only && 
       !this.choices.includes(this.unvalidated) && this.field.required){

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DocumentInfo } from '../models/data-models';
+import { DocumentInfo, Merged } from '../models/data-models';
 import { DocumentsService } from '../services/documents.service';
 
 
@@ -10,17 +10,17 @@ import { DocumentsService } from '../services/documents.service';
   providers: [DocumentsService]
 })
 export class DocumentsListComponent implements OnInit {
-  documents: DocumentInfo[] = [];
+  documents: Merged[] = [];
 
   constructor(private docServ: DocumentsService, private router: Router) { }
 
   ngOnInit(): void {
-    this.docServ.getInfos().subscribe((data: DocumentInfo[]) => this.documents = data);
+    this.docServ.getInfos().subscribe((data) => this.documents = data);
   }
   
   removeDocument(id: number) {
     this.docServ.deleteJoinedDocument(id).subscribe((_) => 
-      this.documents = this.documents.filter((t) => t.id !== id)
+      this.documents = this.documents.filter((t) => t.info.id !== id)
     );
   }
 
