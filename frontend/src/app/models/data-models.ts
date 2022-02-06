@@ -32,7 +32,7 @@ export class DocTemplate {
     constructor(public id: number,
         public name: string,
         public fields: (InputField | TableField)[] = [],
-        public author: string = "Неизвестно",
+        public author: number = 0,
         public type: number = 0) { }
 }
 
@@ -52,7 +52,7 @@ export class DocumentInfo {
         public name: string,
         public templateId: number, 
         public registryId?: number,
-        public author: string = "Неизвестно",
+        public author: number = 0,
         public type: DocTypes = DocTypes.InWork,
         public previousDoc: number = -1,
         public expireDate?: Date) {
@@ -66,4 +66,12 @@ export class DocumentInfo {
 
 export class DocumentData {
     constructor(public id: number, public data: Array<string | string[][]> = []) { }
+}
+
+export class User {
+    constructor(public id: number, public name: string) { }
+}
+
+export class Signatory {
+    constructor(public userId: number, public documentId: number) { }
 }

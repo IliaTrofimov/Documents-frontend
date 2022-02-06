@@ -18,14 +18,7 @@ export class TemplatesService{
     }
     
     getTemplates(author?: string){
-        if(!author){
-            return this.http.get<Array<DocTemplate>>(this.url);
-        }
-        else{
-            return this.http.get<Array<DocTemplate>>(this.url).pipe(
-                map(templates => templates.filter(t => t.author == author))
-            );
-        }
+        return this.http.get<Array<DocTemplate>>(this.url);
     }
     
     getTemplateById(id: number){

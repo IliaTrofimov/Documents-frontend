@@ -179,7 +179,9 @@ DocumentInfo.belongsTo(Registry, {
 });
 
 // FK_documentInfo_users
-User.hasMany(DocumentInfo);
+User.hasMany(DocumentInfo, {
+    foreignKey: 'author'
+});
 DocumentInfo.belongsTo(User, {
     foreignKey: 'author'
 });
@@ -189,7 +191,9 @@ User.belongsToMany(DocumentInfo, { through: Signatories });
 DocumentInfo.belongsToMany(User, { through: Signatories, foreignKey: "documentId" });
 
 // FK_template_users
-User.hasMany(Template);
+User.hasMany(Template,  {
+    foreignKey: 'author'
+});
 Template.belongsTo(User, {
     foreignKey: 'author'
 });
@@ -202,7 +206,6 @@ DocumentInfo.belongsTo(Template, {
 
 
 // TODO: FK_template_templateType
-
 
 
 module.exports.sequelize = sequelize;
