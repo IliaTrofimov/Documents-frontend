@@ -44,6 +44,10 @@ const Template = sequelize.define("template", {
         type: Sequelize.INTEGER,
         defaultValue: 0,
     },
+    depricated:{
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+    }, 
     updateDate: {
         type: Sequelize.DATEONLY,
         defaultValue: Sequelize.NOW
@@ -64,9 +68,6 @@ const DocumentInfo = sequelize.define("documents_infos", {
         type: Sequelize.STRING(300),
         defaultValue: "неизвестно"
     },   
-    registryId: {
-        type: Sequelize.INTEGER,
-    },
     type: {
         type: Sequelize.INTEGER,
         defaultValue: 0,
@@ -79,9 +80,6 @@ const DocumentInfo = sequelize.define("documents_infos", {
         type: Sequelize.DATEONLY,
         allowNull: true
     },
-    /*templateId: {
-        type: Sequelize.INTEGER,
-    }*/
 });
 
 const DocumentData = sequelize.define("documents_data", {
@@ -97,6 +95,40 @@ const DocumentData = sequelize.define("documents_data", {
     },   
 });
 
+const Registry = sequelize.define("registry", {
+    id: {
+      type: Sequelize.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false
+    },
+    name: {
+      type: Sequelize.STRING(300)
+    },  
+    owner: {
+        type: Sequelize.STRING(300)
+    }, 
+    org_units: {
+        type: Sequelize.STRING(300)
+    }, 
+    b_criticality: {
+        type: Sequelize.INTEGER
+    }, 
+    lifecycle: {
+        type: Sequelize.STRING(300)
+    },
+    b_portfolio: {
+        type: Sequelize.STRING(300)
+    },
+    it_portfolio: {
+        type: Sequelize.STRING(300)
+    },
+    gxp_relevant: {
+        type: Sequelize.INTEGER
+    },
+});
+
+
 // FK_documentData_documentInfo
 DocumentInfo.hasOne(DocumentData, {
     foreignKey: 'id',
@@ -104,6 +136,12 @@ DocumentInfo.hasOne(DocumentData, {
 });
 DocumentData.belongsTo(DocumentInfo, {
     foreignKey: 'id'
+});
+
+// FK_documentInfo_registry
+Registry.hasMany(DocumentInfo);
+DocumentInfo.belongsTo(Registry, {
+    foreignKey: 'registryId'
 });
 
 
@@ -122,3 +160,4 @@ module.exports.DocumentData = DocumentData;
 module.exports.DocumentInfo = DocumentInfo;
 module.exports.Template = Template;
 module.exports.TemplateType = TemplateType;
+module.exports.Registry = Registry;

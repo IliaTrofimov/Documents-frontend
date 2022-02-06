@@ -1,62 +1,62 @@
 <div class="container panel" *ngIf="documentInfo">
-    <h1>Редактирование документа</h1>
-    <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Действия</button>
+    <h2>Редактирование документа</h2>
+    <button class="btn btn-outline-secondary dropdown-toggle btn-sm badge" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Действия</button>
     <div class="dropdown-menu">
-        <button class="dropdown-item btn-sm" (click)="save()">Сохранить</button>
+        <button class="dropdown-item btn-sm" (click)="previewSave()">Сохранить</button>
         <button class="dropdown-item btn-sm" (click)="delete()">Удалить</button>
     </div>
     <a class="btn btn-sm" *ngIf="documentInfo.type == 0" (click)="nextType()">Передать на подписание</a>
     <a class="btn btn-sm" *ngIf="documentInfo.type == 1" (click)="nextType()">Подписать</a>
     <a class="btn btn-sm" *ngIf="documentInfo.type == 2" (click)="nextType()">Вывести из оборота</a>
     <hr>
-    <table class="table-sm table-borderless">
-        <tr>
-            <td><b>Название</b></td>
-            <td><b>Автор</b></td>
-            <td><b>Завершение использования</b></td>
-            <td rowspan="2" valign="middle">
-                <div class="alert alert-success alert-dismissible fade show" role="alert" *ngIf="status == 'ok'">
-                    Документ сохранён
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert" *ngIf="status && status != 'ok'">
-                    Не удалось сохранить документ!<br>
-                    {{status}}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td><input class="form-control form-control-sm" [(ngModel)]="documentInfo.name"/></td>
-            <td><input class="form-control form-control-sm" [(ngModel)]="documentInfo.author"/></td>
-            <td><input type="date" class="form-control form-control-sm" [(ngModel)]="documentInfo.expireDate"/></td>
-        </tr>
-    </table>
+    <div class="row">
+        <div class="col">
+            <b>Название</b><br>
+            <input class="form-control form-control-sm" [(ngModel)]="documentInfo.name"/>
+        </div>
+        <div class="col">
+            <b>Автор</b><br>
+            <input class="form-control form-control-sm" [(ngModel)]="documentInfo.author"/>
+        </div>
+        <div class="col">
+            <b>Дата истечения</b><br>
+            <input type="date" class="form-control form-control-sm" [(ngModel)]="documentInfo.expireDate"/>
+        </div>
+        <div class="col">
+            <div class="alert alert-success" role="alert" *ngIf="status == 'ok'">
+                Документ сохранён
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div *ngIf="status && status != 'ok'" class="alert alert-danger">
+                Не удалось сохранить<br>
+                {{status}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    </div>
     <hr>
 </div>
 <div class="container panel" *ngIf="template && documentData">
     <h4>Список полей</h4>
     <h6 class="text-muted">Шаблон: {{template.name}}</h6>
-    <ul class="list-group">
-        <li *ngFor="let f of template.fields; let fi = index" class="list-group-item ">
-            <doc-field *ngIf="f._class == 'InputField'" 
-                [field]="$any(f)" 
-                [data]="$any(documentData.data[fi])"
-                [readOnly]="documentInfo.type != 0"
-                (changed)="updateField(fi, $event)">
-            </doc-field>
-            <doc-table *ngIf="f._class == 'TableField'"
-                [data]="$any(documentData.data[fi])" 
-                [table]="$any(template.fields[fi])"
-                [readOnly]="documentInfo.type != 0"
-                (changed)="updateTable(fi, $event)">
-            </doc-table>                     
-        </li>
-    </ul>  
+    <p *ngFor="let f of template.fields; let fi = index">
+        <doc-field *ngIf="f._class == 'InputField'" 
+            [field]="$any(f)" 
+            [data]="$any(documentData.data[fi])"
+            [readOnly]="documentInfo.type != 0"
+            (changed)="updateField(fi, $event)">
+        </doc-field>
+        <doc-table *ngIf="f._class == 'TableField'"
+            [data]="$any(documentData.data[fi])" 
+            [table]="$any(template.fields[fi])"
+            [readOnly]="documentInfo.type != 0">
+        </doc-table>                     
+    </p>
+    <hr>
     <p class="text-muted">
         Обязательные поля отмечены <span class="badge badge-pill badge-info">*</span>
     </p>  

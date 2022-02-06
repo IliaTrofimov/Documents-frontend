@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { InputField, TableField, RestrictionTypes } from '../models';
+import { InputField, TableField, RestrictionTypes } from '../models/data-models';
 
 @Component({
   selector: 'table-template',

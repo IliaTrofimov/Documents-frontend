@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { RestrictionTypes } from '../models';
+import { RestrictionTypes } from '../models/data-models';
 
 @Pipe({
   name: 'restriction'

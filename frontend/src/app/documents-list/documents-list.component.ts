@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DocumentInfo } from '../models';
+import { DocumentInfo } from '../models/data-models';
 import { DocumentsService } from '../services/documents.service';
 
 

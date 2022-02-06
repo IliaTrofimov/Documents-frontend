@@ -4,6 +4,7 @@ const SETTINGS = require("../server.config").SETTINGS;
 
 const { TemplatesAPI, TemplateTypesAPI } = require("./api-objects/templates-api");
 const { DocumentsDataAPI, DocumentsInfoAPI } = require("./api-objects/documents-api");
+const { APIObject } = require("./api-objects/api-object");
 const JoinedDocumentAPI = require("./api-objects/joinedDoc-api").JoinedDocument;
 
 const templatesAPI = new TemplatesAPI(db.Template);
@@ -11,6 +12,7 @@ const templateTypesAPI = new TemplateTypesAPI(db.TemplateType);
 const documentsDataAPI = new DocumentsDataAPI(db.DocumentData);
 const documentsInfoAPI = new DocumentsInfoAPI(db.DocumentInfo);
 const joinedDocumentAPI = new JoinedDocumentAPI(db.DocumentData, db.DocumentInfo, db.Template);
+const registryAPI = new APIObject(db.Registry, "/registry")
 
 const app = express();
 const jsonParser = express.json();
@@ -87,16 +89,8 @@ app.get("/documents/:id", async function(req, res){
     await documentsInfoAPI.getOne(req.params.id, res);
 });
 
-app.post("/documents", jsonParser, async function(req, res){
-    await documentsInfoAPI.post(req.body, res);
-});
-
 app.put("/documents/:id", jsonParser, async function(req, res){
     await documentsInfoAPI.put(req.body, res);
-});
-
-app.delete("/documents/:id", async function(req, res){
-    await documentsInfoAPI.delete(req.params.id, res);
 });
 
 
@@ -109,22 +103,13 @@ app.get("/documents_data/:id", async function(req, res){
     await documentsDataAPI.getOne(req.params.id, res);
 });
 
-app.post("/documents_data", jsonParser, async function(req, res){
-    req.body.data = JSON.stringify(req.body.data);
-    await documentsDataAPI.post(req.body, res);
-});
-
 app.put("/documents_data/:id", jsonParser, async function(req, res){
     req.body.data = JSON.stringify(req.body.data);
     await documentsDataAPI.put(req.body, res);
 });
 
-app.delete("/documents_data/:id", async function(req, res){
-    await documentsDataAPI.delete(req.params.id, res);
-});
 
-
-// Routes for joined-documents requests (to edit document data & info at the same time)
+// Routes for joined-documents requests (to edit document's data & info at the same time)
 app.get("/document_joined/:id",  async function(req, res){
     await joinedDocumentAPI.get(req.params.id, res);
 })
@@ -148,17 +133,17 @@ app.post("/document_joined/", jsonParser, async function(req, res){
 
 // Test route
 app.get("/", async function(req, res){
-    let info = JSON.stringify(SETTINGS, null, '<br>&nbsp;&nbsp;');
+    let info = JSON.stringify(SETTINGS, null, 2);
     let dataCount = await db.DocumentData.count();
     let infoCount = await db.DocumentInfo.count();
     let templateCount = await db.Template.count();
     let typeCount = await db.TemplateType.count();
 
-    console.log(`200 GET /`);
+    console.log(`200 GET / (info page)`);
     res.status(200).send(`
         <h2>Server is working!</h2>
         <code>
-            <b>Server info</b>: ${info}<br><br>
+            <span><b>Server info</b>: <pre>${info}</pre></span><br><br>
             <b>Stats</b><br>
             'DocumentData' items: ${dataCount}<br>
             'DocumentInfo' items: ${infoCount}<br>

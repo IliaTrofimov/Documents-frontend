@@ -1,37 +1,11 @@
-import { Component, Input, Output, EventEmitter, OnInit, SimpleChange, OnChanges, SimpleChanges } from '@angular/core';
-import { InputField, RestrictionTypes } from '../models';
-import { DocumentSavingService } from '../services/document-saving.service';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { InputField, RestrictionTypes } from '../models/data-models';
+import { EventTransportService } from '../services/event-transport.service';
+import { ValidationService } from '../services/validation.service';
 
 @Component({
   selector: 'doc-field',
-  template: `
-  <div class="form-group">
-    <label for="f_{{field.order}}">
-      {{field.order + 1}}. {{field.name}} <span *ngIf="field.required" class="badge badge-pill badge-info">*</span>
-    </label>
-    <textarea *ngIf="field.dataType == 0"
-      id="f_{{field.order}}" 
-      class="form-control {{error ? 'is-invalid' : ''}}"
-      (blur)="validate()"
-      [(ngModel)]="unvalidated">
-    </textarea>
-    <input *ngIf="field.dataType != 0"
-      type="{{field.dataType | inputtype}}"
-      id="f_{{field.order}}" 
-      class="form-control {{error ? 'is-invalid' : ''}}"
-      (blur)="validate()"
-      [(ngModel)]="unvalidated">
-    <div *ngIf="error" class="alert alert-danger">
-      <div *ngIf="error == 'required'">Обязательное поле!</div>
-      <div *ngIf="error == 'except'">
-        Поле не может принимать значения из списка: {{choices}}
-      </div>
-      <div *ngIf="error == 'only'">
-        Поле должно принимать значение из списка:  {{choices}}
-      </div>
-    </div>
-  </div>                    
-  `
+  templateUrl: './document-field.component.html'          
 })
 export class DocumentFieldComponent implements OnInit {
   @Input() field: InputField = new InputField("");
@@ -43,16 +17,17 @@ export class DocumentFieldComponent implements OnInit {
   error?: string; 
   unvalidated: string = "";
 
-  constructor(private savingServ: DocumentSavingService) {}
+  constructor(private eventServ: EventTransportService, 
+    private validServ: ValidationService) {}
 
   ngOnInit(): void {
     if(this.field.restrictionType == 1 || this.field.restrictionType == 2)
       this.choices = this.field.restrictions.split(';');
     this.unvalidated = this.data;
-    this.savingServ.onSaving(() => this.validate());
+    this.validServ.on(() => this.validate())
   }
 
-  validate() {
+  validate(): boolean {
     if (this.unvalidated == "" && this.field.required){
       this.error = "required";
       this.changed.emit();
@@ -70,6 +45,8 @@ export class DocumentFieldComponent implements OnInit {
     else{
       this.error = undefined;
       this.changed.emit(this.unvalidated);
+      return true;
     }
+    return false;
   }
 }

@@ -50,6 +50,11 @@ module.exports.JoinedDocument = class JoinedDocument {
                 return res.status(400).send(`Cannot create document with given template's id (${templateId}), 
                                             such template does not exist!`);
             }
+            else if(temp.depricated == 1){
+                console.log(`409 POST ${this._name}`);
+                return res.status(400).send(`Cannot create document with given template's id (${templateId}), 
+                                            template is depricated!`);
+            }
         })
 
         let data = prevVersionId ? await this.data_table.findByPk(prevVersionId) : "[]";

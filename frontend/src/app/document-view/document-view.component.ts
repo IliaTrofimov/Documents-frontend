@@ -1,15 +1,15 @@
 import { switchMap } from 'rxjs/operators';
 import { Component, OnInit} from '@angular/core';
 import { ActivatedRoute, Router} from '@angular/router';
-import { DocumentInfo, DocumentData, DocTemplate, TableField, DocTypes } from '../models';
+import { DocumentInfo, DocumentData, DocTemplate, TableField, DocTypes } from '../models/data-models';
 import { DocumentsService } from '../services/documents.service';
-import { DocumentSavingService } from '../services/document-saving.service';
+import { ValidationService } from '../services/validation.service';
 
 
 @Component({
   selector: 'app-document-view',
   templateUrl: './document-view.component.html',
-  providers: [DocumentsService, DocumentSavingService]
+  providers: [DocumentsService,]
 })
 export class DocumentViewComponent implements OnInit {
   documentInfo: DocumentInfo = new DocumentInfo(-1, "", -1);
@@ -17,11 +17,10 @@ export class DocumentViewComponent implements OnInit {
   template: DocTemplate = new DocTemplate(-1, "");
   status?: string;
   validated: boolean = true;
-  saving: boolean = false;
   private id: number = -1;
 
   constructor(private docServ: DocumentsService,
-    private savingServ: DocumentSavingService,
+    private validServ: ValidationService,
     private route: ActivatedRoute, 
     private router: Router) { }
 
@@ -76,22 +75,25 @@ export class DocumentViewComponent implements OnInit {
   }
 
   updateField(index: number, data: string|undefined){
-    if(data == undefined){
-      this.validated = false;
-    }
-    else{
-      this.validated = true;
+    if(data)
       this.documentData.data[index] = data;
-    }
   }
 
-  updateTable(index: number, data: string|undefined){
-    this.validated = data != undefined;
+  previewSave(){
+    // Сбрасываем validated, т.к. можно узнать только о провале валидации.
+    this.validated = true;
+    let listner = this.validServ.start().subscribe({
+      complete: () => this.validated = false
+    })
+ 
+    // Ждём некоторое время окончания валидации
+    new Promise(resolve => setTimeout(resolve, 200)).then(() => {
+      this.save();
+      listner.unsubscribe();
+    })
   }
 
   save(){
-    this.savingServ.startSaving();
-
     if(this.validated){
       this.docServ.updateJoinedDocument(this.documentData, this.documentInfo).subscribe({
         error: error => this.status = error,

@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { InputFieldType } from '../models';
+import { InputFieldType } from '../models/data-models';
 
 @Pipe({
   name: 'fieldtype'

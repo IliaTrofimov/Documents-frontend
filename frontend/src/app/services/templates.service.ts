@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { DocTemplate, InputField, TableField, TemplateType } from '../models';
+import { DocTemplate, InputField, TableField, TemplateType } from '../models/data-models';
 import { map } from 'rxjs';
 
 

@@ -1,0 +1,30 @@
+<label>{{table.order + 1}}. {{table.name}}</label>
+<table class="table table-bordered table-sm">
+    <thead >
+        <tr>
+            <th *ngFor="let col of table.columns">
+            {{col.name}} <span *ngIf="col.required" class="badge badge-pill badge-info">*</span>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let row of data; let r = index">
+            <td *ngFor="let col of row; let c = index; trackBy:trackByFn">
+            <input type="{{table.columns[c].dataType | inputtype}}"
+                id="c_{{r}}_{{c}}" 
+                class="form-control form-control-sm {{error && error[1] == r && error[2] == c ? 'is-invalid' : ''}}"
+                (blur)="validate(r, c)"
+                [(ngModel)]="data[r][c]">
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div *ngIf="error" class="alert alert-danger">
+    <div *ngIf="error[0] == 'required'">Ячейка [{{error[1] + 1}}, {{error[2] + 1}}] обязательна к заполнению!</div>
+    <div *ngIf="error[0] == 'except'">
+        Ячейка [{{error[1] + 1}}, {{error[2] + 1}}] не может принимать значения из списка: {{choices}}
+    </div>
+    <div *ngIf="error[0] == 'only'">
+        Ячейка [{{error[1] + 1}}, {{error[2] + 1}}] должно принимать значение из списка: {{choices}}
+    </div>
+</div>
