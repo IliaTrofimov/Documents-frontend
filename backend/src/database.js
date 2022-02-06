@@ -33,8 +33,8 @@ const Template = sequelize.define("template", {
         defaultValue: "новый шаблон"
     },
     author: {
-        type: Sequelize.STRING(300),
-        defaultValue: "неизвестно"
+        type: Sequelize.INTEGER,
+        allowNull: true
     },   
     fields: {
         type: Sequelize.TEXT,
@@ -65,8 +65,8 @@ const DocumentInfo = sequelize.define("documents_infos", {
         defaultValue: "новый документ"
     },
     author: {
-        type: Sequelize.STRING(300),
-        defaultValue: "неизвестно"
+        type: Sequelize.INTEGER,
+        allowNull: true
     },   
     type: {
         type: Sequelize.INTEGER,
@@ -128,6 +128,40 @@ const Registry = sequelize.define("registry", {
     },
 });
 
+const User = sequelize.define("users", {
+    id: {
+      type: Sequelize.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false
+    },
+    name: {
+      type: Sequelize.STRING(300)
+    }
+});
+
+const Signatories = sequelize.define('signatories', {
+    documentId: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        references: {
+          model: DocumentInfo, 
+          key: 'id'
+        },
+      },
+    userId: {
+      type: Sequelize.INTEGER,
+      references: {
+        model: User, 
+        key: 'id'
+      }
+    },
+    signed: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+    }
+  });
+
 
 // FK_documentData_documentInfo
 DocumentInfo.hasOne(DocumentData, {
@@ -144,12 +178,28 @@ DocumentInfo.belongsTo(Registry, {
     foreignKey: 'registryId'
 });
 
+// FK_documentInfo_users
+User.hasMany(DocumentInfo);
+DocumentInfo.belongsTo(User, {
+    foreignKey: 'author'
+});
+
+// FK_signatories (many-to-many)
+User.belongsToMany(DocumentInfo, { through: Signatories });
+DocumentInfo.belongsToMany(User, { through: Signatories, foreignKey: "documentId" });
+
+// FK_template_users
+User.hasMany(Template);
+Template.belongsTo(User, {
+    foreignKey: 'author'
+});
 
 // FK_documentInfo_template
 Template.hasMany(DocumentInfo);
 DocumentInfo.belongsTo(Template, {
     foreignKey: 'templateId'
 });
+
 
 // TODO: FK_template_templateType
 
@@ -161,3 +211,5 @@ module.exports.DocumentInfo = DocumentInfo;
 module.exports.Template = Template;
 module.exports.TemplateType = TemplateType;
 module.exports.Registry = Registry;
+module.exports.User = User;
+module.exports.Signatories = Signatories;

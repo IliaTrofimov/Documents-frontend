@@ -5,6 +5,7 @@ const SETTINGS = require("../server.config").SETTINGS;
 const { TemplatesAPI, TemplateTypesAPI } = require("./api-objects/templates-api");
 const { DocumentsDataAPI, DocumentsInfoAPI } = require("./api-objects/documents-api");
 const { APIObject } = require("./api-objects/api-object");
+const { UsersAPI, SignsAPI } = require("./api-objects/users-api");
 const JoinedDocumentAPI = require("./api-objects/joinedDoc-api").JoinedDocument;
 
 const templatesAPI = new TemplatesAPI(db.Template);
@@ -12,7 +13,8 @@ const templateTypesAPI = new TemplateTypesAPI(db.TemplateType);
 const documentsDataAPI = new DocumentsDataAPI(db.DocumentData);
 const documentsInfoAPI = new DocumentsInfoAPI(db.DocumentInfo);
 const joinedDocumentAPI = new JoinedDocumentAPI(db.DocumentData, db.DocumentInfo, db.Template);
-const registryAPI = new APIObject(db.Registry, "/registry")
+const registryAPI = new APIObject(db.Registry, "/registry");
+const usersAPI = new UsersAPI(db.User, db.Signatories, "/users", "/signs");
 
 const app = express();
 const jsonParser = express.json();
@@ -131,24 +133,55 @@ app.post("/document_joined/", jsonParser, async function(req, res){
 })
 
 
+// Users routing
+app.get("/users/:id", async function(req, res){
+    await usersAPI.getOne(req.params.id, res);
+});
+
+app.get("/users/", async function(req, res){
+    await usersAPI.search(req.query.name, res);
+});
+
+
+// Signs routing
+app.get("/signs/", jsonParser, async function(req, res){
+    await usersAPI.getOne(req.body.userId, req.body.documentsInfoID, res);
+});
+
+app.get("/signers/:id", async function(req, res){
+    await usersAPI.getSigners(req.params.id, res);
+});
+
+app.post("/signs/", jsonParser, async function(req, res){
+    await usersAPI.post(req.body.userId, req.body.documentsInfoID, res);
+});
+
+app.put("/signs/", jsonParser, async function(req, res){
+    await usersAPI.put(req.body.userId, req.body.documentsID, req.body.signed, res);
+});
+
+app.delete("/signs/", jsonParser, async function(req, res){
+    await usersAPI.delete(req.body.userId, req.body.documentsID, res);
+});
+
+
 // Test route
 app.get("/", async function(req, res){
     let info = JSON.stringify(SETTINGS, null, 2);
-    let dataCount = await db.DocumentData.count();
-    let infoCount = await db.DocumentInfo.count();
-    let templateCount = await db.Template.count();
-    let typeCount = await db.TemplateType.count();
 
     console.log(`200 GET / (info page)`);
     res.status(200).send(`
         <h2>Server is working!</h2>
         <code>
-            <span><b>Server info</b>: <pre>${info}</pre></span><br><br>
+            <span><b>Server info</b>: <pre>${info}</pre></span><br>
             <b>Stats</b><br>
-            'DocumentData' items: ${dataCount}<br>
-            'DocumentInfo' items: ${infoCount}<br>
-            'Template' items: ${templateCount}<br>
-            'TemplateType' items: ${typeCount}<br>
+            'DocumentData' items: ${await db.DocumentData.count()}<br>
+            'DocumentInfo' items: ${await db.DocumentInfo.count()}<br>
+            'Template' items: ${await db.Template.count()}<br>
+            'TemplateType' items: ${await db.TemplateType.count()}<br>
+            'User' items: ${await db.User.count()}<br>
+            'Signatories' items: ${await db.Signatories.count()}<br>
+            'Registry' items: ${await db.Registry.count()}<br>
         </code>
     `);
 });
