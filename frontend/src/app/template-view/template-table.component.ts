@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { InputField, TableField, RestrictionTypes } from '../models/data-models';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { InputField, RestrictionTypes } from '../models/template-models';
+import { TableField } from "../models/template-models";
 
 @Component({
   selector: 'table-template',
@@ -31,10 +32,11 @@ import { InputField, TableField, RestrictionTypes } from '../models/data-models'
     </table>   
   `
 })
-export class TemplateTableComponent{
-    @Input() table: TableField = new TableField("", []); 
+export class TemplateTableComponent implements OnInit{
+    @Input() table: TableField = new TableField({ name: "", columns: [] }); 
     @Output() onDelete = new EventEmitter();
     @Output() onChangeOrder = new EventEmitter<number>();
+    vacantId: number = 0;
 
     static _restrictionTypes = [
         RestrictionTypes.None,
@@ -46,16 +48,33 @@ export class TemplateTableComponent{
         return TemplateTableComponent._restrictionTypes;
     }
 
+    ngOnInit() {
+        for (let f of this.table.columns) {
+            if (f.id > this.vacantId) {
+                this.vacantId = f.id;
+            }
+        }
+        this.vacantId++;
+    }
+
     deleteColumn(columnId: number){
         this.table.columns.splice(columnId, 1);
     }
     
     addColumn(){
-        this.table.columns.push(new InputField(""));
+        this.table.columns.push(new InputField({name: "", id: this.vacantId}));
+        this.vacantId++;
     }
 
     deleteField(){
         this.onDelete.emit();
+    }
+
+    onColumnChangeOrder(index: number, delta: number){
+        let newOrder = index + delta;
+        if (newOrder < this.table.columns.length - 1 && newOrder >= 0){
+            [this.table.columns[newOrder], this.table.columns[index]] = [this.table.columns[index], this.table.columns[newOrder]];
+        }
     }
 
     changeOrder(delta: number){

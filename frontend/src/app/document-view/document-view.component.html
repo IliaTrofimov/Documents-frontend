@@ -2,7 +2,7 @@
     <h2>Редактирование документа</h2>
     <button class="btn btn-outline-secondary dropdown-toggle btn-sm badge" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Действия</button>
     <div class="dropdown-menu">
-        <button class="dropdown-item btn-sm" (click)="previewSave()">Сохранить</button>
+        <button class="dropdown-item btn-sm" (click)="save()">Сохранить</button>
         <button class="dropdown-item btn-sm" (click)="delete()">Удалить</button>
     </div>
     <a class="btn btn-sm" *ngIf="documentInfo.type == 0" (click)="nextType()">Передать на подписание</a>
@@ -16,7 +16,7 @@
         </div>
         <div class="col">
             <b>Автор</b><br>
-            <input class="form-control form-control-sm" [(ngModel)]="documentAuthor.name" readonly/>
+            <input class="form-control form-control-sm" [(ngModel)]="documentInfo.authorName" readonly/>
         </div>
         <div class="col">
             <b>Дата истечения</b><br>
@@ -44,16 +44,16 @@
     <h4>Список полей</h4>
     <h6 class="text-muted">Шаблон: {{template.name}}</h6>
     <p *ngFor="let f of template.fields; let fi = index">
-        <doc-field *ngIf="f._class == 'InputField'" 
-            [field]="$any(f)" 
-            [data]="$any(documentData.data[fi])"
-            [readOnly]="documentInfo.type != 0"
+        <doc-field *ngIf="f.type == 0" 
+            [template]="$any(f)" 
+            [data]="$any(findField(f.id))"
+            [readonly]="documentInfo.type != 0"
             (changed)="updateField(fi, $event)">
         </doc-field>
-        <doc-table *ngIf="f._class == 'TableField'"
-            [data]="$any(documentData.data[fi])" 
-            [table]="$any(template.fields[fi])"
-            [readOnly]="documentInfo.type != 0">
+        <doc-table *ngIf="f.type == 1"
+            [data]="$any(findTable(f.id))" 
+            [table]="$any(f)"
+            [readonly]="documentInfo.type != 0">
         </doc-table>                     
     </p>
     <hr>

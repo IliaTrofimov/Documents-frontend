@@ -1,7 +1,9 @@
 import { switchMap } from 'rxjs/operators';
 import { Component, OnInit} from '@angular/core';
 import { ActivatedRoute, Router} from '@angular/router';
-import { DocumentInfo, DocumentData, DocTemplate, TableField, DocTypes, User } from '../models/data-models';
+import { DocumentInfo, DocumentData, DocTypes } from '../models/document-models';
+
+import { DocTemplate } from "../models/template-models";
 import { DocumentsService } from '../services/documents.service';
 import { ValidationService } from '../services/validation.service';
 import { UsersService } from '../services/users.service';
@@ -14,8 +16,7 @@ import { UsersService } from '../services/users.service';
 })
 export class DocumentViewComponent implements OnInit {
   documentInfo: DocumentInfo = new DocumentInfo(-1, "", -1);
-  documentData: DocumentData = new DocumentData(-1, []); 
-  documentAuthor: User = new User(-1, "неизвестно");
+  documentData: DocumentData = new DocumentData(-1); 
   template: DocTemplate = new DocTemplate(-1, "");
   status?: string;
   validated: boolean = true;
@@ -27,7 +28,7 @@ export class DocumentViewComponent implements OnInit {
     private route: ActivatedRoute, 
     private router: Router) { }
 
-  ngOnInit(): void {
+  ngOnInit(){
     this.route.paramMap.pipe(switchMap(params => params.getAll('id'))).subscribe(data => this.id = +data);
     this.loadData();   
   }
@@ -36,12 +37,19 @@ export class DocumentViewComponent implements OnInit {
     this.docServ.getJoinedDocument(this.id).subscribe({
       next: (merged) => {
         this.documentInfo = merged.info;
-        this.documentData = merged.data;
-        this.template = merged.template;
-        this.usersServ.getUser(this.documentInfo.author).subscribe(user => this.documentAuthor = user);
-        this.initData();
-      },
-      error: (e) => this.getErrorPage()
+        
+        if(merged.data)
+          this.documentData = merged.data;
+        
+        if(merged.template)  
+          this.template = merged.template;
+        
+        console.log('comp.tables', this.documentData.tables);
+        if (this.docServ.checkDocumentData(this.documentData, this.template)){
+          console.log('comp.tables (checked)\n', this.documentData.tables);
+          this.docServ.updateJoinedDocument(this.documentData, this.documentInfo).subscribe();
+        }
+      }
     });
   }
 
@@ -54,36 +62,19 @@ export class DocumentViewComponent implements OnInit {
     });
   }
 
-  private initData(){
-    if(this.documentData.data == null || this.documentData.data.length < this.template.fields.length){
-      for(let f of this.template.fields){
-        if(f._class == "InputField")
-          this.documentData.data.push("");
-        else if(f._class == "TableField"){
-          // инициализируем таблицы, чтобы в JSON не было null
-          let templateTable = f as TableField;
-          let temp = new Array<string[]>(templateTable.rows);
-          
-          for(let j = 0; j < templateTable.rows; j++){
-            temp[j] = new Array<string>(templateTable.columns.length);
-            for(let i = 0; i < templateTable.columns.length; i++)
-              temp[j][i] = "";
-          }
+  findField(index: number){
+    return this.documentData.fields.find(d => d.id == index) 
+  }
 
-          this.documentData.data.push(temp);
-        }
-      }
-
-      this.docServ.updateJoinedDocument(this.documentData, this.documentInfo).subscribe();
-    }
+  findTable(index: number){
+    return this.documentData.tables.find(d => d.id == index) 
   }
 
   updateField(index: number, data: string|undefined){
-    if(data)
-      this.documentData.data[index] = data;
+    
   }
 
-  previewSave(){
+  validate(){
     // Сбрасываем validated, т.к. можно узнать только о провале валидации.
     this.validated = true;
     let listner = this.validServ.start().subscribe({
@@ -98,15 +89,10 @@ export class DocumentViewComponent implements OnInit {
   }
 
   save(){
-    if(this.validated){
-      this.docServ.updateJoinedDocument(this.documentData, this.documentInfo).subscribe({
-        error: error => this.status = error,
-        complete: () => this.status = "ok"
-      });
-    }
-    else{
-      this.status = "Недопустимые данные.";
-    }
+    this.docServ.updateJoinedDocument(this.documentData, this.documentInfo).subscribe({
+      error: error => this.status = error,
+      complete: () => this.status = "ok"
+    });
   }
 
   delete(){

@@ -121,7 +121,6 @@ app.delete("/document_joined/:id",  async function(req, res){
 })
 
 app.put("/document_joined/:id", jsonParser, async function(req, res){
-    req.body.data.data = JSON.stringify(req.body.data.data);
     await joinedDocumentAPI.put(req.body.info, req.body.data, res); 
 })
 

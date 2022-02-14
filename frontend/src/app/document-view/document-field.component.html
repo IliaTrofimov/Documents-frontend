@@ -1,19 +1,21 @@
 <div class="form-group">
-    <label for="f_{{field.order}}">
-        {{field.order + 1}}. {{field.name}} <span *ngIf="field.required" class="badge badge-pill badge-info">*</span>
+    <label for="f_{{template.id}}">
+        {{template.name}} <span *ngIf="template.required" class="badge badge-pill badge-info">*</span>
     </label>
-    <textarea *ngIf="field.dataType == 0"
-        id="f_{{field.order}}" 
+    <textarea *ngIf="template.dataType == 0"
+        id="f_{{template.id}}" 
         class="form-control {{error ? 'is-invalid' : ''}}"
         (blur)="validate()"
-        [(ngModel)]="unvalidated">
+        [(ngModel)]="data.value"
+        [disabled]="readonly">
     </textarea>
-    <input *ngIf="field.dataType != 0"
-        type="{{field.dataType | inputtype}}"
-        id="f_{{field.order}}" 
+    <input *ngIf="template.dataType != 0"
+        type="{{template.dataType | inputtype}}"
+        id="f_{{template.id}}" 
         class="form-control {{error ? 'is-invalid' : ''}}"
         (blur)="validate()"
-        [(ngModel)]="unvalidated">
+        [(ngModel)]="data.value"
+        [disabled]="readonly">
     <div *ngIf="error" class="alert alert-danger">
         <div *ngIf="error == 'required'">Обязательное поле!</div>
         <div *ngIf="error == 'except'">

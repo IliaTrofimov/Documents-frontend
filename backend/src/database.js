@@ -89,10 +89,14 @@ const DocumentData = sequelize.define("documents_data", {
       primaryKey: true,
       allowNull: false
     },
-    data: {
+    fields: {
       type: Sequelize.TEXT,
       defaultValue: "[]",
-    },   
+    },  
+    tables: {
+        type: Sequelize.TEXT,
+        defaultValue: "[]",
+    },  
 });
 
 const Registry = sequelize.define("registry", {

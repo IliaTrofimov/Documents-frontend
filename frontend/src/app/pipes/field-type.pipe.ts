@@ -1,17 +1,17 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { InputFieldType } from '../models/data-models';
+import { InputType } from '../models/template-models';
 
 @Pipe({
   name: 'fieldtype'
 })
 export class FieldTypePipe implements PipeTransform {
 
-  transform(value: InputFieldType): string {
+  transform(value: InputType): string {
     switch(value){
-      case InputFieldType.Text:  return "текст";
-      case InputFieldType.Registry: return "реестр";
-      case InputFieldType.Date: return "дата";
-      case InputFieldType.Number: return "число";
+      case InputType.Text:  return "текст";
+      case InputType.Registry: return "реестр";
+      case InputType.Date: return "дата";
+      case InputType.Number: return "число";
     }
   }
 }

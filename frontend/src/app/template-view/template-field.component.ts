@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { InputField, RestrictionTypes, InputFieldType } from '../models/data-models';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { InputField, RestrictionTypes, InputType } from '../models/template-models';
 
 @Component({
   selector: 'field-template',
@@ -29,8 +29,8 @@ import { InputField, RestrictionTypes, InputFieldType } from '../models/data-mod
             <button class="dropdown-item btn-sm" (click)="deleteField()">Удалить</button>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="check_{{field.order}}" [(ngModel)]="field.required">
-            <label class="form-check-label" for="check_{{field.order}}">
+            <input class="form-check-input" type="checkbox" id="check_{{field.id}}" [(ngModel)]="field.required">
+            <label class="form-check-label" for="check_{{field.id}}">
                 Обязательное
             </label>
         </div>
@@ -38,10 +38,11 @@ import { InputField, RestrictionTypes, InputFieldType } from '../models/data-mod
   </div>
   `
 })
-export class TemplateFieldComponent{
-    @Input() field: InputField = new InputField(""); 
+export class TemplateFieldComponent {
+    @Input() field: InputField = new InputField({name: ""}); 
     @Output() onDelete = new EventEmitter();
     @Output() onChangeOrder = new EventEmitter<number>();
+
 
     static _restrictionTypes = [
         RestrictionTypes.None,
@@ -51,10 +52,10 @@ export class TemplateFieldComponent{
     ]
 
     static _dataTypes = [
-        InputFieldType.Text,
-        InputFieldType.Date,
-        InputFieldType.Number,
-        InputFieldType.Registry
+        InputType.Text,
+        InputType.Date,
+        InputType.Number,
+        InputType.Registry
     ]
 
     get restrictionTypes(){

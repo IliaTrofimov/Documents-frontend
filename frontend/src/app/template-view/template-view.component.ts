@@ -2,7 +2,8 @@ import { switchMap } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router} from '@angular/router';
 import { TemplatesService } from '../services/templates.service';
-import { DocTemplate, TableField, InputField, RestrictionTypes, TemplateType, InputFieldType } from '../models/data-models';
+import { DocTemplate, InputField, RestrictionTypes, TemplateType } from '../models/template-models';
+import { TableField } from "../models/template-models";
 
 @Component({
   selector: 'app-templates-view',
@@ -15,6 +16,7 @@ export class TemplateViewComponent implements OnInit {
   selectedIndex: number = -1;
   status?: string; 
   private id: number = -1;
+  vacantId: number = 0;
 
   static _restrictionTypes = [
     RestrictionTypes.None,
@@ -34,8 +36,16 @@ export class TemplateViewComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap.pipe(switchMap(params => params.getAll('id'))).subscribe(data => this.id = +data);
     this.templateServ.getTemplateById(this.id).subscribe({
-      next: data => this.template = data,
-      error: error => this.router.navigate(['not-found'], { 
+      next: data => {
+        this.template = data;
+        for (let f of data.fields) {
+          if (f.id > this.vacantId) {
+            this.vacantId = f.id;
+          }
+        }
+        this.vacantId++;
+      },
+      error: () => this.router.navigate(['not-found'], { 
         queryParams: {
           "requestedId": this.id, 
           "requestedObject": "шаблон"
@@ -47,33 +57,28 @@ export class TemplateViewComponent implements OnInit {
 
   changeOrder(oldOrder: number, delta: number){
     let newOrder = oldOrder + delta;
-    if (newOrder < this.template.fields.length - 1 && newOrder >= 0){
-      this.template.fields[newOrder].order = oldOrder;
-      this.template.fields[oldOrder].order = newOrder;
+    if (newOrder < this.template.fields.length && newOrder >= 0){
       [this.template.fields[newOrder], this.template.fields[oldOrder]] = [this.template.fields[oldOrder], this.template.fields[newOrder]];
     }
   }
 
   addField(){
-    this.template.fields.push(new InputField("", undefined, true, RestrictionTypes.None, InputFieldType.Text, this.template.fields.length)) - 1;
+    this.template.fields.push(new InputField({name: "", id: this.vacantId}));
+    this.vacantId++;
   }
 
   addTable(){
-    this.template.fields.push(new TableField("", [], 5, this.template.fields.length));
+    this.template.fields.push(new TableField({name: "", rows: 5, id: this.vacantId}));
+    this.vacantId++;
   }
 
   deleteField(id: number){
     this.template.fields.splice(id, 1);
   }
 
-  onTableChanged(table: any, index: number){
-    if(this.template)
-      this.template.fields[index] = table;
-  }
-
   save(){
     this.templateServ.updateTemplate(this.template).subscribe({
-      error: error => this.status = error,
+      error: error => this.status = error.error,
       complete: () => this.status = "ok"
     });
   }

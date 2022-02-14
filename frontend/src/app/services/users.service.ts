@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { User, Signatory } from '../models/data-models';
+import { User, Signatory } from '../models/document-models';
 import { map } from 'rxjs';
 
 

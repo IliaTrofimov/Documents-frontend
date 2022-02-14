@@ -6,21 +6,21 @@
         <tbody>
             <tr *ngFor="let t of documents">
                 <td>
-                    <h5 class="card-title">{{t.info.name}}</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">{{t.info.type | doctype}}</h6>
+                    <h5 class="card-title">{{t.name}}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{t.type | doctype}}</h6>
                 </td> 
-                <td><h6>{{t.user ? t.user.name : t.info.author}}</h6></td>  
+                <td><h6>{{t.authorName}}</h6></td>  
                 <td>
-                    <b>Создан: </b>{{t.info.updateDate | date:"longDate"}}<br>
-                    <b>Истекает: </b>{{t.info.expireDate | date:"longDate" }}
+                    <b>Создан: </b>{{t.updateDate | date:"longDate"}}<br>
+                    <b>Истекает: </b>{{t.expireDate | date:"longDate" }}
                 </td>  
                 <td width="110px">
                     <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Действия</button>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item btn-sm" [routerLink]="['/documents', t.info.id]">Изменить документ</a>
-                        <button class="dropdown-item btn-sm" *ngIf="t.info.type >= 2" (click)="createNewVersion(t.info)">Новая версия</button>
-                        <a class="dropdown-item btn-sm" [routerLink]="['/templates', t.info.templateId]">К шаблону</a>
-                        <button class="dropdown-item btn-sm" (click)="removeDocument(t.info.id)">Удалить документ</button>
+                        <a class="dropdown-item btn-sm" [routerLink]="['/documents', t.id]">Изменить документ</a>
+                        <button class="dropdown-item btn-sm" *ngIf="t.type >= 2" (click)="createNewVersion(t)">Новая версия</button>
+                        <a class="dropdown-item btn-sm" [routerLink]="['/templates', t.templateId]">К шаблону</a>
+                        <button class="dropdown-item btn-sm" (click)="removeDocument(t.id)">Удалить документ</button>
                     </div>
                 </td>
             </tr>

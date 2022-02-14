@@ -50,8 +50,8 @@
             <b>Пусто</b>
         </li>                
         <li *ngFor="let f of template.fields; let fi = index" class="list-group-item">
-            <field-template *ngIf="f._class == 'InputField'" [field]="$any(f)" (onDelete)="deleteField(fi)" (onChangeOrder)="changeOrder(fi, $event)"></field-template>   
-            <table-template *ngIf="f._class == 'TableField'" [table]="$any(f)" (onDelete)="deleteField(fi)" (onChangeOrder)="changeOrder(fi, $event)"></table-template>      
+            <field-template *ngIf="f.type == 0" [field]="$any(f)" (onDelete)="deleteField(fi)" (onChangeOrder)="changeOrder(fi, $event)"></field-template>  
+            <table-template *ngIf="f.type == 1" [table]="$any(f)" (onDelete)="deleteField(fi)" (onChangeOrder)="changeOrder(fi, $event)"></table-template>      
         </li>
     </ul>    
 </div>

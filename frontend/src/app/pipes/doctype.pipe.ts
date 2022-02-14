@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { DocTypes } from '../models/data-models';
+import { DocTypes } from '../models/document-models';
 
 @Pipe({
   name: 'doctype'
