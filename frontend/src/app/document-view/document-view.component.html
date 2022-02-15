@@ -2,17 +2,18 @@
     <h2>Редактирование документа</h2>
     <button class="btn btn-outline-secondary dropdown-toggle btn-sm badge" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Действия</button>
     <div class="dropdown-menu">
-        <button class="dropdown-item btn-sm" (click)="save()">Сохранить</button>
-        <button class="dropdown-item btn-sm" (click)="delete()">Удалить</button>
+        <button *ngIf="documentInfo.type == 0" class="dropdown-item btn-sm" (click)="save()">Сохранить</button>
+        <button *ngIf="documentInfo.type == 0" class="dropdown-item btn-sm" (click)="delete()">Удалить</button>
     </div>
     <a class="btn btn-sm" *ngIf="documentInfo.type == 0" (click)="nextType()">Передать на подписание</a>
     <a class="btn btn-sm" *ngIf="documentInfo.type == 1" (click)="nextType()">Подписать</a>
     <a class="btn btn-sm" *ngIf="documentInfo.type == 2" (click)="nextType()">Вывести из оборота</a>
     <hr>
+    <button (click)="validate()">validate</button>
     <div class="row">
         <div class="col">
             <b>Название</b><br>
-            <input class="form-control form-control-sm" [(ngModel)]="documentInfo.name"/>
+            <input class="form-control form-control-sm" [(ngModel)]="documentInfo.name" [readonly]="documentInfo.type != 0"/>
         </div>
         <div class="col">
             <b>Автор</b><br>
@@ -20,22 +21,15 @@
         </div>
         <div class="col">
             <b>Дата истечения</b><br>
-            <input type="date" class="form-control form-control-sm" [(ngModel)]="documentInfo.expireDate"/>
+            <input type="date" class="form-control form-control-sm" [(ngModel)]="documentInfo.expireDate" [readonly]="documentInfo.type != 0"/>
         </div>
         <div class="col">
-            <div class="alert alert-success" role="alert" *ngIf="status == 'ok'">
-                Документ сохранён
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <div *ngIf="status" class="alert alert-{{status[0] ? 'success' : 'danger'}}" role="alert">
+                {{status[1]}}
+                <button type="button" class="close" aria-label="Close" (click)="status = undefined">
                     <span aria-hidden="true">&times;</span>
                 </button>
-            </div>
-            <div *ngIf="status && status != 'ok'" class="alert alert-danger">
-                Не удалось сохранить<br>
-                {{status}}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+            </div> 
         </div>
     </div>
     <hr>
@@ -47,8 +41,7 @@
         <doc-field *ngIf="f.type == 0" 
             [template]="$any(f)" 
             [data]="$any(findField(f.id))"
-            [readonly]="documentInfo.type != 0"
-            (changed)="updateField(fi, $event)">
+            [readonly]="documentInfo.type != 0">
         </doc-field>
         <doc-table *ngIf="f.type == 1"
             [data]="$any(findTable(f.id))" 

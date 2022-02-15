@@ -5,13 +5,12 @@
             <button class="btn btn-success btn-sm" (click)="addTemplate()">Создать</button>
         </span></h6>
     <br>
-    <div class="alert alert-danger alert-dismissible fade show" role="alert" *ngIf="status && status != 'ok'">
-        Не удалось удалить шаблон!<br>
-        {{status}}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <div *ngIf="status" class="alert alert-{{status[0] ? 'success' : 'danger'}}" role="alert">
+        {{status[1]}}
+        <button type="button" class="close" aria-label="Close" (click)="status = undefined">
             <span aria-hidden="true">&times;</span>
         </button>
-    </div>
+    </div> 
     <table class="table table-sm">
         <tbody>
             <tr *ngFor="let t of templates">

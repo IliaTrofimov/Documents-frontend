@@ -12,14 +12,13 @@ import { DocumentInfo, DocumentData, DocTypes } from '../models/document-models'
 @Component({
   selector: 'app-document-view',
   templateUrl: './document-view.component.html',
-  providers: [DocumentsService,]
+  providers: [DocumentsService, ValidationService]
 })
 export class DocumentViewComponent implements OnInit {
   documentInfo: DocumentInfo = new DocumentInfo(-1, "", -1);
   documentData: DocumentData = new DocumentData(-1); 
   template: DocTemplate = new DocTemplate(-1, "");
-  status?: string;
-  validated: boolean = true;
+  status?: [boolean, string];
   private id: number = -1;
 
   constructor(private docServ: DocumentsService,
@@ -67,28 +66,26 @@ export class DocumentViewComponent implements OnInit {
     return this.documentData.tables.find(d => d.id == index) 
   }
 
-  updateField(index: number, data: string|undefined){
-    
-  }
-
   validate(){
-    // Сбрасываем validated, т.к. можно узнать только о провале валидации.
-    this.validated = true;
+    let validated = true;
     let listner = this.validServ.start().subscribe({
-      complete: () => this.validated = false
-    })
- 
-    // Ждём некоторое время окончания валидации
-    new Promise(resolve => setTimeout(resolve, 200)).then(() => {
-      this.save();
-      listner.unsubscribe();
-    })
+      complete: () => {
+        validated = true;
+        this.save();
+      },
+      error: () => {
+        validated = false;
+        this.status = [false, "Документ не сохранён, недопустимые значения"]
+      }
+    });
+    return validated;
   }
 
   save(){
+    console.log("saving");
     this.docServ.updateJoinedDocument(this.documentData, this.documentInfo).subscribe({
-      error: error => this.status = error,
-      complete: () => this.status = "ok"
+      error: error => this.status = [false, error.error],
+      complete: () => this.status = [true, "Документ сохранён"]
     });
   }
 
@@ -98,12 +95,14 @@ export class DocumentViewComponent implements OnInit {
   }
 
   nextType(){
-    if(this.documentInfo.type != DocTypes.Old){
-      this.documentInfo.type++;
-      this.docServ.updateJoinedDocument(this.documentData, this.documentInfo).subscribe({
-        error: error => this.status = error,
-        complete: () => this.status = "ok"
-      });
+    if (this.documentInfo.type != DocTypes.Old) {
+      if (this.documentInfo.type == DocTypes.InWork) {
+        this.validate();
+      }
+      else{
+        this.documentInfo.type++;
+        this.save();
+      }
     }
   } 
 }

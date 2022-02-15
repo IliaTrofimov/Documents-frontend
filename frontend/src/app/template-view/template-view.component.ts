@@ -12,7 +12,7 @@ import { DocTemplate, InputField, RestrictionTypes, TemplateType, TableField } f
 export class TemplateViewComponent implements OnInit {
   template: DocTemplate = new DocTemplate(-1, "");
   templateTypes: TemplateType[] = [];
-  status?: string; 
+  status?: [boolean, string]; 
   private vacantId: number = 0;
   private id: number = -1;
 
@@ -82,8 +82,8 @@ export class TemplateViewComponent implements OnInit {
 
   save(){
     this.templateServ.updateTemplate(this.template).subscribe({
-      error: error => this.status = error.error,
-      complete: () => this.status = "ok"
+      error: error => this.status =  [true, error.error],
+      complete: () => this.status = [true, "Шаблон сохранён"]
     });
   }
 

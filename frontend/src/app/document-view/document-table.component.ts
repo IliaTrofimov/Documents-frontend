@@ -11,7 +11,6 @@ export class DocumentTableComponent implements OnInit{
   @Input() table: TableField = new TableField({ name: "", columns: [], rows: 0 });
   @Input() data: DocumentDataTable = new DocumentDataTable(-1, []);
   @Input() readonly: boolean = false;
-  @Output() changed: EventEmitter<string|undefined> = new EventEmitter<string|undefined>();
   error?: [string, number, number];
   choices: string[] = [];
   tempString: string = "";
@@ -21,9 +20,10 @@ export class DocumentTableComponent implements OnInit{
   ngOnInit() {
     console.log("tbl.table", this.data)
     this.validServ.on(() => {
+      console.log("table validating")
       let status = true;
-      for(let i = 0; i < this.data.columns.length && status; i++){
-        for(let j = 0; j < this.data.columns[i].values.length && status; j++){
+      for(let i = 0; i < this.data.columns.length; i++){
+        for(let j = 0; j < this.data.columns[i].values.length; j++){
           status = status && this.validate(j, i);
         }
       }
@@ -35,11 +35,6 @@ export class DocumentTableComponent implements OnInit{
     return index;
   }
 
-  save(){
-    
-  }
-  
-
   validate(row: number, col: number): boolean{
     let column = this.table.columns[col];
 
@@ -50,21 +45,17 @@ export class DocumentTableComponent implements OnInit{
 
     if (this.data.columns[col].values[row] == "" && column.required){
       this.error = ["required", row, col];
-      this.changed.emit();
     }
     else if(column.restrictionType == RestrictionTypes.Except && 
       this.choices.includes(this.data.columns[col].values[row]) && column.required){
       this.error = ["except", row, col];
-      this.changed.emit();
     }
     else if(column.restrictionType == RestrictionTypes.Only && 
       !this.choices.includes(this.data.columns[col].values[row]) && column.required){
       this.error = ["only", row, col];
-      this.changed.emit();
     }
     else{
       this.error = undefined;
-      this.changed.emit(this.data.columns[col].values[row]);
       return true;
     }
 

@@ -12,7 +12,7 @@ import { DocTemplate, TemplateType } from '../models/template-models';
 export class TemplatesListComponent implements OnInit {
   templates: DocTemplate[] = [];
   templateTypes: TemplateType[] = [];
-  status?: string;
+  status?: [boolean, string];
 
   constructor(private templateServ: TemplatesService, 
     private router: Router,
@@ -50,7 +50,7 @@ export class TemplatesListComponent implements OnInit {
   removeTemplate(id: number) {
     this.templateServ.deleteTemplate(id).subscribe({
       next: () => this.templates = this.templates.filter(template => template.id !== id),
-      error: (err) => this.status = err.error 
+      error: (err) => this.status = [false, err.error] 
     });
   }
 
