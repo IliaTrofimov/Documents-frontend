@@ -1,12 +1,12 @@
 import { switchMap } from 'rxjs/operators';
 import { Component, OnInit} from '@angular/core';
 import { ActivatedRoute, Router} from '@angular/router';
-import { DocumentInfo, DocumentData, DocTypes } from '../models/document-models';
 
 import { DocTemplate } from "../models/template-models";
+import { UsersService } from '../services/users.service';
 import { DocumentsService } from '../services/documents.service';
 import { ValidationService } from '../services/validation.service';
-import { UsersService } from '../services/users.service';
+import { DocumentInfo, DocumentData, DocTypes } from '../models/document-models';
 
 
 @Component({
@@ -49,16 +49,13 @@ export class DocumentViewComponent implements OnInit {
           console.log('comp.tables (checked)\n', this.documentData.tables);
           this.docServ.updateJoinedDocument(this.documentData, this.documentInfo).subscribe();
         }
+      },
+      error: err =>  {
+        this.router.navigate(['not-found'], { queryParams: {
+          "title": `Не удалось загрузить документ '${this.documentInfo.name}'`, 
+          "error": err.error
+        }});
       }
-    });
-  }
-
-  private getErrorPage(){
-    this.router.navigate(['not-found'], { 
-      queryParams: {
-        "requestedId": this.id, 
-        "requestedObject": "документ"
-      } 
     });
   }
 

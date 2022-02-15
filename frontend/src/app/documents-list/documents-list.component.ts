@@ -15,7 +15,15 @@ export class DocumentsListComponent implements OnInit {
   constructor(private docServ: DocumentsService, private router: Router) { }
 
   ngOnInit(): void {
-    this.docServ.getInfos().subscribe((data) => this.documents = data);
+    this.docServ.getInfos().subscribe({
+      next: data => this.documents = data,
+      error: err => {
+        this.router.navigate(['not-found'], { queryParams: {
+          "title": "Не удалось загрузить список документов", 
+          "error": err.error
+        }});
+      }
+    });
   }
   
   removeDocument(id: number) {

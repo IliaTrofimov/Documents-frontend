@@ -20,12 +20,25 @@ export class TemplatesListComponent implements OnInit {
   } 
 
   ngOnInit(): void {
-    this.loadTemplates();
-    this.templateServ.getTypes().subscribe(data => this.templateTypes = data);
-  }
+    let error: any = undefined;
 
-  private loadTemplates(): void {
-    this.templateServ.getTemplates().subscribe((data: DocTemplate[]) => this.templates = data);
+    this.templateServ.getTemplates().subscribe({
+      next: templates => {
+        this.templates = templates;
+        this.templateServ.getTypes().subscribe({
+          next: types => this.templateTypes = types,
+          error: err => error = err
+        });
+      },
+      error: err => error = err
+    })
+
+    if (error){
+      this.router.navigate(['not-found'], { queryParams: {
+        "title": "Не удалось загрузить список шаблонов", 
+        "error": error.error
+      }});
+    }
   }
   
   addTemplate() {

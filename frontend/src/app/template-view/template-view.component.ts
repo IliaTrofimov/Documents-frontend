@@ -2,8 +2,7 @@ import { switchMap } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router} from '@angular/router';
 import { TemplatesService } from '../services/templates.service';
-import { DocTemplate, InputField, RestrictionTypes, TemplateType } from '../models/template-models';
-import { TableField } from "../models/template-models";
+import { DocTemplate, InputField, RestrictionTypes, TemplateType, TableField } from '../models/template-models';
 
 @Component({
   selector: 'app-templates-view',
@@ -45,12 +44,12 @@ export class TemplateViewComponent implements OnInit {
         }
         this.vacantId++;
       },
-      error: () => this.router.navigate(['not-found'], { 
-        queryParams: {
-          "requestedId": this.id, 
-          "requestedObject": "шаблон"
-        } 
-      })
+      error: err => {
+        this.router.navigate(['not-found'], { queryParams: {
+          "title": `Не удалось загрузить шаблон '${this.template.name}'`, 
+          "error": err.error
+        }});
+      }
     });
     this.templateServ.getTypes().subscribe(data => this.templateTypes = data);
   }
