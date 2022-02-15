@@ -6,12 +6,12 @@ import { Subscription } from 'rxjs';
   selector: 'error',
   template: `
     <h2>Не удалось загрузить страницу :(</h2>
-    <h3>{{title}}</h3>
+    <h4>{{title}}</h4>
     <p>{{error}}</p>
   `
 })
 export class ErrorComponent {
-  title?: number;
+  title?: string;
   error?: string;
 
   private querySubscription: Subscription;
@@ -20,7 +20,7 @@ export class ErrorComponent {
     this.querySubscription = route.queryParams.subscribe(
       (param: any) => {
         this.title = param['title'];
-        this.error = param['error'];
+        this.error = param['error'] ? param['error'] : "Такой страницы не существует";
       }
     );
   }

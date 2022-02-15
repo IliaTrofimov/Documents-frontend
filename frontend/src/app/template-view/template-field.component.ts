@@ -7,6 +7,7 @@ import { InputField, RestrictionTypes, InputType } from '../models/template-mode
 })
 export class TemplateFieldComponent {
     @Input() field: InputField = new InputField({name: ""}); 
+    @Input() readonly: boolean = false;
     @Output() onDelete = new EventEmitter();
     @Output() onChangeOrder = new EventEmitter<number>();
 

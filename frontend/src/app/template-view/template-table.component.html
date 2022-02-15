@@ -3,7 +3,9 @@
         <td><b>Название таблицы: </b></td>
         <td><b>Количество строк: </b></td>
         <td>
-            <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Действия</button>
+            <button *ngIf="!readonly" class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Действия
+            </button>
             <div class="dropdown-menu">
                 <button class="dropdown-item btn-sm" (click)="changeOrder(-1)">Двигать вверх</button>
                 <button class="dropdown-item btn-sm" (click)="changeOrder(1)">Двигать вниз</button>
@@ -12,14 +14,14 @@
         </td>
     </tr>
     <tr>
-        <td><input class="form-control form-control-sm" placeholder="Название" [(ngModel)]="table.name"/></td>
-        <td><input type="number" class="form-control form-control-sm" [(ngModel)]="table.rows"/></td>
+        <td><input class="form-control form-control-sm" placeholder="Название" [(ngModel)]="table.name" [readonly]="readonly"/></td>
+        <td><input type="number" class="form-control form-control-sm" [(ngModel)]="table.rows" [readonly]="readonly"/></td>
     </tr>
 </table>
 <br>
-<button class="btn badge badge-success" (click)="addColumn()"><b>+</b></button>&nbsp;Столбцы таблицы ({{table.columns.length}}):
+<button *ngIf="!readonly" class="btn badge badge-success" (click)="addColumn()"><b>+</b></button>&nbsp;Столбцы таблицы ({{table.columns.length}}):
 <table class="table table-sm table-borderless">
     <tr *ngFor="let c of table.columns; let i = index">
-        <field-template [field]="c" (onDelete)="deleteColumn(i)"></field-template>
+        <field-template [field]="c" (onDelete)="deleteColumn(i)" [readonly]="readonly"></field-template>
     </tr>
 </table>   

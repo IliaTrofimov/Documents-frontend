@@ -3,6 +3,9 @@
     <button class="btn btn-outline-secondary dropdown-toggle btn-sm badge" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Действия</button>
     <div class="dropdown-menu">
         <button class="dropdown-item btn-sm" (click)="save()">Сохранить</button>
+        <button class="dropdown-item btn-sm" (click)="changeUsage()">
+            {{template.depricated == 1 ? "Отметить действующим" : "Отметить устаревшим"}}
+        </button>
         <button class="dropdown-item btn-sm" (click)="delete()">Удалить</button>
     </div>
     <br>
@@ -41,17 +44,19 @@
 </div>
 <div class="container panel" *ngIf="template != undefined && template.fields != undefined">
     <h4>Список полей ({{template.fields.length}})</h4>
-    <button class="btn badge badge-success" (click)="addField()">Добавить поле</button> или 
-    <button class="btn badge badge-success" (click)="addTable()">добавить таблицу</button>
-    <br>
-    <br>
+    <p *ngIf="template.depricated == 0">
+        <button class="btn badge badge-success" (click)="addField()">Добавить поле</button> или 
+        <button class="btn badge badge-success" (click)="addTable()">добавить таблицу</button>
+        <br>
+        <br>
+    </p>
     <ul class="list-group">
         <li *ngIf="template.fields.length == 0" class="list-group-item">
             <b>Пусто</b>
         </li>                
         <li *ngFor="let f of template.fields; let fi = index" class="list-group-item">
-            <field-template *ngIf="f.type == 0" [field]="$any(f)" (onDelete)="deleteField(fi)" (onChangeOrder)="changeOrder(fi, $event)"></field-template>  
-            <table-template *ngIf="f.type == 1" [table]="$any(f)" (onDelete)="deleteField(fi)" (onChangeOrder)="changeOrder(fi, $event)"></table-template>      
+            <field-template *ngIf="f.type == 0" [field]="$any(f)" (onDelete)="deleteField(fi)" (onChangeOrder)="changeOrder(fi, $event)" [readonly]="template.depricated == 1"></field-template>  
+            <table-template *ngIf="f.type == 1" [table]="$any(f)" (onDelete)="deleteField(fi)" (onChangeOrder)="changeOrder(fi, $event)" [readonly]="template.depricated == 1"></table-template>      
         </li>
     </ul>    
 </div>

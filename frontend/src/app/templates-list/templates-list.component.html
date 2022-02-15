@@ -16,8 +16,15 @@
         <tbody>
             <tr *ngFor="let t of templates">
                 <td>
-                    <h5 class="card-title">{{t.name}}</h5>
+                    <h5>{{t.name}}</h5>
                     <h6 class="card-subtitle mb-2 text-muted">{{getTemplateType(t.type)}}</h6>
+                </td> 
+                <td>
+                    <h6 *ngIf="t.depricated == 0">действует</h6>
+                    <div *ngIf="t.depricated == 1">
+                        <h6>устарел</h6>
+                        <p class="card-subtitle mb-2 text-muted">Новый документ создать нельзя</p>
+                    </div>
                 </td> 
                 <td>
                     <h6 class="">{{t.author}}</h6>
@@ -28,7 +35,7 @@
                 <td width="110px">
                     <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Действия</button>
                     <div class="dropdown-menu">
-                        <button class="dropdown-item btn-sm" (click)="createDocument(t.id)">Создать документ</button>
+                        <button *ngIf="t.depricated != 1" class="dropdown-item btn-sm" (click)="createDocument(t.id)">Создать документ</button>
                         <a class="dropdown-item btn-sm" [routerLink]="['/templates', t.id]">Изменить шаблон</a>
                         <button class="dropdown-item btn-sm" (click)="removeTemplate(t.id)">Удалить шаблон</button>
                     </div>

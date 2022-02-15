@@ -12,7 +12,6 @@ module.exports.JoinedDocument = class JoinedDocument {
 
             info.getDocumentData().then(data => {
                 if(!this._checkData(data, id, res)) return;
-                console.log(JSON.stringify(data, null, 2));
 
                 info.getTemplate().then(temp => {
                     if(!this._checkData(temp, id, res)) return;
@@ -60,16 +59,16 @@ module.exports.JoinedDocument = class JoinedDocument {
 
         let data = prevVersionId ? await this.data_table.findByPk(prevVersionId) : {fields: "[]", tables: "[[]]"};
         await this.info_table.create({templateId: templateId}).then(info => {
-            info.createDocumentData().then((_data) => {
+            info.createDocumentData(data).then((_data) => {
                 console.log(`200 POST ${this._name}`);
-                res.status(200).json(_data.id);
+                return res.status(200).json(_data.id);
             }).catch(err => {
                 console.log(`500 POST ${this._name}:\n${err}`);
-                res.sendStatus(500); 
+                return res.sendStatus(500); 
             })
         }).catch(err => {
             console.log(`500 POST ${this._name}:\n${err}`);
-            res.sendStatus(500);
+            return res.sendStatus(500);
         });
     }
 

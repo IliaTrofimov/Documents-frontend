@@ -7,6 +7,7 @@ import { InputField, RestrictionTypes, TableField } from '../models/template-mod
 })
 export class TemplateTableComponent implements OnInit{
     @Input() table: TableField = new TableField({ name: "", columns: [] }); 
+    @Input() readonly: boolean = false;
     @Output() onDelete = new EventEmitter();
     @Output() onChangeOrder = new EventEmitter<number>();
     vacantId: number = 0;

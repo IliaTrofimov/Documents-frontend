@@ -64,6 +64,7 @@ export class TableField implements TemplateRow {
 export class DocTemplate {
     public updateDate: Date = new Date();
     public authorName?: string;
+    public depricated: number = 0;
 
     constructor(public id: number,
         public name: string,

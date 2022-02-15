@@ -12,10 +12,9 @@ import { DocTemplate, InputField, RestrictionTypes, TemplateType, TableField } f
 export class TemplateViewComponent implements OnInit {
   template: DocTemplate = new DocTemplate(-1, "");
   templateTypes: TemplateType[] = [];
-  selectedIndex: number = -1;
   status?: string; 
+  private vacantId: number = 0;
   private id: number = -1;
-  vacantId: number = 0;
 
   static _restrictionTypes = [
     RestrictionTypes.None,
@@ -52,6 +51,12 @@ export class TemplateViewComponent implements OnInit {
       }
     });
     this.templateServ.getTypes().subscribe(data => this.templateTypes = data);
+  }
+
+  
+  changeUsage(){
+    if(this.template.depricated == 0) this.template.depricated = 1;
+    else this.template.depricated = 0;
   }
 
   changeOrder(oldOrder: number, delta: number){

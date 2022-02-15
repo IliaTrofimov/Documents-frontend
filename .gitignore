@@ -1,2 +1,4 @@
 /.vscode
 .editorconfig
+*.db
+site_database.db

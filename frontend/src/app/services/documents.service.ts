@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../environments/environment';
-import { DocumentInfo, DocTypes, DocumentData, DocumentDataItem, Merged, DocumentDataTable } from '../models/document-models';
-import { DocTemplate, TableField, TemplateField, TemplateRow } from "../models/template-models";
-import { map } from 'rxjs';
 import { UsersService } from './users.service';
+import { environment } from '../../environments/environment';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { DocTemplate, TableField, TemplateField, TemplateRow } from "../models/template-models";
+import { DocumentInfo, DocTypes, DocumentData, DocumentDataItem, Merged, DocumentDataTable } from '../models/document-models';
+import { map } from 'rxjs';
 
 
 @Injectable()
@@ -82,7 +82,7 @@ export class DocumentsService{
                 });
                 return info;
             })
-        }));
+        }))
     }
 
     getJoinedDocument(id: number){
