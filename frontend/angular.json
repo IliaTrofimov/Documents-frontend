@@ -22,7 +22,10 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "scripts": []
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "src/scripts/print.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -85,7 +88,7 @@
             "assets": [
               "src/assets"
             ],
-            "scripts": []
+            "scripts": [ ]
           }
         },
         "deploy": {

@@ -3,6 +3,7 @@
     <button class="btn btn-outline-secondary dropdown-toggle btn-sm badge" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Действия</button>
     <div class="dropdown-menu">
         <button *ngIf="documentInfo.type == 0" class="dropdown-item btn-sm" (click)="save()">Сохранить</button>
+        <a class="dropdown-item btn-sm" [routerLink]="['/documents/print/', documentInfo.id]">Печать</a>
         <button *ngIf="documentInfo.type == 0" class="dropdown-item btn-sm" (click)="delete()">Удалить</button>
     </div>
     <a class="btn btn-sm" *ngIf="documentInfo.type == 0" (click)="nextType()">Передать на подписание</a>

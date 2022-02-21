@@ -43,9 +43,7 @@ export class DocumentViewComponent implements OnInit {
         if(merged.template)  
           this.template = merged.template;
         
-        console.log('comp.tables', this.documentData.tables);
         if (this.docServ.checkDocumentData(this.documentData, this.template)){
-          console.log('comp.tables (checked)\n', this.documentData.tables);
           this.docServ.updateJoinedDocument(this.documentData, this.documentInfo).subscribe();
         }
       },

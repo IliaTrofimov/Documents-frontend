@@ -5,7 +5,7 @@ import { ValidationService } from '../services/validation.service';
 
 @Component({
   selector: 'doc-field',
-  templateUrl: './document-field.component.html'          
+  templateUrl: './document-field.component.html'    
 })
 export class DocumentFieldComponent implements OnInit {
   @Input() template: InputField = new InputField({name: ""});

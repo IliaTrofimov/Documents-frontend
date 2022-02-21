@@ -1,0 +1,68 @@
+.printform{
+    border: 2px;
+    border-color: black;
+    border-style: solid;
+    height: 297mm;
+	width: 210mm;
+    padding: 27mm 16mm 27mm 16mm;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 12pt;
+}
+
+.printform-header{
+    margin-left: 65%;
+}
+
+.printform-title{
+    font-size: 24pt;
+    font-weight: bold;
+    margin-bottom: 24pt;
+}
+
+@media print {
+	html, body{
+		height: 297mm;
+		width: 210mm;
+	}
+
+    *, *:before, *:after { 
+		color: #000;
+		box-shadow: none;
+		text-shadow: none;
+	}
+
+    html, body {
+		font-size: 14px;
+	}
+	h1 {
+		font-size: 24px;
+	}
+	h2 {
+		font-size: 20px;
+	}
+	h3 {
+		font-size: 18px;
+	}
+
+    .noprint {
+		display: none;
+	}
+
+    .wrapper {
+		width: auto;
+		margin: 0;
+		padding: 0;
+	}
+
+    ul, ol, table {
+		page-break-inside: avoid;
+	}
+
+    a[href^="http"]:after {
+		content: " (" attr(href) ")";
+	}
+}
+
+@page {
+	margin: 20mm 10mm 20mm 20mm;
+}

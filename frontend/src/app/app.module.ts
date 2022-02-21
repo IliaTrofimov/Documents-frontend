@@ -21,6 +21,7 @@ import { DocumentTypePipe } from './pipes/doctype.pipe';
 import { RestrictionPipe } from './pipes/restriction.pipe';
 import { FieldTypePipe } from './pipes/field-type.pipe';
 import { HTMLInputTypePipe } from './pipes/html-input-type.pipe';
+import { PrintformComponent } from './printform/printform.component';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { HTMLInputTypePipe } from './pipes/html-input-type.pipe';
     HTMLInputTypePipe,
     TemplateTableComponent,
     DocumentTableComponent,
-    DocumentFieldComponent
+    DocumentFieldComponent,
+    PrintformComponent
   ],
   imports: [
     BrowserModule,

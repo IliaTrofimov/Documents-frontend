@@ -1,7 +1,7 @@
 <div class="form-group">
     <label for="f_{{template.id}}">
         {{template.name}} <span *ngIf="template.required" class="badge badge-pill badge-info">*</span>
-    </label>
+    </label>   
     <textarea *ngIf="template.dataType == 0"
         id="f_{{template.id}}" 
         class="form-control {{error ? 'is-invalid' : ''}}"

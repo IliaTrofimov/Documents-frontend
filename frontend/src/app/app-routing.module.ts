@@ -6,10 +6,12 @@ import { DocumentsListComponent } from './documents-list/documents-list.componen
 import { TemplateViewComponent } from './template-view/template-view.component';
 import { DocumentViewComponent } from './document-view/document-view.component';
 import { ErrorComponent } from './shared-items/error.component';
+import { PrintformComponent } from './printform/printform.component';
 
 const routes: Routes = [
   { path: 'documents', component: DocumentsListComponent },
   { path: 'documents/:id', component: DocumentViewComponent },
+  { path: 'documents/print/:id', component: PrintformComponent },
   { path: 'templates', component: TemplatesListComponent },
   { path: 'templates/:id', component: TemplateViewComponent },
   { path: 'not-found', component: ErrorComponent },

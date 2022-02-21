@@ -1,11 +1,11 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { DocumentDataItem, DocumentDataTable } from '../models/document-models';
+import { Component, Input, OnInit } from '@angular/core';
+import { DocumentDataTable } from '../models/document-models';
 import { RestrictionTypes, TableField } from '../models/template-models';
 import { ValidationService } from '../services/validation.service';
 
 @Component({
   selector: 'doc-table',
-  templateUrl: "./document-table.component.html",
+  templateUrl: "./document-table.component.html"   
 })
 export class DocumentTableComponent implements OnInit{
   @Input() table: TableField = new TableField({ name: "", columns: [], rows: 0 });
