@@ -1,8 +1,12 @@
 import { switchMap } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router} from '@angular/router';
+
 import { TemplatesService } from '../../services/templates.service';
-import { DocTemplate, InputField, RestrictionTypes, TemplateType, TableField } from '../../models/template-models';
+import { InputField, TableField } from '../../models/template-row';
+import { DocTemplate, TemplateType } from 'src/app/models/template';
+import { RestrictionTypes } from 'src/app/models/template-enums';
+
 
 @Component({
   selector: 'app-templates-view',

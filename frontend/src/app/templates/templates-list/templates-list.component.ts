@@ -2,7 +2,8 @@ import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { TemplatesService } from '../../services/templates.service';
 import { DocumentsService } from '../../services/documents.service';
-import { DocTemplate, TemplateType } from '../../models/template-models';
+import { DocTemplate, TemplateType } from '../../models/template';
+
 
 @Component({
   selector: 'templates-list',

@@ -1,7 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { DocumentDataItem } from '../../models/document-models';
-import { InputField, RestrictionTypes } from '../../models/template-models';
+import { InputField } from '../../models/template-row';
+import { RestrictionTypes } from '../../models/template-enums'
+import { DocumentDataItem } from 'src/app/models/document-data';
 import { ValidationService } from '../../services/validation.service';
+
 
 @Component({
   selector: 'doc-field',
@@ -24,7 +26,6 @@ export class DocumentFieldComponent implements OnInit {
   }
 
   validate(): boolean {
-    console.log("field validating")
     if (this.data?.value == "" && this.template.required){
       this.error = "required";
     }

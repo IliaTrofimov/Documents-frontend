@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { InputField, RestrictionTypes, InputType } from '../../models/template-models';
+import { RestrictionTypes, InputType } from 'src/app/models/template-enums';
+import { InputField } from '../../models/template-row';
+
 
 @Component({
   selector: 'field-template',

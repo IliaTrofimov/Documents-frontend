@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs';
-import { DocumentData, DocumentInfo } from '../../models/document-models';
-import { DocTemplate } from '../../models/template-models';
-import { DocumentsService } from '../../services/documents.service';
+
+import { DocTemplate } from '../../models/template';
+import { DocumentInfo } from '../../models/document-info';
+import { DocumentData } from 'src/app/models/document-data';
 import { UsersService } from '../../services/users.service';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+import { DocumentsService } from '../../services/documents.service';
+
 
 declare  var jQuery:  any;
 

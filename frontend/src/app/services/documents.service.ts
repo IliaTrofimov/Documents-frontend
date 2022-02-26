@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { UsersService } from './users.service';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { DocTemplate, TableField, TemplateField, TemplateRow } from "../models/template-models";
-import { DocumentInfo, DocTypes, DocumentData, DocumentDataItem, Merged, DocumentDataTable } from '../models/document-models';
+import { DocTemplate, TableField, TemplateField, TemplateRow } from "../models/template-row";
+import { DocumentInfo, DocTypes, DocumentData, DocumentDataItem, Merged, DocumentDataTable } from '../models/document-info';
 import { map } from 'rxjs';
 
 

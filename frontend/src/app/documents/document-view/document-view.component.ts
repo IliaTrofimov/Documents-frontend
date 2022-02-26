@@ -2,11 +2,12 @@ import { switchMap } from 'rxjs/operators';
 import { Component, OnInit} from '@angular/core';
 import { ActivatedRoute, Router} from '@angular/router';
 
-import { DocTemplate } from "../../models/template-models";
+import { DocTemplate } from "../../models/template";
+import { DocumentData } from 'src/app/models/document-data';
 import { UsersService } from '../../services/users.service';
+import { DocumentInfo, DocTypes } from '../../models/document-info';
 import { DocumentsService } from '../../services/documents.service';
 import { ValidationService } from '../../services/validation.service';
-import { DocumentInfo, DocumentData, DocTypes } from '../../models/document-models';
 
 
 @Component({
@@ -80,7 +81,6 @@ export class DocumentViewComponent implements OnInit {
   }
 
   save(){
-    console.log("saving");
     this.docSvc.updateJoinedDocument(this.documentData, this.documentInfo).subscribe({
       error: error => this.status = [false, error.error],
       complete: () => this.status = [true, "Документ сохранён"]
