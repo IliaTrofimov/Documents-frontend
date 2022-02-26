@@ -13,6 +13,10 @@ export class UsersService{
     
     constructor(private http: HttpClient){}
     
+    whoami(){
+        return "unknown user";
+    }
+
     getUser(id: number){
         return this.http.get<User>(`${this.usersUrl}/${id}`);
     }
