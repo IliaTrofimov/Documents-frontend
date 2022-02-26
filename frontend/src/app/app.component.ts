@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-root',
   template: `
     <site-header></site-header>
-    <div class="container noprint">
+    <div class="container hidden-print">
       <router-outlet></router-outlet>
     </div>
     <site-footer></site-footer>

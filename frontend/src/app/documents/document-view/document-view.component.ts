@@ -2,11 +2,11 @@ import { switchMap } from 'rxjs/operators';
 import { Component, OnInit} from '@angular/core';
 import { ActivatedRoute, Router} from '@angular/router';
 
-import { DocTemplate } from "../models/template-models";
-import { UsersService } from '../services/users.service';
-import { DocumentsService } from '../services/documents.service';
-import { ValidationService } from '../services/validation.service';
-import { DocumentInfo, DocumentData, DocTypes } from '../models/document-models';
+import { DocTemplate } from "../../models/template-models";
+import { UsersService } from '../../services/users.service';
+import { DocumentsService } from '../../services/documents.service';
+import { ValidationService } from '../../services/validation.service';
+import { DocumentInfo, DocumentData, DocTypes } from '../../models/document-models';
 
 
 @Component({
@@ -21,9 +21,9 @@ export class DocumentViewComponent implements OnInit {
   status?: [boolean, string];
   private id: number = -1;
 
-  constructor(private docServ: DocumentsService,
-    private validServ: ValidationService,
-    private usersServ: UsersService,
+  constructor(private docSvc: DocumentsService,
+    private validSvc: ValidationService,
+    private usersSvc: UsersService,
     private route: ActivatedRoute, 
     private router: Router) { }
 
@@ -33,7 +33,7 @@ export class DocumentViewComponent implements OnInit {
   }
 
   private loadData(){
-    this.docServ.getJoinedDocument(this.id).subscribe({
+    this.docSvc.getJoinedDocument(this.id).subscribe({
       next: (merged) => {
         this.documentInfo = merged.info;
         
@@ -43,12 +43,12 @@ export class DocumentViewComponent implements OnInit {
         if(merged.template)  
           this.template = merged.template;
         
-        if (this.docServ.checkDocumentData(this.documentData, this.template)){
-          this.docServ.updateJoinedDocument(this.documentData, this.documentInfo).subscribe();
+        if (this.docSvc.checkDocumentData(this.documentData, this.template)){
+          this.docSvc.updateJoinedDocument(this.documentData, this.documentInfo).subscribe();
         }
       },
       error: err =>  {
-        this.router.navigate(['not-found'], { queryParams: {
+        this.router.navigate(['error'], { queryParams: {
           "title": `Не удалось загрузить документ '${this.documentInfo.name}'`, 
           "error": err.error
         }});
@@ -66,7 +66,7 @@ export class DocumentViewComponent implements OnInit {
 
   validate(){
     let validated = true;
-    let listner = this.validServ.start().subscribe({
+    let listner = this.validSvc.start().subscribe({
       complete: () => {
         validated = true;
         this.save();
@@ -81,14 +81,14 @@ export class DocumentViewComponent implements OnInit {
 
   save(){
     console.log("saving");
-    this.docServ.updateJoinedDocument(this.documentData, this.documentInfo).subscribe({
+    this.docSvc.updateJoinedDocument(this.documentData, this.documentInfo).subscribe({
       error: error => this.status = [false, error.error],
       complete: () => this.status = [true, "Документ сохранён"]
     });
   }
 
   delete(){
-    this.docServ.deleteJoinedDocument(this.documentData.id).subscribe();
+    this.docSvc.deleteJoinedDocument(this.documentData.id).subscribe();
     this.router.navigate(["/documents"]);
   }
 

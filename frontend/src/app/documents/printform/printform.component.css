@@ -20,9 +20,11 @@
 }
 
 @media print {
+	
+
 	html, body{
-		height: 297mm;
-		width: 210mm;
+		height: 297mm !important;
+		width: 210mm !important;
 	}
 
     *, *:before, *:after { 

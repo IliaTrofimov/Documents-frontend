@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DocumentInfo } from '../models/document-models';
-import { DocumentsService } from '../services/documents.service';
+import { DocumentInfo } from '../../models/document-models';
+import { DocumentsService } from '../../services/documents.service';
 
 
 @Component({
@@ -12,13 +12,13 @@ import { DocumentsService } from '../services/documents.service';
 export class DocumentsListComponent implements OnInit {
   documents: DocumentInfo[] = [];
 
-  constructor(private docServ: DocumentsService, private router: Router) { }
+  constructor(private docSvc: DocumentsService, private router: Router) { }
 
   ngOnInit(): void {
-    this.docServ.getInfos().subscribe({
+    this.docSvc.getInfos().subscribe({
       next: data => this.documents = data,
       error: err => {
-        this.router.navigate(['not-found'], { queryParams: {
+        this.router.navigate(['error'], { queryParams: {
           "title": "Не удалось загрузить список документов", 
           "error": err.error
         }});
@@ -27,13 +27,13 @@ export class DocumentsListComponent implements OnInit {
   }
   
   removeDocument(id: number) {
-    this.docServ.deleteJoinedDocument(id).subscribe((_) => 
+    this.docSvc.deleteJoinedDocument(id).subscribe((_) => 
       this.documents = this.documents.filter((t) => t.id !== id)
     );
   }
 
   createNewVersion(document: DocumentInfo){
-    this.docServ.createJoinedDocument(document.templateId, document.id).subscribe(id =>
+    this.docSvc.createJoinedDocument(document.templateId, document.id).subscribe(id =>
       this.router.navigate(['/documents', id])
     );
   }

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs';
-import { DocumentData, DocumentInfo } from '../models/document-models';
-import { DocTemplate } from '../models/template-models';
-import { DocumentsService } from '../services/documents.service';
-import { UsersService } from '../services/users.service';
+import { DocumentData, DocumentInfo } from '../../models/document-models';
+import { DocTemplate } from '../../models/template-models';
+import { DocumentsService } from '../../services/documents.service';
+import { UsersService } from '../../services/users.service';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -22,8 +22,8 @@ export class PrintformComponent implements OnInit {
   template: DocTemplate = new DocTemplate(-1, "");
   private id: number = -1;
 
-  constructor(private docServ: DocumentsService,
-    private usersServ: UsersService,
+  constructor(private docSvc: DocumentsService,
+    private usersSvc: UsersService,
     private route: ActivatedRoute, 
     private router: Router) { }
 
@@ -33,7 +33,7 @@ export class PrintformComponent implements OnInit {
   }
 
   private loadData(){
-    this.docServ.getJoinedDocument(this.id).subscribe({
+    this.docSvc.getJoinedDocument(this.id).subscribe({
       next: (merged) => {
         this.documentInfo = merged.info;
         

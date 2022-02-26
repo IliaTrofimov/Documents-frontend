@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { DocumentDataItem } from '../models/document-models';
-import { InputField, RestrictionTypes } from '../models/template-models';
-import { ValidationService } from '../services/validation.service';
+import { DocumentDataItem } from '../../models/document-models';
+import { InputField, RestrictionTypes } from '../../models/template-models';
+import { ValidationService } from '../../services/validation.service';
 
 @Component({
   selector: 'doc-field',
@@ -15,12 +15,12 @@ export class DocumentFieldComponent implements OnInit {
   choices: string[] = [];
   error?: string; 
 
-  constructor(private validServ: ValidationService) {}
+  constructor(private validSvc: ValidationService) {}
 
   ngOnInit(): void {
     if(this.template.restrictionType == 1 || this.template.restrictionType == 2)
       this.choices = this.template.restrictions.split(';');
-    this.validServ.on(() => this.validate())
+    this.validSvc.on(() => this.validate())
   }
 
   validate(): boolean {

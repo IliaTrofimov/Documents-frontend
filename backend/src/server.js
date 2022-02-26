@@ -186,21 +186,9 @@ app.get("/", async function(req, res){
 });
 
 
-try{
-    app.listen(SETTINGS.host, SETTINGS.ip, () => {
-        if (SETTINGS.flush_console) 
-            process.stdout.write('\033c');
-            
-        console.log("Server info: " + JSON.stringify(SETTINGS, null, 2));
-        console.log(`Express server is runnig on ${SETTINGS.ip}.`);
-    });
-}
-catch{
-    app.listen(SETTINGS.host, () => {
-        if (SETTINGS.flush_console) 
-            process.stdout.write('\033c');
-            
-        console.log("Server info: " + JSON.stringify(SETTINGS, null, 2));
-        console.log("Express server is runnig on localhost.");
-    });
-}
+app.listen(SETTINGS.host, () => {
+    if (SETTINGS.flush_console) 
+        process.stdout.write('\033c');
+        
+    console.log("Server info: " + JSON.stringify(SETTINGS, null, 2));
+});

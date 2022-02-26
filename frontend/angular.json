@@ -23,8 +23,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "scripts": [
-              "node_modules/jquery/dist/jquery.min.js",
-              "src/scripts/print.js"
+              "node_modules/jquery/dist/jquery.min.js"
             ]
           },
           "configurations": {

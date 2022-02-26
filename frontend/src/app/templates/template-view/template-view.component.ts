@@ -1,8 +1,8 @@
 import { switchMap } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router} from '@angular/router';
-import { TemplatesService } from '../services/templates.service';
-import { DocTemplate, InputField, RestrictionTypes, TemplateType, TableField } from '../models/template-models';
+import { TemplatesService } from '../../services/templates.service';
+import { DocTemplate, InputField, RestrictionTypes, TemplateType, TableField } from '../../models/template-models';
 
 @Component({
   selector: 'app-templates-view',
@@ -27,13 +27,13 @@ export class TemplateViewComponent implements OnInit {
     return TemplateViewComponent._restrictionTypes;
   }
 
-  constructor(private templateServ: TemplatesService, 
+  constructor(private templateSvc: TemplatesService, 
     private route: ActivatedRoute, 
     private router: Router) { }
 
   ngOnInit() {
     this.route.paramMap.pipe(switchMap(params => params.getAll('id'))).subscribe(data => this.id = +data);
-    this.templateServ.getTemplateById(this.id).subscribe({
+    this.templateSvc.getTemplateById(this.id).subscribe({
       next: data => {
         this.template = data;
         for (let f of data.fields) {
@@ -44,13 +44,13 @@ export class TemplateViewComponent implements OnInit {
         this.vacantId++;
       },
       error: err => {
-        this.router.navigate(['not-found'], { queryParams: {
+        this.router.navigate(['error'], { queryParams: {
           "title": `Не удалось загрузить шаблон '${this.template.name}'`, 
           "error": err.error
         }});
       }
     });
-    this.templateServ.getTypes().subscribe(data => this.templateTypes = data);
+    this.templateSvc.getTypes().subscribe(data => this.templateTypes = data);
   }
 
   
@@ -81,14 +81,14 @@ export class TemplateViewComponent implements OnInit {
   }
 
   save(){
-    this.templateServ.updateTemplate(this.template).subscribe({
+    this.templateSvc.updateTemplate(this.template).subscribe({
       error: error => this.status =  [true, error.error],
       complete: () => this.status = [true, "Шаблон сохранён"]
     });
   }
 
   delete(){
-    this.templateServ.deleteTemplate(this.template.id).subscribe({
+    this.templateSvc.deleteTemplate(this.template.id).subscribe({
       next: (data) =>  this.router.navigate(["/templates"]),
       error: (err) => this.status = err.error
     });

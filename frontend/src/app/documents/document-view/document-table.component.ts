@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { DocumentDataTable } from '../models/document-models';
-import { RestrictionTypes, TableField } from '../models/template-models';
-import { ValidationService } from '../services/validation.service';
+import { DocumentDataTable } from '../../models/document-models';
+import { RestrictionTypes, TableField } from '../../models/template-models';
+import { ValidationService } from '../../services/validation.service';
 
 @Component({
   selector: 'doc-table',
@@ -15,11 +15,11 @@ export class DocumentTableComponent implements OnInit{
   choices: string[] = [];
   tempString: string = "";
 
-  constructor(private validServ: ValidationService) {}
+  constructor(private validSvc: ValidationService) {}
   
   ngOnInit() {
     console.log("tbl.table", this.data)
-    this.validServ.on(() => {
+    this.validSvc.on(() => {
       console.log("table validating")
       let status = true;
       for(let i = 0; i < this.data.columns.length; i++){
