@@ -1,10 +1,18 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { map } from 'rxjs';
+
+import { DocTemplate } from '../models/template';
+import { TableField, TemplateRow } from "../models/template-row";
+import { TemplateField } from '../models/template-enums';
+import { DocumentData } from '../models/document-data';
+import { DocumentDataItem } from '../models/document-data';
+import { DocumentDataTable } from '../models/document-data';
+import { DocumentInfo, DocTypes } from '../models/document-info';
+import { Merged } from '../models/merged-item';
+
 import { UsersService } from './users.service';
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { DocTemplate, TableField, TemplateField, TemplateRow } from "../models/template-row";
-import { DocumentInfo, DocTypes, DocumentData, DocumentDataItem, Merged, DocumentDataTable } from '../models/document-info';
-import { map } from 'rxjs';
 
 
 @Injectable()

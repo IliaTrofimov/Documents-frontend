@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../environments/environment';
-import { User, Signatory } from '../models/document-info';
 import { map } from 'rxjs';
+
+import { environment } from '../../environments/environment';
+import { User, Signatory } from '../models/user';
 
 
 @Injectable({providedIn: 'root'})
@@ -20,5 +21,4 @@ export class UsersService{
         return this.http.get<User[]>(`signers/${documentId}`);
     }
 
-    
 }

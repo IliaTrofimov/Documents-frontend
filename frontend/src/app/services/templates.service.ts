@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../environments/environment';
-import { DocTemplate, InputField, TemplateType, TableField } from '../models/template-row';
 import { map } from 'rxjs';
+
+import { InputField, TableField } from '../models/template-row';
+import { DocTemplate, TemplateType } from '../models/template';
+import { environment } from '../../environments/environment';
 
 
 @Injectable()
 export class TemplatesService{
-
     private url = environment.apiUrl + "/templates";
     private typesUrl = environment.apiUrl + "/templates_types";
     

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
+
 @Injectable({
     providedIn: 'root'
 })
@@ -18,7 +19,6 @@ export class ValidationService{
         this.status$ = new Subject<boolean>();
         this.validated = 0;
         this.status = true;
-        console.log(`ValidationService.start()\nvalidators ${this.validatorsCount}\nvalidated ${this.validated}\nstatus ${this.isValidationSuccess()}`);
         this.start$.next(true);
         return this.status$;
     }
@@ -26,16 +26,11 @@ export class ValidationService{
     validate(receivedStatus: boolean){
         this.validated++;
         this.status = this.status && receivedStatus;
-        console.log(`ValidationService.validate(${receivedStatus})\nvalidators ${this.validatorsCount}\nvalidated ${this.validated}\nstatus ${this.status}`);
         
-        if (!this.status){
-            console.log("error")
+        if (!this.status)
             this.status$.error("fail");     
-        }
-        else if (this.validatorsCount == this.validated){
-            console.log("complete")
-            this.status$.complete();     
-        }       
+        else if (this.validatorsCount == this.validated)
+            this.status$.complete();          
     }
 
     isValidationSuccess(){
@@ -53,7 +48,6 @@ export class ValidationService{
 
     on(action: any){
         this.validatorsCount++;
-        console.log(`ValidationService.on(), validators ${this.validatorsCount}`);
         return this.start$.subscribe(() => this.validate(action()));
     }
 }
