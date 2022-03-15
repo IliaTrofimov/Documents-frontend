@@ -1,0 +1,27 @@
+<div class="panel">
+    <h2>Типы шаблонов</h2>
+    <h6 class="card-subtitle mb-2 text-muted">Всего {{types.length}} элементов.</h6>
+    <br>
+    <table class="table table-sm">
+        <tbody>
+            <tr *ngIf="selection == 0">
+                <td></td>
+                <td><input [(ngModel)]="newTypeName" class=""></td>
+                <td><button class="btn btn-sm btn-success">Добавить</button></td>
+            </tr>
+            <tr *ngFor="let t of types; let i = index">
+                <td>{{t.Id}}</td>
+                <td *ngIf="selection == i"><input [(ngModel)]="t.Name" (blur)="editType(t)"></td>
+                <td *ngIf="selection != i" (click)="selection = i">{{t.Name}}</td>
+                <td><button class="btn btn-sm btn-danger" (click)="removeType(t.Id)">Удалить</button></td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <div class="card" *ngIf="!types">
+        <div class="card-body">
+            <h5 class="card-title">Здесь ничего нет</h5>
+            <p class="card-text">Пока не был создан ни один тип</p>
+        </div>
+    </div>
+</div>

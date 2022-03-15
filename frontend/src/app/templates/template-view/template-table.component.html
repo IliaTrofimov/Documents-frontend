@@ -14,14 +14,14 @@
         </td>
     </tr>
     <tr>
-        <td><input class="form-control form-control-sm" placeholder="Название" [(ngModel)]="table.name" [readonly]="readonly"/></td>
-        <td><input type="number" class="form-control form-control-sm" [(ngModel)]="table.rows" [readonly]="readonly"/></td>
+        <td><input class="form-control form-control-sm" placeholder="Название" [(ngModel)]="table.Name" [readonly]="readonly"/></td>
+        <td><input type="number" class="form-control form-control-sm" [(ngModel)]="table.Rows" [readonly]="readonly"/></td>
     </tr>
 </table>
 <br>
-<button *ngIf="!readonly" class="btn badge badge-success" (click)="addColumn()"><b>+</b></button>&nbsp;Столбцы таблицы ({{table.columns.length}}):
+<button *ngIf="!readonly" class="btn badge badge-success" (click)="addColumn()"><b>+</b></button>&nbsp;Столбцы таблицы ({{columns.length}}):
 <table class="table table-sm table-borderless">
-    <tr *ngFor="let c of table.columns; let i = index">
+    <tr *ngFor="let c of columns; let i = index">
         <field-template [field]="c" (onDelete)="deleteColumn(i)" [readonly]="readonly"></field-template>
     </tr>
 </table>   

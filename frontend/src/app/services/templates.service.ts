@@ -1,47 +1,41 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
-import { InputField, TableField } from '../models/template-row';
-import { DocTemplate, TemplateType } from '../models/template';
-import { environment } from '../../environments/environment';
+import { Template } from '../models/template';
+import { UtilityService } from './utility.service';
 
 
 @Injectable()
 export class TemplatesService{
-    private url = environment.apiUrl + "/templates";
-    private typesUrl = environment.apiUrl + "/templates_types";
+    private url = "";
     
-    constructor(private http: HttpClient){}
-    
-    getTypes(){
-        return this.http.get<Array<TemplateType>>(this.typesUrl);
+    constructor(private http: HttpClient, private utilitySvc: UtilityService){
+        this.url = this.utilitySvc.apiUrl + "/templates";
     }
-    
+      
     getTemplates(author?: string){
-        return this.http.get<Array<DocTemplate>>(this.url);
+        return this.http.get<Template[]>(this.url);
     }
     
-    getTemplateById(id: number){
-        return this.http.get<DocTemplate>(`${this.url}/${id}`).pipe(
-            map((t: any) => {
-                t.fields = (JSON.parse(t.fields) as Array<InputField | TableField>);
-                return t;
-            }) 
-        );
+    getTemplate(id: number){
+        return this.http.get<Template>(`${this.url}/${id}`);
     }
 
     createTemplate(){
-        const myHeaders = new HttpHeaders().set("Content-Type", "application/json");
-        return this.http.post<DocTemplate>(this.url, {}, {headers: myHeaders}); 
+        return this.http.post<number>(this.url, 
+            {authorId: this.utilitySvc.currentUserId}, 
+            {headers: this.utilitySvc.httpHeaders}
+        ); 
     }
 
-    updateTemplate(template: DocTemplate) {
-        const myHeaders = new HttpHeaders().set("Content-Type", "application/json");
-        return this.http.put<DocTemplate>(`${this.url}/${template.id}`, JSON.stringify(template), {headers:myHeaders});
+    updateTemplate(template: Template) {
+        return this.http.put(this.url, 
+            JSON.stringify(template), 
+            {headers: this.utilitySvc.httpHeaders}
+        );
     }
 
     deleteTemplate(id: number){
-        return this.http.delete<DocTemplate>(`${this.url}/${id}`);
+        return this.http.delete(`${this.url}/${id}`);
     }
 }

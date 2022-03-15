@@ -1,14 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { TemplatesListComponent } from './templates/templates-list/templates-list.component';
-import { TemplateViewComponent } from './templates/template-view/template-view.component';
 import { ErrorComponent } from './shared-items/error.component';
 import { DocumentsRoutingModule } from './documents/documents-routing.module';
+import { TemplatesRoutingModule } from './templates/templates-routing.module';
+import { DictionariesRoutingModule } from './dictionaries/dictionaries-routing.module';
 
 const routes: Routes = [
-  { path: 'templates', component: TemplatesListComponent },
-  { path: 'templates/:id', component: TemplateViewComponent },
   { path: 'error', component: ErrorComponent },
   { path: '**', redirectTo: 'error' },
 ];
@@ -16,7 +14,9 @@ const routes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forRoot(routes),
-    DocumentsRoutingModule
+    DocumentsRoutingModule,
+    TemplatesRoutingModule,
+    DictionariesRoutingModule
   ],
   exports: [RouterModule]
 })

@@ -7,11 +7,10 @@ import { DocumentsListComponent } from './documents-list/documents-list.componen
 import { DocumentViewComponent } from './document-view/document-view.component';
 import { DocumentFieldComponent } from './document-view/document-field.component';
 import { DocumentTableComponent } from './document-view/document-table.component';
-import { PrintformComponent } from './printform/printform.component';
 import { DocumentsRoutingModule } from './documents-routing.module';
 
 import { HTMLInputTypePipe } from '../pipes/html-input-type.pipe';
-import { DocumentTypePipe } from '../pipes/doctype.pipe';
+import { DocumentStatusPipe } from '../pipes/document-status.pipe';
 
 
 
@@ -21,9 +20,8 @@ import { DocumentTypePipe } from '../pipes/doctype.pipe';
     DocumentViewComponent,
     DocumentTableComponent,
     DocumentFieldComponent,
-    PrintformComponent,
     HTMLInputTypePipe,
-    DocumentTypePipe
+    DocumentStatusPipe
   ],
   imports: [
     BrowserModule,

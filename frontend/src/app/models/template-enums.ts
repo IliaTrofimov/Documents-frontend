@@ -4,6 +4,3 @@ export enum RestrictionTypes{
 export enum InputType{
     Text, Date, Number, Registry
 }
-export enum TemplateField{
-    InputField, TableField
-}

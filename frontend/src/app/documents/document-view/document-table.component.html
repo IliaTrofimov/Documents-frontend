@@ -1,17 +1,17 @@
 <div class="">
-    {{table.name}}
+    
     <table>
-        <tr><td *ngFor="let col of table.columns; let c = index">
+        <tr><td *ngFor="let col of columns; let c = index">
             <table>
                 <tr>
-                    <th>{{col.name}}<span *ngIf="col.required" class="badge badge-pill badge-info">*</span></th>
+                    <th>{{col.Name}}<span *ngIf="col.Required" class="badge badge-pill badge-info">*</span></th>
                 </tr>
-                <tr *ngFor="let row of data.columns[c].values; let r = index; trackBy:trackByFn">
+                <tr *ngFor="let row of data.slice(c*table.Rows, (c + 1)*table.Rows); let r = index; trackBy:trackByFn">
                     <td>
-                        <input type="{{col.dataType | inputtype}}"
+                        <input type="{{col.DataType | inputtype}}"
                             id="c_{{r}}_{{c}}" 
                             class="form-control form-control-sm {{error && error[1] == r && error[2] == c ? 'is-invalid' : ''}}"
-                            [(ngModel)]="data.columns[c].values[r]"
+                            [(ngModel)]="row.Value"
                         >
                     </td>
                 </tr>

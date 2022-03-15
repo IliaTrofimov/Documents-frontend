@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { TableField } from '../../models/template-row';
+import { TemplateField } from '../../models/template-field';
 import { RestrictionTypes } from '../../models/template-enums';
-import { DocumentDataTable } from 'src/app/models/document-data';
+import { DocumentDataItem } from 'src/app/models/document-data-item';
 import { ValidationService } from '../../services/validation.service';
+import { TemplateTable } from 'src/app/models/template-table';
 
 
 @Component({
@@ -10,8 +11,9 @@ import { ValidationService } from '../../services/validation.service';
   templateUrl: "./document-table.component.html"   
 })
 export class DocumentTableComponent implements OnInit{
-  @Input() table: TableField = new TableField({ name: "", columns: [], rows: 0 });
-  @Input() data: DocumentDataTable = new DocumentDataTable(-1, []);
+  @Input() columns: TemplateField[] = [];
+  @Input() table: TemplateTable = new TemplateTable();
+  @Input() data: DocumentDataItem[] = [];
   @Input() readonly: boolean = false;
   error?: [string, number, number];
   choices: string[] = [];
@@ -22,10 +24,11 @@ export class DocumentTableComponent implements OnInit{
   ngOnInit() {
     this.validSvc.on(() => {
       let status = true;
-      for(let i = 0; i < this.data.columns.length; i++){
-        for(let j = 0; j < this.data.columns[i].values.length; j++){
-          status = status && this.validate(j, i);
-        }
+      for(let cell of this.data){
+        if (cell.Col && cell.Row)
+          status = status && this.validate(cell.Value, cell.Col, cell.Row);
+        else 
+          return false;
       }
       return status;
     })
@@ -35,23 +38,26 @@ export class DocumentTableComponent implements OnInit{
     return index;
   }
 
-  validate(row: number, col: number): boolean{
-    let column = this.table.columns[col];
+  
 
-    if(column.restrictionType == 1 || column.restrictionType == 2)
-      this.choices = column.restrictions.split(';'); 
+  validate(value: string, col: number, row: number): boolean{
+    let column = this.columns[col];
+    if (!column || row < 0 || row >= this.table.Rows) return false;
+
+    if (column.RestrictionType == 1 || column.RestrictionType == 2)
+      this.choices = column.Restriction.split(';'); 
     else
       this.choices = [];
 
-    if (this.data.columns[col].values[row] == "" && column.required){
+    if (value == "" && column.Required){
       this.error = ["required", row, col];
     }
-    else if(column.restrictionType == RestrictionTypes.Except && 
-      this.choices.includes(this.data.columns[col].values[row]) && column.required){
+    else if(column.RestrictionType == RestrictionTypes.Except && 
+      this.choices.includes(value) && column.Required){
       this.error = ["except", row, col];
     }
-    else if(column.restrictionType == RestrictionTypes.Only && 
-      !this.choices.includes(this.data.columns[col].values[row]) && column.required){
+    else if(column.RestrictionType == RestrictionTypes.Only && 
+      !this.choices.includes(value) && column.Required){
       this.error = ["only", row, col];
     }
     else{

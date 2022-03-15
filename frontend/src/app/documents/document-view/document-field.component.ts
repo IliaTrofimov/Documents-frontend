@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { InputField } from '../../models/template-row';
+import { TemplateField } from '../../models/template-field';
 import { RestrictionTypes } from '../../models/template-enums'
-import { DocumentDataItem } from 'src/app/models/document-data';
+import { DocumentDataItem } from 'src/app/models/document-data-item';
 import { ValidationService } from '../../services/validation.service';
 
 
@@ -10,8 +10,8 @@ import { ValidationService } from '../../services/validation.service';
   templateUrl: './document-field.component.html'    
 })
 export class DocumentFieldComponent implements OnInit {
-  @Input() template: InputField = new InputField({name: ""});
-  @Input() data: DocumentDataItem = new DocumentDataItem(-1);
+  @Input() template: TemplateField = new TemplateField("", 0);
+  @Input() data: DocumentDataItem = new DocumentDataItem();
   @Input() readonly: boolean = false;
 
   choices: string[] = [];
@@ -20,22 +20,22 @@ export class DocumentFieldComponent implements OnInit {
   constructor(private validSvc: ValidationService) {}
 
   ngOnInit(): void {
-    if(this.template.restrictionType == 1 || this.template.restrictionType == 2)
-      this.choices = this.template.restrictions.split(';');
+    if(this.template.RestrictionType == 1 || this.template.RestrictionType == 2)
+      this.choices = this.template.Restriction.split(';');
     this.validSvc.on(() => this.validate())
   }
 
   validate(): boolean {
-    if (this.data?.value == "" && this.template.required){
+    if (this.data?.Value == "" && this.template.Required){
       this.error = "required";
     }
-    else if(this.template.restrictionType == RestrictionTypes.Except && 
-      this.choices.includes(this.data.value) && this.template.required){
+    else if(this.template.RestrictionType == RestrictionTypes.Except && 
+      this.choices.includes(this.data.Value) && this.template.Required){
       this.error = "except";
 
     }
-    else if(this.template.restrictionType == RestrictionTypes.Only && 
-      !this.choices.includes(this.data?.value) && this.template.required){
+    else if(this.template.RestrictionType == RestrictionTypes.Only && 
+      !this.choices.includes(this.data.Value) && this.template.Required){
       this.error = "only";
     }
     else{

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { InputField, TableField } from '../../models/template-row';
+import { TemplateField } from '../../models/template-field';
 import { RestrictionTypes } from 'src/app/models/template-enums';
+import { TemplateTable } from 'src/app/models/template-table';
 
 
 @Component({
@@ -8,11 +9,11 @@ import { RestrictionTypes } from 'src/app/models/template-enums';
   templateUrl: 'template-table.component.html' 
 })
 export class TemplateTableComponent implements OnInit{
-    @Input() table: TableField = new TableField({ name: "", columns: [] }); 
+    @Input() table: TemplateTable = new TemplateTable(); 
+    @Input() columns: TemplateField[] = []; 
     @Input() readonly: boolean = false;
     @Output() onDelete = new EventEmitter();
-    @Output() onChangeOrder = new EventEmitter<number>();
-    vacantId: number = 0;
+    @Output() onChangeOrder = new EventEmitter<number>(); 
 
     static _restrictionTypes = [
         RestrictionTypes.None,
@@ -25,31 +26,34 @@ export class TemplateTableComponent implements OnInit{
     }
 
     ngOnInit() {
-        for (let f of this.table.columns) {
-            if (f.id > this.vacantId) {
-                this.vacantId = f.id;
-            }
-        }
-        this.vacantId++;
+        
     }
 
     deleteColumn(columnId: number){
-        this.table.columns.splice(columnId, 1);
+        this.columns.splice(columnId, 1);
     }
     
     addColumn(){
-        this.table.columns.push(new InputField({name: "", id: this.vacantId}));
-        this.vacantId++;
+        this.columns.push(new TemplateField(
+            `Столбец ${this.columns.length}`, 
+            this.columns.length, 
+        ));
     }
 
     deleteField(){
         this.onDelete.emit();
     }
 
+    setRows(rows: number){
+        this.table.Rows = rows;
+    }
+
     onColumnChangeOrder(index: number, delta: number){
         let newOrder = index + delta;
-        if (newOrder < this.table.columns.length - 1 && newOrder >= 0){
-            [this.table.columns[newOrder], this.table.columns[index]] = [this.table.columns[index], this.table.columns[newOrder]];
+        if (newOrder < this.columns.length - 1 && newOrder >= 0){
+            [this.columns[newOrder], this.columns[index]] = [this.columns[index], this.columns[newOrder]];
+            this.columns[newOrder].Order = this.columns[index].Order;
+            this.columns[index].Order = this.columns[newOrder].Order;
         }
     }
 

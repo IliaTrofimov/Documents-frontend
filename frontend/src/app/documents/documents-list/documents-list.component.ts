@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DocumentInfo } from '../../models/document-info';
+import { Document } from '../../models/document';
 import { DocumentsService } from '../../services/documents.service';
 
 
@@ -10,32 +10,30 @@ import { DocumentsService } from '../../services/documents.service';
   providers: [DocumentsService]
 })
 export class DocumentsListComponent implements OnInit {
-  documents: DocumentInfo[] = [];
+  documents: Document[] = [];
 
-  constructor(private docSvc: DocumentsService, private router: Router) { }
+  constructor(private documentsSvc: DocumentsService, private router: Router) { }
 
   ngOnInit(): void {
-    this.docSvc.getInfos().subscribe({
+    this.documentsSvc.getDocuments().subscribe({
       next: data => this.documents = data,
       error: err => {
-        this.router.navigate(['error'], { queryParams: {
-          "title": "Не удалось загрузить список документов", 
-          "error": err.error
-        }});
+        //this.router.navigate(['error'], { queryParams: {
+        //  "title": "Не удалось загрузить список документов", 
+        //  "error": JSON.stringify(err.error, null, 2)
+        //}});
       }
     });
   }
   
   removeDocument(id: number) {
-    this.docSvc.deleteJoinedDocument(id).subscribe((_) => 
-      this.documents = this.documents.filter((t) => t.id !== id)
+    this.documentsSvc.deleteDocument(id).subscribe(() => 
+      this.documents = this.documents.filter(doc => doc.Id !== id)
     );
   }
 
-  createNewVersion(document: DocumentInfo){
-    this.docSvc.createJoinedDocument(document.templateId, document.id).subscribe(id =>
-      this.router.navigate(['/documents', id])
-    );
+  createNewVersion(document: Document){
+    
   }
 
 }

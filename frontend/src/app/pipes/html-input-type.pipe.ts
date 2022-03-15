@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { InputType } from '../models/template-row';
+import { InputType } from '../models/template-enums';
 
 @Pipe({
   name: 'inputtype'

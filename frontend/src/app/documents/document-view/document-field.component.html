@@ -1,20 +1,18 @@
 <div class="form-group">
-    <label for="f_{{template.id}}">
-        {{template.name}} <span *ngIf="template.required" class="badge badge-pill badge-info">*</span>
+    <label>
+        {{template.Name}} <span *ngIf="template.Required" class="badge badge-pill badge-info">*</span>
     </label>   
-    <textarea *ngIf="template.dataType == 0"
-        id="f_{{template.id}}" 
+    <textarea *ngIf="template.DataType == 0"
         class="form-control {{error ? 'is-invalid' : ''}}"
         (blur)="validate()"
-        [(ngModel)]="data.value"
+        [(ngModel)]="data.Value"
         [disabled]="readonly">
     </textarea>
-    <input *ngIf="template.dataType != 0"
-        type="{{template.dataType | inputtype}}"
-        id="f_{{template.id}}" 
+    <input *ngIf="template.DataType != 0"
+        type="{{template.DataType | inputtype}}"
         class="form-control {{error ? 'is-invalid' : ''}}"
         (blur)="validate()"
-        [(ngModel)]="data.value"
+        [(ngModel)]="data.Value"
         [disabled]="readonly">
     <div *ngIf="error" class="alert alert-danger">
         <div *ngIf="error == 'required'">Обязательное поле!</div>

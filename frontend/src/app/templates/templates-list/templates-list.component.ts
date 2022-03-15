@@ -1,8 +1,10 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+
+import { Template } from '../../models/template';
 import { TemplatesService } from '../../services/templates.service';
 import { DocumentsService } from '../../services/documents.service';
-import { DocTemplate, TemplateType } from '../../models/template';
+import { UtilityService } from 'src/app/services/utility.service';
 
 
 @Component({
@@ -11,59 +13,46 @@ import { DocTemplate, TemplateType } from '../../models/template';
   providers: [TemplatesService, DocumentsService]
 })
 export class TemplatesListComponent implements OnInit {
-  templates: DocTemplate[] = [];
-  templateTypes: TemplateType[] = [];
+  templates: Template[] = [];
   status?: [boolean, string];
 
   constructor(private templateSvc: TemplatesService, 
-    private router: Router,
-    private documentsServ: DocumentsService) {
+    private documetnsSvc: DocumentsService,
+    private utilitySvc: UtilityService,
+    private router: Router) {
   } 
 
   ngOnInit(): void {
-    let error: any = undefined;
-
     this.templateSvc.getTemplates().subscribe({
       next: templates => {
         this.templates = templates;
-        this.templateSvc.getTypes().subscribe({
-          next: types => this.templateTypes = types,
-          error: err => error = err
-        });
       },
-      error: err => error = err
+      //error: err => this.router.navigate(['error'], { queryParams: {
+      //  title: "Не удалось загрузить список шаблонов", 
+      //  error: JSON.stringify(err.error, null, 2)
+      //}})
     })
 
-    if (error){
-      this.router.navigate(['error'], { queryParams: {
-        "title": "Не удалось загрузить список шаблонов", 
-        "error": error.error
-      }});
-    }
   }
   
   addTemplate() {
-    this.templateSvc.createTemplate().subscribe((t: DocTemplate) => {
-      this.router.navigate(["templates/" + t.id]);
+    this.templateSvc.createTemplate().subscribe({
+      next: (templateId) => this.router.navigate(["templates/" + templateId]),
+      error: (err) => this.status = [false, err.error]
     });
   }
 
   removeTemplate(id: number) {
     this.templateSvc.deleteTemplate(id).subscribe({
-      next: () => this.templates = this.templates.filter(template => template.id !== id),
+      next: () => this.templates = this.templates.filter(template => template.Id !== id),
       error: (err) => this.status = [false, err.error] 
     });
   }
 
-  getTemplateType(typeId: number){
-    for(let t of this.templateTypes)
-      if(t.id == typeId) return t.name;
-    return "Без типа";
-  }
-
-  createDocument(templateId: number){
-    this.documentsServ.createJoinedDocument(templateId).subscribe((id) => {
-        this.router.navigate(["documents/" + id]);
+  createDocument(templateId: number) {
+    this.documetnsSvc.createDocument(templateId).subscribe({
+      next: (id) => this.router.navigate(["documents/" + id]),
+      error: (err) => this.status = [false, err.error]
     });
   }
 }

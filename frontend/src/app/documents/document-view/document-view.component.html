@@ -1,28 +1,28 @@
-<div class="container panel" *ngIf="documentInfo">
+<div class="container panel" *ngIf="document">
     <h2>Редактирование документа</h2>
     <button class="btn btn-outline-secondary dropdown-toggle btn-sm badge" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Действия</button>
     <div class="dropdown-menu">
-        <button *ngIf="documentInfo.type == 0" class="dropdown-item btn-sm" (click)="save()">Сохранить</button>
-        <a class="dropdown-item btn-sm" [routerLink]="['/documents/print/', documentInfo.id]">Печать</a>
-        <button *ngIf="documentInfo.type == 0" class="dropdown-item btn-sm" (click)="delete()">Удалить</button>
+        <button *ngIf="document.Type == 0" class="dropdown-item btn-sm" (click)="save()">Сохранить</button>
+        <a class="dropdown-item btn-sm" [routerLink]="['/documents/print/', document.Id]">Печать</a>
+        <button *ngIf="document.Type == 0" class="dropdown-item btn-sm" (click)="delete()">Удалить</button>
     </div>
-    <a class="btn btn-sm" *ngIf="documentInfo.type == 0" (click)="nextType()">Передать на подписание</a>
-    <a class="btn btn-sm" *ngIf="documentInfo.type == 1" (click)="nextType()">Подписать</a>
-    <a class="btn btn-sm" *ngIf="documentInfo.type == 2" (click)="nextType()">Вывести из оборота</a>
+    <a class="btn btn-sm" *ngIf="document.Type == 0" (click)="nextType()">Передать на подписание</a>
+    <a class="btn btn-sm" *ngIf="document.Type == 1" (click)="nextType()">Подписать</a>
+    <a class="btn btn-sm" *ngIf="document.Type == 2" (click)="nextType()">Вывести из оборота</a>
     <hr>
     <button (click)="validate()">validate</button>
     <div class="row">
         <div class="col">
             <b>Название</b><br>
-            <input class="form-control form-control-sm" [(ngModel)]="documentInfo.name" [readonly]="documentInfo.type != 0"/>
+            <input class="form-control form-control-sm" [(ngModel)]="document.Name" [readonly]="document.Type != 0"/>
         </div>
         <div class="col">
             <b>Автор</b><br>
-            <input class="form-control form-control-sm" [(ngModel)]="documentInfo.authorName" readonly/>
+            {{template.AuthorName}}
         </div>
         <div class="col">
             <b>Дата истечения</b><br>
-            <input type="date" class="form-control form-control-sm" [(ngModel)]="documentInfo.expireDate" [readonly]="documentInfo.type != 0"/>
+            <input type="date" class="form-control form-control-sm" [(ngModel)]="document.ExpireDate" [readonly]="document.Type != 0"/>
         </div>
         <div class="col">
             <div *ngIf="status" class="alert alert-{{status[0] ? 'success' : 'danger'}}" role="alert">
@@ -35,19 +35,20 @@
     </div>
     <hr>
 </div>
-<div class="container panel" *ngIf="template && documentData">
+<div class="container panel">
     <h4>Список полей</h4>
-    <h6 class="text-muted">Шаблон: {{template.name}}</h6>
-    <p *ngFor="let f of template.fields; let fi = index">
-        <doc-field *ngIf="f.type == 0" 
-            [template]="$any(f)" 
-            [data]="$any(findField(f.id))"
-            [readonly]="documentInfo.type != 0">
+    <h6 class="text-muted">Шаблон: {{document.Template?.Name}}</h6>
+    <p *ngFor="let field of preparedData">
+        <doc-field *ngIf="!field.table" 
+            [template]="field.templateFields[0]" 
+            [data]="field.items[0]"
+            [readonly]="document.Type != 0">
         </doc-field>
-        <doc-table *ngIf="f.type == 1"
-            [data]="$any(findTable(f.id))" 
-            [table]="$any(f)"
-            [readonly]="documentInfo.type != 0">
+        <doc-table *ngIf="field.table"
+            [table]="field.table"
+            [columns]="field.templateFields" 
+            [data]="$any(field.items)"
+            [readonly]="document.Type != 0">
         </doc-table>                     
     </p>
     <hr>
@@ -55,6 +56,6 @@
         Обязательные поля отмечены <span class="badge badge-pill badge-info">*</span>
     </p>  
 </div>
-<div class="container panel" *ngIf="!documentData || !documentInfo || !template">
+<div class="container panel" *ngIf="!document">
     Ошибка, не удалось загурзить документ
 </div>

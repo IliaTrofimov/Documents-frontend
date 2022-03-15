@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { RestrictionTypes } from '../models/template-row';
+import { RestrictionTypes } from '../models/template-enums';
 
 @Pipe({
   name: 'restriction'

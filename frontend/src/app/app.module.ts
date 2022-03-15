@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+import { APP_INITIALIZER } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { ErrorComponent } from './shared-items/error.component';
@@ -10,6 +11,7 @@ import { SiteFooterComponent } from './shared-items/site-footer.component';
 import { DocumentsModule } from './documents/documents.module';
 import { TemplatesModule } from './templates/templates.module';
 import { AppRoutingModule } from './app-routing.module';
+import { DictionariesModule } from './dictionaries/dictionaries.module';
 
 
 @NgModule({
@@ -25,8 +27,10 @@ import { AppRoutingModule } from './app-routing.module';
     HttpClientModule,
     DocumentsModule,
     TemplatesModule,
+    DictionariesModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

@@ -15,28 +15,28 @@
         <tbody>
             <tr *ngFor="let t of templates">
                 <td>
-                    <h5>{{t.name}}</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">{{getTemplateType(t.type)}}</h6>
+                    <h5>{{t.Name}}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{t.TemplateType}}</h6>
                 </td> 
                 <td>
-                    <h6 *ngIf="t.depricated == 0">действует</h6>
-                    <div *ngIf="t.depricated == 1">
+                    <h6 *ngIf="t.Depricated">действует</h6>
+                    <div *ngIf="!t.Depricated">
                         <h6>устарел</h6>
                         <p class="card-subtitle mb-2 text-muted">Новый документ создать нельзя</p>
                     </div>
                 </td> 
                 <td>
-                    <h6 class="">{{t.author}}</h6>
+                    <h6 class="">{{t.AuthorName}}</h6>
                 </td>  
                 <td>
-                    <h6 class="">{{t.updateDate | date:'longDate'}}</h6>
+                    <h6 class="">{{t.UpdateDate | date:'longDate'}}</h6>
                 </td>  
                 <td width="110px">
                     <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Действия</button>
                     <div class="dropdown-menu">
-                        <button *ngIf="t.depricated != 1" class="dropdown-item btn-sm" (click)="createDocument(t.id)">Создать документ</button>
-                        <a class="dropdown-item btn-sm" [routerLink]="['/templates', t.id]">Изменить шаблон</a>
-                        <button class="dropdown-item btn-sm" (click)="removeTemplate(t.id)">Удалить шаблон</button>
+                        <button *ngIf="!t.Depricated" class="dropdown-item btn-sm" (click)="createDocument(t.Id)">Создать документ</button>
+                        <a class="dropdown-item btn-sm" [routerLink]="['/templates', t.Id]">Изменить шаблон</a>
+                        <button class="dropdown-item btn-sm" (click)="removeTemplate(t.Id)">Удалить шаблон</button>
                     </div>
                 </td>
             </tr>

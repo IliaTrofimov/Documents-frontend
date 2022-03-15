@@ -4,7 +4,7 @@
     <div class="dropdown-menu">
         <button class="dropdown-item btn-sm" (click)="save()">Сохранить</button>
         <button class="dropdown-item btn-sm" (click)="changeUsage()">
-            {{template.depricated == 1 ? "Отметить действующим" : "Отметить устаревшим"}}
+            {{template.Depricated  ? "Отметить действующим" : "Отметить устаревшим"}}
         </button>
         <button class="dropdown-item btn-sm" (click)="delete()">Удалить</button>
     </div>
@@ -13,16 +13,16 @@
     <div class="row">
         <div class="col">
             <b>Название</b><br>
-            <input class="form-control form-control-sm" [(ngModel)]="template.name"/>
+            <input class="form-control form-control-sm" [(ngModel)]="template.Name"/>
         </div>
         <div class="col">
             <b>Автор</b><br>
-            <input class="form-control form-control-sm" [(ngModel)]="template.author"/>
+            {{template.AuthorName}}
         </div>
         <div class="col">
             <b>Тип</b><br>
-            <select class="form-control form-control-sm" [(ngModel)]="template.type">
-                <option *ngFor="let t of templateTypes" [ngValue]="t.id">{{t.name}}</option>
+            <select class="form-control form-control-sm" [(ngModel)]="template.TemplateType">
+                <option *ngFor="let t of templateTypes" [ngValue]="t.Id">{{t.Name}}</option>
             </select>
         </div>
         <div class="col">
@@ -36,21 +36,24 @@
     </div>
     <hr>
 </div>
-<div class="container panel" *ngIf="template != undefined && template.fields != undefined">
-    <h4>Список полей ({{template.fields.length}})</h4>
-    <p *ngIf="template.depricated == 0">
+<div class="container panel">
+    <h4>Список полей ({{template.TemplateField.length}})</h4>
+    <p *ngIf="template.Depricated">
         <button class="btn badge badge-success" (click)="addField()">Добавить поле</button> или 
         <button class="btn badge badge-success" (click)="addTable()">добавить таблицу</button>
         <br>
         <br>
     </p>
     <ul class="list-group">
-        <li *ngIf="template.fields.length == 0" class="list-group-item">
+        <li *ngIf="template.TemplateField.length == 0" class="list-group-item">
             <b>Пусто</b>
         </li>                
-        <li *ngFor="let f of template.fields; let fi = index" class="list-group-item">
-            <field-template *ngIf="f.type == 0" [field]="$any(f)" (onDelete)="deleteField(fi)" (onChangeOrder)="changeOrder(fi, $event)" [readonly]="template.depricated == 1"></field-template>  
-            <table-template *ngIf="f.type == 1" [table]="$any(f)" (onDelete)="deleteField(fi)" (onChangeOrder)="changeOrder(fi, $event)" [readonly]="template.depricated == 1"></table-template>      
+        <li *ngFor="let f of preparedFields" class="list-group-item">
+            <table-template *ngIf="f.table"
+                [columns]="f.columns"
+                [table]="f.table">
+            </table-template>
+            <field-template *ngIf="!f.table" [field]="f.columns[0]"></field-template>
         </li>
     </ul>    
 </div>

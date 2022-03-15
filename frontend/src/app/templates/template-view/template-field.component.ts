@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RestrictionTypes, InputType } from 'src/app/models/template-enums';
-import { InputField } from '../../models/template-row';
+import { TemplateField } from '../../models/template-field';
 
 
 @Component({
@@ -8,7 +8,7 @@ import { InputField } from '../../models/template-row';
   templateUrl: 'template-field.component.html'
 })
 export class TemplateFieldComponent {
-    @Input() field: InputField = new InputField({name: ""}); 
+    @Input() field: TemplateField = new TemplateField("", -1); 
     @Input() readonly: boolean = false;
     @Output() onDelete = new EventEmitter();
     @Output() onChangeOrder = new EventEmitter<number>();

@@ -1,17 +1,15 @@
-import { TemplateRow } from "./template-row";
+import { TemplateField } from "./template-field";
+import { TemplateTable } from "./template-table";
 
-export class DocTemplate {
-    public updateDate: Date = new Date();
-    public authorName?: string;
-    public depricated: number = 0;
+export class Template {
+    public Id: number = -1;
+    public Name: string = "Новый шаблон";
+    public AuthorId: number = -1;
+    public AuthorName: string = "неизвестно";
+    public UpdateDate: Date = new Date();
+    public Depricated: boolean = false;
+    public TemplateType: string = "без типа";
 
-    constructor(public id: number,
-        public name: string,
-        public fields: TemplateRow[] = [],
-        public author: number = 0,
-        public type: number = 0) { }      
-}
-
-export class TemplateType{
-    constructor(public id: number, public name: string) {}
+    public TemplateField: TemplateField[] = [];
+    public TemplateTable: TemplateTable[] = [];
 }

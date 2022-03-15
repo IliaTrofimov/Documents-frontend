@@ -1,28 +1,41 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
-import { environment } from '../../environments/environment';
-import { User, Signatory } from '../models/user';
+import { User } from '../models/user';
+import { UtilityService } from './utility.service';
 
 
-@Injectable({providedIn: 'root'})
+@Injectable()
 export class UsersService{
-    private usersUrl = environment.apiUrl + "/users";
-    private signsUrl = environment.apiUrl + "/signs";
+    private url = "";
     
-    constructor(private http: HttpClient){}
-    
-    whoami(){
-        return "unknown user";
+    constructor(private http: HttpClient, private utilitySvc: UtilityService){
+        this.url = this.utilitySvc.apiUrl + "/users";
     }
 
+    getUsers(){
+        return this.http.get<User[]>(this.url);
+    }
+    
     getUser(id: number){
-        return this.http.get<User>(`${this.usersUrl}/${id}`);
+        return this.http.get<User>(`${this.url}/${id}`);
     }
 
-    getSigners(documentId: number){
-        return this.http.get<User[]>(`signers/${documentId}`);
+    updateUser(user: User){
+        return this.http.put(this.url,
+            JSON.stringify(user),
+            {headers: this.utilitySvc.httpHeaders}
+        );
     }
 
+    createUser(user: User){
+        return this.http.post<number>(this.url,
+            JSON.stringify(user),
+            {headers: this.utilitySvc.httpHeaders}
+        );
+    }
+
+    deleteUser(id: number){
+        return this.http.delete<number>(`${this.url}/${id}`);
+    }
 }
