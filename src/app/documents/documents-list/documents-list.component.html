@@ -1,0 +1,36 @@
+<div class="panel">
+    <h2>Документы</h2>
+    <h6 class="card-subtitle mb-2 text-muted">Всего {{documents.length}} элементов. Создать новый документ по шаблону, можно в разделе "шаблоны".</h6>
+    <br>
+    <table class="table table-sm">
+        <tbody>
+            <tr *ngFor="let d of documents">
+                <td>
+                    <h5 class="card-title">{{d.Name}}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{d.Type | doctstatus}}</h6>
+                </td> 
+                <td><h6>{{d.AuthorName}}</h6></td>  
+                <td>
+                    <b>Создан: </b>{{d.UpdateDate | date:"longDate"}}<br>
+                    <b>Истекает: </b>{{d.ExpireDate | date:"longDate" }}
+                </td>  
+                <td width="110px">
+                    <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Действия</button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item btn-sm" [routerLink]="['/documents', d.Id]">Изменить документ</a>
+                        <button class="dropdown-item btn-sm" *ngIf="d.Type >= 2" (click)="createNewVersion(d)">Новая версия</button>
+                        <a class="dropdown-item btn-sm" [routerLink]="['/templates', d.TemplateId]">К шаблону</a>
+                        <button class="dropdown-item btn-sm" (click)="removeDocument(d.Id)">Удалить документ</button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <div class="card" *ngIf="!documents">
+        <div class="card-body">
+            <h5 class="card-title">Здесь ничего нет</h5>
+            <p class="card-text">Пока не был создан ни один документ</p>
+        </div>
+    </div>
+</div>
