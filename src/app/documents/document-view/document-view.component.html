@@ -1,5 +1,5 @@
 <div class="container panel" *ngIf="document">
-    <h2>Редактирование документа</h2>
+    <h4>Редактирование документа</h4>
     <button class="btn btn-outline-secondary dropdown-toggle btn-sm badge" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Действия</button>
     <div class="dropdown-menu">
         <button *ngIf="document.Type == 0" class="dropdown-item btn-sm" (click)="save()">Сохранить</button>
@@ -36,7 +36,7 @@
     <hr>
 </div>
 <div class="container panel">
-    <h4>Список полей</h4>
+    <h5>Список полей</h5>
     <h6 class="text-muted">Шаблон: {{document.Template?.Name}}</h6>
     <p *ngFor="let field of preparedData">
         <doc-field *ngIf="!field.table" 

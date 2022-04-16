@@ -11,7 +11,8 @@ import { DocumentsRoutingModule } from './documents-routing.module';
 
 import { HTMLInputTypePipe } from '../pipes/html-input-type.pipe';
 import { DocumentStatusPipe } from '../pipes/document-status.pipe';
-
+import { MatTableModule } from '@angular/material/table';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -21,7 +22,7 @@ import { DocumentStatusPipe } from '../pipes/document-status.pipe';
     DocumentTableComponent,
     DocumentFieldComponent,
     HTMLInputTypePipe,
-    DocumentStatusPipe
+    DocumentStatusPipe,
   ],
   imports: [
     BrowserModule,
@@ -29,8 +30,11 @@ import { DocumentStatusPipe } from '../pipes/document-status.pipe';
     FormsModule,
     ReactiveFormsModule,
     DocumentsRoutingModule,
+    MatTableModule,
+    MatSnackBarModule
   ],
   providers: [],
-  bootstrap: []
+  bootstrap: [],
+  exports: [DocumentsListComponent] 
 })
 export class DocumentsModule { }

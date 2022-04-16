@@ -10,7 +10,10 @@ import { TemplateTableComponent } from './template-view/template-table.component
 import { TemplatesRoutingModule } from './templates-routing.module';
 
 import { RestrictionPipe } from '../pipes/restriction.pipe';
+
 import { FieldTypePipe } from '../pipes/field-type.pipe';
+import { MatTableModule } from '@angular/material/table';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -28,8 +31,11 @@ import { FieldTypePipe } from '../pipes/field-type.pipe';
     FormsModule,
     ReactiveFormsModule,
     TemplatesRoutingModule,
+    MatTableModule,
+    MatSnackBarModule
   ],
   providers: [],
-  bootstrap: []
+  bootstrap: [],
+  exports: [TemplatesListComponent]
 })
 export class TemplatesModule { }

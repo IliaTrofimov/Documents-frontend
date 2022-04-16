@@ -13,6 +13,7 @@ export class TemplateTableComponent implements OnInit{
     @Input() columns: TemplateField[] = []; 
     @Input() readonly: boolean = false;
     @Output() onDelete = new EventEmitter();
+    @Output() onDeleteColumn = new EventEmitter<number>();
     @Output() onChangeOrder = new EventEmitter<number>(); 
 
     static _restrictionTypes = [
@@ -29,14 +30,16 @@ export class TemplateTableComponent implements OnInit{
         
     }
 
-    deleteColumn(columnId: number){
-        this.columns.splice(columnId, 1);
+    deleteColumn(col: TemplateField){
+        this.columns.splice(col.Order, 1);
+        for (let i = col.Order; i < this.columns.length; i++)
+            this.columns[i].Order = i - 1;
+        this.onDeleteColumn.emit(col.Id);
     }
     
     addColumn(){
-        this.columns.push(new TemplateField(
-            `Столбец ${this.columns.length}`, 
-            this.columns.length, 
+        this.columns.push(new TemplateField(`Столбец ${this.columns.length + 1}`, 
+            this.columns.length, this.table.TemplateId, this.table.Id
         ));
     }
 

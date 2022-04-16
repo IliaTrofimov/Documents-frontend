@@ -1,0 +1,6 @@
+{
+    "Production": true,
+    "ApiUrl": "https://localhost:44381/api",
+    "Active": true,
+    "ServiceMessage": "Ресурс не доступен, попробуйте обновить страницу позднее."
+}

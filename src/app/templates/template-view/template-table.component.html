@@ -22,6 +22,6 @@
 <button *ngIf="!readonly" class="btn badge badge-success" (click)="addColumn()"><b>+</b></button>&nbsp;Столбцы таблицы ({{columns.length}}):
 <table class="table table-sm table-borderless">
     <tr *ngFor="let c of columns; let i = index">
-        <field-template [field]="c" (onDelete)="deleteColumn(i)" [readonly]="readonly"></field-template>
+        <field-template [field]="c" (onDelete)="deleteColumn(c)" [readonly]="readonly"></field-template>
     </tr>
 </table>   

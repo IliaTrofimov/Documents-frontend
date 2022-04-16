@@ -63,6 +63,7 @@
           "configurations": {
             "production": {
               "browserTarget": "mywebsite:build:production"
+              
             },
             "development": {
               "browserTarget": "mywebsite:build:production"

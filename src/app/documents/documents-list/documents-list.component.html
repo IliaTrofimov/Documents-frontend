@@ -1,36 +1,56 @@
-<div class="panel">
-    <h2>Документы</h2>
-    <h6 class="card-subtitle mb-2 text-muted">Всего {{documents.length}} элементов. Создать новый документ по шаблону, можно в разделе "шаблоны".</h6>
-    <br>
-    <table class="table table-sm">
-        <tbody>
-            <tr *ngFor="let d of documents">
-                <td>
-                    <h5 class="card-title">{{d.Name}}</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">{{d.Type | doctstatus}}</h6>
-                </td> 
-                <td><h6>{{d.AuthorName}}</h6></td>  
-                <td>
-                    <b>Создан: </b>{{d.UpdateDate | date:"longDate"}}<br>
-                    <b>Истекает: </b>{{d.ExpireDate | date:"longDate" }}
-                </td>  
-                <td width="110px">
-                    <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Действия</button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item btn-sm" [routerLink]="['/documents', d.Id]">Изменить документ</a>
-                        <button class="dropdown-item btn-sm" *ngIf="d.Type >= 2" (click)="createNewVersion(d)">Новая версия</button>
-                        <a class="dropdown-item btn-sm" [routerLink]="['/templates', d.TemplateId]">К шаблону</a>
-                        <button class="dropdown-item btn-sm" (click)="removeDocument(d.Id)">Удалить документ</button>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <br>
-    <div class="card" *ngIf="!documents">
-        <div class="card-body">
-            <h5 class="card-title">Здесь ничего нет</h5>
-            <p class="card-text">Пока не был создан ни один документ</p>
-        </div>
+<h4 *ngIf="!isComponentInserted">Документы</h4>
+<p *ngIf="!isComponentInserted" class="text-muted">
+    Всего {{documents.length}} элементов. Создать новый документ по шаблону, можно в разделе "шаблоны".
+</p>
+
+<table mat-table [dataSource]="documents" fixedLayout class="w-100" *ngIf="documents">
+    <ng-container matColumnDef="Name">
+        <th mat-header-cell *matHeaderCellDef>Название</th>
+        <td mat-cell *matCellDef="let document">
+            {{(document.Name != null ? document.Name : "Без названия")}}
+            <br>--- {{document.TemplateName}} ---
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="AuthorName">
+        <th mat-header-cell *matHeaderCellDef>Автор</th>
+        <td mat-cell *matCellDef="let document">{{document.AuthorName}}</td>
+    </ng-container>
+    <ng-container matColumnDef="UpdateDate">
+        <th mat-header-cell *matHeaderCellDef>Изменено</th>
+        <td mat-cell *matCellDef="let document">{{document.UpdateDate | date:"longDate"}}</td>
+    </ng-container>
+    <ng-container matColumnDef="ExpireDate">
+        <th mat-header-cell *matHeaderCellDef>Устареет</th>
+        <td mat-cell *matCellDef="let document">
+            {{(document.ExpireDate ? (document.ExpireDate | date:"longDate") : 'никогда')}}
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="Status">
+        <th mat-header-cell *matHeaderCellDef>Статус</th>
+        <td mat-cell *matCellDef="let document">
+            <span class="badge badge-secondary">{{document.Type | doctstatus}}</span>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="Actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let document">
+            <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Действия</button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item btn-sm" [routerLink]="['/documents', document.Id]">Изменить документ</a>
+                <button class="dropdown-item btn-sm" *ngIf="document.Type >= 2" (click)="createNewVersion(document.Id)">Новая версия</button>
+                <a class="dropdown-item btn-sm" [routerLink]="['/templates', document.TemplateId]">К шаблону</a>
+                <button class="dropdown-item btn-sm" (click)="removeDocument(document.Id)">Удалить документ</button>
+            </div>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let myRowData; columns: displayedColumns"></tr>     
+</table>
+
+<div class="card" *ngIf="!documents">
+    <div class="card-body">
+        <b>Здесь ничего нет</b>
+        <p class="muted">Пока не был создан ни один документ</p>
     </div>
 </div>

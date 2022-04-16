@@ -12,6 +12,8 @@ import { DocumentDataItem } from 'src/app/models/document-data-item';
 import { TemplateTable } from 'src/app/models/template-table';
 
 
+
+
 @Component({
   selector: 'app-document-view',
   templateUrl: './document-view.component.html',
@@ -26,13 +28,13 @@ export class DocumentViewComponent implements OnInit {
 
   constructor(private docSvc: DocumentsService,
     private validSvc: ValidationService,
-    private usersSvc: UsersService,
     private route: ActivatedRoute, 
     private router: Router) { }
 
   ngOnInit(){
     this.route.paramMap.pipe(switchMap(params => params.getAll('id'))).subscribe(data => this.id = +data);
     this.loadData();   
+    console.log(JSON.stringify(this.document, null, 2))
   }
 
   private loadData(){
@@ -108,7 +110,7 @@ export class DocumentViewComponent implements OnInit {
   }
 
   save(){
-    this.docSvc.updateDocument(this.document).subscribe({
+    this.docSvc.editDocument(this.document).subscribe({
       error: error => this.status = [false, error.error],
       complete: () => this.status = [true, "Документ сохранён"]
     });

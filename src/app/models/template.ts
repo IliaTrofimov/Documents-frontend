@@ -1,5 +1,6 @@
 import { TemplateField } from "./template-field";
 import { TemplateTable } from "./template-table";
+import { TemplateType } from "./template-type";
 
 export class Template {
     public Id: number = -1;
@@ -8,7 +9,8 @@ export class Template {
     public AuthorName: string = "неизвестно";
     public UpdateDate: Date = new Date();
     public Depricated: boolean = false;
-    public TemplateType: string = "без типа";
+    public TemplateTypeId: number = 0;
+    public TemplateType: TemplateType = new TemplateType(0, "без типа");
 
     public TemplateField: TemplateField[] = [];
     public TemplateTable: TemplateTable[] = [];

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Document } from '../../models/document';
 import { DocumentsService } from '../../services/documents.service';
@@ -10,7 +10,10 @@ import { DocumentsService } from '../../services/documents.service';
   providers: [DocumentsService]
 })
 export class DocumentsListComponent implements OnInit {
-  documents: Document[] = [];
+  @Input() documents: Document[] = [];
+  isComponentInserted: boolean = false;
+  displayedColumns = ['Name', 'AuthorName', 'UpdateDate', 'ExpireDate', 'Status', 'Actions'];
+
 
   constructor(private documentsSvc: DocumentsService, private router: Router) { }
 
@@ -18,10 +21,10 @@ export class DocumentsListComponent implements OnInit {
     this.documentsSvc.getDocuments().subscribe({
       next: data => this.documents = data,
       error: err => {
-        //this.router.navigate(['error'], { queryParams: {
-        //  "title": "Не удалось загрузить список документов", 
-        //  "error": JSON.stringify(err.error, null, 2)
-        //}});
+        this.router.navigate(['error'], { queryParams: {
+          "title": "Не удалось загрузить список документов", 
+          "error": JSON.stringify(err.error, null, 2)
+        }});
       }
     });
   }

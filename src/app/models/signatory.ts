@@ -1,4 +1,4 @@
-export class Sign {
+export class Signatory {
     public UserName: string = "";
     public DocumentName: string = "";
 

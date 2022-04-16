@@ -1,4 +1,4 @@
-import { Sign } from "./sign";
+import { Signatory } from "./signatory";
 import { Template } from "./template"
 import { DocumentDataItem } from "./document-data-item";
 
@@ -18,8 +18,9 @@ export class Document {
     public AuthorName: string = "неизвестно";
 
     public Template?: Template;
+    public TemplateName?: string;
     public DocumentDataItem: DocumentDataItem[] = [];
-    public Sign: Sign[] = [];
+    public Sign: Signatory[] = [];
 
     public RegistryId: number = -1;
     public PreviousDoc: number = -1;

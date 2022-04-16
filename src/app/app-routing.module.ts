@@ -16,7 +16,7 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     DocumentsRoutingModule,
     TemplatesRoutingModule,
-    DictionariesRoutingModule
+    DictionariesRoutingModule,
   ],
   exports: [RouterModule]
 })

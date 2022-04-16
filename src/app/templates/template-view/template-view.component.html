@@ -1,10 +1,10 @@
-<div class="container panel" *ngIf="template != undefined">
-    <h2>Редактирование шаблона</h2>
+<div class="container panel">
+    <h4>Редактирование шаблона</h4>
     <button class="btn btn-outline-secondary dropdown-toggle btn-sm badge" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Действия</button>
     <div class="dropdown-menu">
         <button class="dropdown-item btn-sm" (click)="save()">Сохранить</button>
-        <button class="dropdown-item btn-sm" (click)="changeUsage()">
-            {{template.Depricated  ? "Отметить действующим" : "Отметить устаревшим"}}
+        <button class="dropdown-item btn-sm" (click)="template.Depricated = !template.Depricated">
+            {{template.Depricated  ? "Отметить актуальным" : "Отметить устаревшим"}}
         </button>
         <button class="dropdown-item btn-sm" (click)="delete()">Удалить</button>
     </div>
@@ -17,7 +17,7 @@
         </div>
         <div class="col">
             <b>Тип</b><br>
-            <select class="form-control form-control-sm" [(ngModel)]="template.TemplateType">
+            <select class="form-control form-control-sm" [(ngModel)]="template.TemplateTypeId">
                 <option *ngFor="let t of templateTypes" [ngValue]="t.Id">{{t.Name}}</option>
             </select>
         </div>
@@ -25,23 +25,22 @@
             <b>Автор</b><br>
             {{template.AuthorName}}
         </div>
-        <div class="col">
-            <div *ngIf="status" class="alert alert-{{status[0] ? 'success' : 'danger'}}" role="alert">
-                {{status[1]}}
-                <button type="button" class="close" aria-label="Close" (click)="status = undefined">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>  
-        </div>
+    </div>
+    <div class="row" *ngIf="status">
+        <div class="alert alert-{{status[0] ? 'success' : 'danger'}}" role="alert">
+            {{status[1]}}
+            <button type="button" class="close" aria-label="Close" (click)="status = undefined">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>  
     </div>
     <hr>
 </div>
 <div class="container panel">
-    <h4>Список полей ({{template.TemplateField.length}})</h4>
-    <p *ngIf="template.Depricated">
+    <h5>Список полей ({{template.TemplateField.length}})</h5>
+    <p *ngIf="!template.Depricated">
         <button class="btn badge badge-success" (click)="addField()">Добавить поле</button> или 
         <button class="btn badge badge-success" (click)="addTable()">добавить таблицу</button>
-        <br>
         <br>
     </p>
     <ul class="list-group">
@@ -49,11 +48,18 @@
             <b>Пусто</b>
         </li>                
         <li *ngFor="let f of preparedFields" class="list-group-item">
-            <table-template *ngIf="f.table"
-                [columns]="f.columns"
-                [table]="f.table">
+            <table-template *ngIf="f.table" 
+                [columns]="f.columns" 
+                [table]="f.table"
+                (onDeleteColumn)="deleteColumn($event)"
+                (onDelete)="deleteField(f)"
+            >
             </table-template>
-            <field-template *ngIf="!f.table" [field]="f.columns[0]"></field-template>
+            <field-template *ngIf="!f.table" 
+                [field]="f.columns[0]" 
+                (onDelete)="deleteField(f)"
+            >
+            </field-template>
         </li>
     </ul>    
 </div>

@@ -1,0 +1,122 @@
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="card" style="width: 18rem;">    
+                <div class="card-body">
+                  <h5 class="card-title">{{user.Lastname}} {{user.Firstname}} {{user.Fathersname}}</h5>
+                  <p class="muted">Должность ...</p>
+                </div>
+              </div>
+        </div>
+    </div>
+    <mat-tab-group>
+        <mat-tab label="Документы">
+          <p>Создать документ можно только по выбранному шаблону в разделе <a [routerLink]="['templates']">шаблоны</a></p>
+          {{documentsJson}}
+          <table mat-table [dataSource]="user.Document" fixedLayout class="w-100">
+            <ng-container matColumnDef="Name">
+                <th mat-header-cell *matHeaderCellDef>Название</th>
+                <td mat-cell *matCellDef="let document">
+                    {{(document.Name != null ? document.Name : "Без названия")}}
+                    <br>--- {{document.TemplateName}} ---
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="AuthorName">
+                <th mat-header-cell *matHeaderCellDef>Автор</th>
+                <td mat-cell *matCellDef="let document">{{document.AuthorName}}</td>
+            </ng-container>
+            <ng-container matColumnDef="UpdateDate">
+                <th mat-header-cell *matHeaderCellDef>Изменено</th>
+                <td mat-cell *matCellDef="let document">{{document.UpdateDate | date:"longDate"}}</td>
+            </ng-container>
+            <ng-container matColumnDef="ExpireDate">
+                <th mat-header-cell *matHeaderCellDef>Устареет</th>
+                <td mat-cell *matCellDef="let document">
+                    {{(document.ExpireDate ? (document.ExpireDate | date:"longDate") : 'никогда')}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="Actions">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let document">
+                    <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Действия</button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item btn-sm" [routerLink]="['/documents', document.Id]">Изменить документ</a>
+                        <button class="dropdown-item btn-sm" *ngIf="document.Type >= 2">Новая версия</button>
+                        <a class="dropdown-item btn-sm" [routerLink]="['/templates', document.TemplateId]">К шаблону</a>
+                        <button class="dropdown-item btn-sm">Удалить документ</button>
+                    </div>
+                </td>
+            </ng-container>
+        
+            <tr mat-header-row *matHeaderRowDef="documentsColumns"></tr>
+            <tr mat-row *matRowDef="let myRowData1; columns: documentsColumns"></tr>     
+          </table>
+        </mat-tab>
+
+        <mat-tab label="Шаблоны">
+          {{templatesJson}}
+          <table mat-table [dataSource]="user.Template" fixedLayout class="w-100">
+            <ng-container matColumnDef="Name">
+                <th mat-header-cell *matHeaderCellDef>Название</th>
+                <td mat-cell *matCellDef="let template">
+                    {{(template.Name != null ? template.Name : "Без названия")}}
+                    <span class="badge badge-secondary">{{template.TemplateType}}</span>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="AuthorName">
+                <th mat-header-cell *matHeaderCellDef>Автор</th>
+                <td mat-cell *matCellDef="let template">{{template.AuthorName}}</td>
+            </ng-container>
+            <ng-container matColumnDef="UpdateDate">
+                <th mat-header-cell *matHeaderCellDef>Изменено</th>
+                <td mat-cell *matCellDef="let template">{{template.UpdateDate | date:"longDate"}}</td>
+            </ng-container>
+            <ng-container matColumnDef="Depricated">
+                <th mat-header-cell *matHeaderCellDef>Статус</th>
+                <td mat-cell *matCellDef="let template">
+                    {{(template.Depricated ? "Устарел": "Актуальный")}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="Actions">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let template">
+                    <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Действия</button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item btn-sm" [routerLink]="['/templates', template.Id]">Изменить шаблон</a>
+                        <button [disabled]="template.Depricated" class="dropdown-item btn-sm">Создать документ</button>
+                        <button class="dropdown-item btn-sm">Удалить шаблон</button>
+                    </div>
+                </td>
+            </ng-container>
+        
+            <tr mat-header-row *matHeaderRowDef="templatesColumns"></tr>
+            <tr mat-row *matRowDef="let myRowData2; columns: templatesColumns"></tr>     
+          </table> 
+        </mat-tab>
+
+        <mat-tab label="Визирование">
+          {{signatoriesJson}}
+          <table mat-table [dataSource]="user.Sign" fixedLayout class="w-100">
+            <ng-container matColumnDef="Document">
+                <th mat-header-cell *matHeaderCellDef>Документ</th>
+                <td mat-cell *matCellDef="let sign">{{sign.DocumentName}}</td>
+            </ng-container>
+            <ng-container matColumnDef="User">
+                <th mat-header-cell *matHeaderCellDef>Автор</th>
+                <td mat-cell *matCellDef="let sign">{{sign.UserName}}</td>
+            </ng-container>
+            <ng-container matColumnDef="Actions">
+                <th mat-header-cell *matHeaderCellDef>Действия</th>
+                <td mat-cell *matCellDef="let sign">
+                  <button (click)="sign.Signed = !sign.Signed" class="btn btn-secondary btn-sm">
+                    {{(sign.Signed ? "Отозвать подпись" : "Подписать")}}
+                  </button>
+                </td>
+            </ng-container>            
+        
+            <tr mat-header-row *matHeaderRowDef="signatoriesColumns"></tr>
+            <tr mat-row *matRowDef="let myRowData3; columns: signatoriesColumns"></tr>     
+          </table> 
+        </mat-tab>
+    </mat-tab-group>
+</div>

@@ -1,9 +1,10 @@
-import { Sign } from "./sign";
+import { Signatory } from "./signatory";
 import { Template } from "./template";
+import { Document } from "./document";
 
 export class User {
     public Template: Template[] = [];
-    public Sign: Sign[] = [];
+    public Sign: Signatory[] = [];
     public Document: Document[] = [];
 
     constructor(public Id: number, 
@@ -11,7 +12,7 @@ export class User {
         public Lastname: string,
         public Fathersname?: string) { }
 
-    get shortName(){
+    getShortName(){
         return `${this.Firstname} ${this.Lastname}`;
     }
 }
