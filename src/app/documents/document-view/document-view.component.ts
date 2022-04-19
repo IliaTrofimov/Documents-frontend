@@ -41,7 +41,6 @@ export class DocumentViewComponent implements OnInit {
     this.docSvc.getDocument(this.id).subscribe({
       next: document => {
         this.document = document;
-        this.prepareData();
       },
       error: err =>  {
         this.router.navigate(['error'], { queryParams: {
@@ -52,47 +51,6 @@ export class DocumentViewComponent implements OnInit {
     });
   }
 
-  prepareData(){
-    if (!this.document.Template)
-      return;
-
-    let isTable = false;
-    let tableId = 0;
-    let fieldId = 0;
-
-    let tableColumns: TemplateField[] = [];
-    let tableCells: DocumentDataItem[] = [];
-    const tables = this.document.Template.TemplateTable;
-    this.preparedData = [];
-
-    for (let templateField of this.document.Template.TemplateField){
-      if (templateField.TemplateTableId) {
-        if (tableId != 0 && tableId != templateField.TemplateTableId) {
-          this.preparedData.push({ items: tableCells, templateFields: tableColumns, table: tables[tableId] });
-          tableCells = [];
-          tableColumns = [];
-        }
-
-        tableId = templateField.TemplateTableId;
-        isTable = true;
-        tableColumns.push(templateField);
-        tableCells.concat(this.document.DocumentDataItem.slice(tableId, tableId + tables[tableId].Rows));
-      }
-      else {
-        if (isTable) {
-          this.preparedData.push({ items: tableCells, templateFields: tableColumns, table: tables[tableId] });
-          tableCells = [];
-          tableColumns = [];
-        }
-
-        this.preparedData.push({
-          items: [this.document.DocumentDataItem[fieldId++]],
-          templateFields: [templateField],
-          table: undefined
-        });
-      }
-    }
-  }
 
   validate(){
     let validated = true;

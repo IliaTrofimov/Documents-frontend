@@ -14,6 +14,8 @@ import { RestrictionPipe } from '../pipes/restriction.pipe';
 import { FieldTypePipe } from '../pipes/field-type.pipe';
 import { MatTableModule } from '@angular/material/table';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { TestComponent } from './test-compnent';
+import { AsPipe } from '../pipes/document-status.pipe copy';
 
 
 @NgModule({
@@ -23,7 +25,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     TemplateFieldComponent,
     TemplateTableComponent,
     RestrictionPipe,
-    FieldTypePipe
+    FieldTypePipe,
+    AsPipe,
+    TestComponent
   ],
   imports: [
     BrowserModule,

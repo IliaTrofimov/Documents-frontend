@@ -6,7 +6,7 @@ import { AppConfig } from '../app.config';
 
 
 @Injectable()
-export class SignsService{
+export class SignatoriesService{
     private url = "";
     
     constructor(private http: HttpClient, private config: AppConfig){

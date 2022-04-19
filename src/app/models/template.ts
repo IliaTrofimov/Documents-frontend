@@ -12,6 +12,5 @@ export class Template {
     public TemplateTypeId: number = 0;
     public TemplateType: TemplateType = new TemplateType(0, "без типа");
 
-    public TemplateField: TemplateField[] = [];
-    public TemplateTable: TemplateTable[] = [];
+    public TemplateItems: (TemplateField | TemplateTable)[] = [];
 }

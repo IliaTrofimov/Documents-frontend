@@ -10,28 +10,6 @@ import { TemplateTypesService } from 'src/app/services/template-types.service';
 import { TemplateTable } from 'src/app/models/template-table';
 
 
-class DataPair{
-  constructor(public columns: TemplateField[], public table?: TemplateTable) {}
-
-  public set order(order: number){
-    if (this.table) this.table.Order = order;
-    else this.columns[0].Order = order;
-  }
-
-  public get order(){
-    if (this.table) return this.table.Order;
-    else return this.columns[0].Order; 
-  }
-
-  public get isTable(){
-    return this.table != undefined;
-  }
-
-  public get id(){
-    if (this.table) return this.table.Id;
-    else return this.columns[0].Id; 
-  }
-}
 
 
 @Component({
@@ -40,10 +18,12 @@ class DataPair{
   providers: [TemplatesService, TemplateTypesService]
 })
 export class TemplateViewComponent implements OnInit {
+  Field = TemplateField;
+  Table = TemplateTable;
+
   template: Template = new Template();
   templateTypes: TemplateType[] = [];
   status?: [boolean, string]; 
-  preparedFields: DataPair[] = [];
   private vacantId: number = 0;
   private id: number = -1;
 
@@ -56,8 +36,7 @@ export class TemplateViewComponent implements OnInit {
     this.templateSvc.getTemplate(this.id).subscribe({
       next: data => {
         this.template = data;
-        this.prepareData();
-        console.log(JSON.stringify(this.template, null, 2));
+        console.log(`received data: ${JSON.stringify(this.template, null, 2)}`);
       },
       error: err => {
         this.router.navigate(['error'], { queryParams: {
@@ -68,7 +47,7 @@ export class TemplateViewComponent implements OnInit {
     });
 
     this.typesSvc.getTypes().subscribe({
-      next: data =>  {this.templateTypes = data; console.log(JSON.stringify(this.templateTypes, null, 2));},
+      next: data => this.templateTypes = data,
       error: err => this.router.navigate(['error'], { queryParams: {
         "title": `Не удалось загрузить типы шаблонов`, 
         "error": JSON.stringify(err.error, null, 2)
@@ -76,47 +55,15 @@ export class TemplateViewComponent implements OnInit {
     });
   }
 
-  prepareData(){
-    let isTable = false;
-    let tableId = 0;
-    let tableColumns: TemplateField[] = [];
-    this.preparedFields = [];
 
-    for (let field of this.template.TemplateField){
-      if (field.TemplateTableId) {
-        if (tableId != 0 && tableId != field.TemplateTableId) {
-          this.preparedFields.push(new DataPair(
-            tableColumns, this.template.TemplateTable.find(table => table.Id == tableId)
-          ));
-          tableColumns = [];
-          tableColumns = [];
-        }
-        isTable = true;
-        tableId = field.TemplateTableId;
-        tableColumns.push(field);
-      }
-      else {
-        if (isTable) {
-          this.preparedFields.push(new DataPair(
-            tableColumns, this.template.TemplateTable.find(table => table.Order == tableId)
-          ));
-          tableColumns = [];
-          tableColumns = [];
-        }
-
-        this.preparedFields.push(new DataPair([field]));
-      }
-    }
-  }
-  
   changeUsage(){
     this.template.Depricated = !this.template.Depricated;
   }
 
   changeOrder(oldOrder: number, delta: number){
     let newOrder = oldOrder + delta;
-    if (newOrder < this.template.TemplateField.length && newOrder >= 0){
-      [this.template.TemplateField[newOrder], this.template.TemplateField[oldOrder]] = [this.template.TemplateField[oldOrder], this.template.TemplateField[newOrder]];
+    if (newOrder < this.template.TemplateItems.length && newOrder >= 0){
+      [this.template.TemplateItems[newOrder], this.template.TemplateItems[oldOrder]] = [this.template.TemplateItems[oldOrder], this.template.TemplateItems[newOrder]];
     }
   }
 
@@ -126,8 +73,7 @@ export class TemplateViewComponent implements OnInit {
     this.templateSvc.updateField(this.template.Id, field).subscribe({
       next: f => {
         field.Id = f.Id;
-        this.template.TemplateField.push(field);    
-        this.preparedFields.push(new DataPair([field]));
+        this.template.TemplateItems.push(field);    
         this.status = [true, "Поле сохранено"];
         this.vacantId++;
       },
@@ -137,7 +83,7 @@ export class TemplateViewComponent implements OnInit {
 
   addTable(){
     let table = new TemplateTable(this.template.Id,
-      `Таблица ${this.template.TemplateTable.length + 1}`,
+      `Таблица ${this.template.TemplateItems.length + 1}`,
       1, this.vacantId);
 
     this.templateSvc.updateTable(this.template.Id, table).subscribe({
@@ -147,9 +93,8 @@ export class TemplateViewComponent implements OnInit {
         this.templateSvc.updateField(this.template.Id, field).subscribe({
           next: f => {
             field.Id = f.Id;
-            this.template.TemplateField.push(field);
-            this.template.TemplateTable.push(table);      
-            this.preparedFields.push(new DataPair([field], table));
+            this.template.TemplateItems.push(field);
+            this.template.TemplateItems.push(table);      
             this.status = [true, "Таблица сохранена"];
             this.vacantId++;
           },
@@ -160,49 +105,9 @@ export class TemplateViewComponent implements OnInit {
     })
   }
 
-  deleteField(pair: DataPair){
-    if (pair.table){
-      let order = pair.order;
-      this.templateSvc.deleteTable(this.template.Id, pair.id).subscribe({
-        next: () => {
-          this.preparedFields.splice(order, 1);
-          this.template.TemplateTable.filter(t => t.Id != pair.id);
-          this.template.TemplateField.filter(f => f.TemplateId != pair.id);
-          this.vacantId--;
-          for (let i = order; i < this.preparedFields.length; i++)
-            this.preparedFields[i].order = i - 1;
-
-          this.status = [true, "Таблица удалена"];
-        },
-        error: err => this.status = [false, JSON.stringify(err.error, null, 2)], 
-      })
-    }
-    else {
-      let order = pair.order;
-      this.templateSvc.deleteField(this.template.Id, pair.id).subscribe({
-        next: () => {
-          this.preparedFields.splice(order, 1);
-          this.template.TemplateField.filter(f => f.Id != pair.id);
-          this.vacantId--;
-          for (let i = order; i < this.preparedFields.length; i++)
-            this.preparedFields[i].order = i - 1;
-
-          this.status = [true, "Поле удалено"];
-        },
-        error: err => this.status = [false, JSON.stringify(err.error, null, 2)], 
-      })
-    }
-  }
-
-  deleteColumn(id: number){
-    this.templateSvc.deleteField(this.template.Id, id).subscribe({
-      next: () => {
-        this.preparedFields.filter(t => t.id != id);
-        this.template.TemplateField.filter(f => f.Id != id);
-        this.status = [true, "Столбец удалён"];
-      },
-      error: err => this.status = [false, JSON.stringify(err.error, null, 2)], 
-    })
+  deleteItem(id: number, order: number){
+    console.log("deleting item")
+    
   }
 
   save(){
@@ -210,9 +115,6 @@ export class TemplateViewComponent implements OnInit {
       error: error => this.status =  [true, JSON.stringify(error.error, null, 2)],
       next: () => {
         this.status = [true, "Шаблон сохранён"];
-        console.clear();
-        console.log("New field:");
-        console.log(JSON.stringify(this.template, null, 2));
       }
     });
   }

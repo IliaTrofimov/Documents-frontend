@@ -19,7 +19,7 @@ export class Document {
 
     public Template?: Template;
     public TemplateName?: string;
-    public DocumentDataItem: DocumentDataItem[] = [];
+    public DocumentDataItems: DocumentDataItem[] = [];
     public Sign: Signatory[] = [];
 
     public RegistryId: number = -1;

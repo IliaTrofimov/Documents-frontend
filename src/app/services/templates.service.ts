@@ -5,6 +5,7 @@ import { Template } from '../models/template';
 import { AppConfig } from '../app.config';
 import { TemplateTable } from '../models/template-table';
 import { TemplateField } from '../models/template-field';
+import { map } from 'rxjs';
 
 
 @Injectable()
@@ -14,7 +15,7 @@ export class TemplatesService{
     constructor(private http: HttpClient, private config: AppConfig){
         this.url = this.config.apiUrl + "/templates";
     }
-      
+    
     getTemplates(author?: string){
         return this.http.get<Template[]>(`${this.url}/list`);
     }

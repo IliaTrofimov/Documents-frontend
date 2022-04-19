@@ -12,4 +12,8 @@ export class TemplateField{
         public TemplateId: number = -1,
         public TemplateTableId?: number){
     }
+
+    public isTable() {
+        return false;
+    }
 }

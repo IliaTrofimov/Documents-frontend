@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RestrictionTypes, InputType } from 'src/app/models/template-enums';
+import { TemplatesService } from 'src/app/services/templates.service';
 import { TemplateField } from '../../models/template-field';
 
 
@@ -13,6 +14,7 @@ export class TemplateFieldComponent {
     @Output() onDelete = new EventEmitter();
     @Output() onChangeOrder = new EventEmitter<number>();
 
+    constructor(private templateSvc: TemplatesService) {}
 
     static _restrictionTypes = [
         RestrictionTypes.None,
@@ -37,7 +39,9 @@ export class TemplateFieldComponent {
     }
 
     deleteField(){
+        console.log("deleting field f")
         this.onDelete.emit();
+        this.templateSvc.deleteField(this.field.TemplateId, this.field.Id);
     }
 
     changeOrder(delta: number){

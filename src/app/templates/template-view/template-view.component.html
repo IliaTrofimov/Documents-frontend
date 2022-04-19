@@ -37,27 +37,26 @@
     <hr>
 </div>
 <div class="container panel">
-    <h5>Список полей ({{template.TemplateField.length}})</h5>
+    <h5>Список полей ({{template.TemplateItems.length}})</h5>
     <p *ngIf="!template.Depricated">
         <button class="btn badge badge-success" (click)="addField()">Добавить поле</button> или 
         <button class="btn badge badge-success" (click)="addTable()">добавить таблицу</button>
         <br>
     </p>
     <ul class="list-group">
-        <li *ngIf="template.TemplateField.length == 0" class="list-group-item">
+        <li *ngIf="template.TemplateItems.length == 0" class="list-group-item">
             <b>Пусто</b>
         </li>                
-        <li *ngFor="let f of preparedFields" class="list-group-item">
-            <table-template *ngIf="f.table" 
-                [columns]="f.columns" 
-                [table]="f.table"
-                (onDeleteColumn)="deleteColumn($event)"
-                (onDelete)="deleteField(f)"
+        <li *ngFor="let f of template.TemplateItems" class="list-group-item">
+            <table-template *ngIf="f.isTable()" 
+                [columns]="(f | as: Table).TemplateFields" 
+                [table]="(f | as: Table)"
+                (onDelete)="deleteItem(f.Id, f.Order)"
             >
             </table-template>
-            <field-template *ngIf="!f.table" 
-                [field]="f.columns[0]" 
-                (onDelete)="deleteField(f)"
+            <field-template *ngIf="!f.isTable()" 
+                [field]="(f | as: Field)" 
+                (onDelete)="deleteItem(f.Id, f.Order)"
             >
             </field-template>
         </li>
