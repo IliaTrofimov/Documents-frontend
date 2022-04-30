@@ -1,19 +1,18 @@
 <div class="row">
     <div class="col-10">
-        {{field.Id}}
-        <input class="form-control form-control-sm" placeholder="Название поля" [(ngModel)]="field.Name" [readonly]="readonly"/>
+        <input (blur)="save()" [(ngModel)]="field.Name" [readonly]="readonly" class="form-control form-control-sm" placeholder="Название поля"/>
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-                <select class="form-control form-control-sm" [(ngModel)]="field.DataType" [disabled]="readonly">
+                <select [(ngModel)]="field.DataType" (change)="save()" [disabled]="readonly" class="form-control form-control-sm">
                     <option *ngFor="let d of dataTypes" [ngValue]="d">{{d | fieldtype}}</option>
                 </select>
             </div>
             <div class="input-group-prepend">
-                <select class="form-control form-control-sm" [(ngModel)]="field.RestrictionType" [disabled]="readonly">
+                <select [(ngModel)]="field.RestrictionType" (change)="onSave.emit()" [disabled]="readonly" class="form-control form-control-sm">
                     <option *ngFor="let r of restrictionTypes" [ngValue]="r">{{r | restriction}}</option>
                 </select>
             </div>
-            <input [readonly]="readonly || field.RestrictionType == 0" [(ngModel)]="field.Restriction" class="form-control form-control-sm" placeholder="Ограничение"/>
+            <input [(ngModel)]="field.Restriction" (blur)="save()" [readonly]="readonly || field.RestrictionType == 0" class="form-control form-control-sm" placeholder="Ограничение"/>
         </div>
     </div>
     <div class="col">
@@ -23,7 +22,8 @@
         <div class="dropdown-menu">
             <button class="dropdown-item btn-sm" (click)="changeOrder(-1)">Двигать вверх</button>
             <button class="dropdown-item btn-sm" (click)="changeOrder(1)">Двигать вниз</button>
-            <button class="dropdown-item btn-sm" (click)="deleteField()">Удалить</button>
+            <button class="dropdown-item btn-sm" (click)="save()">Сохранить</button>
+            <button class="dropdown-item btn-sm" (click)="delete()">Удалить</button>
         </div>
         <div class="form-check">
             <input class="form-check-input" type="checkbox" [(ngModel)]="field.Required" [disabled]="readonly">

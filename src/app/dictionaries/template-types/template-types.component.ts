@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Template } from '../models/template';
-import { TemplateType } from '../models/template-type';
-import { TemplateTypesService } from '../services/template-types.service';
+import { TemplateType } from '../../models/template-type';
+import { TemplateTypesService } from '../../services/template-types.service';
 
 
 @Component({
@@ -13,12 +12,12 @@ import { TemplateTypesService } from '../services/template-types.service';
 export class TemplateTypesComponent implements OnInit {
   types: TemplateType[] = [];
   newType: TemplateType = new TemplateType(-1, "");
-  selection: number = -1;
+  selected = -2;
+  displayedColumns = ['Id', 'Name', 'Edit'];
 
   constructor(private typesSvc: TemplateTypesService, private router: Router) { }
 
   ngOnInit(): void {
-    console.log("loading types...")
     this.typesSvc.getTypes().subscribe({
       next: types => this.types = types,
       error: err => {
@@ -30,33 +29,26 @@ export class TemplateTypesComponent implements OnInit {
     });
   }
 
-  setSelection(index: number = -1){
-    if (this.selection == index) this.selection = -1;
-    else this.selection = index;
-  }
   
   editType(type: TemplateType){
-    if(type.Id == -1){
-      this.typesSvc.createType(type.Name).subscribe(
-        typeId => this.types.push(new TemplateType(typeId, type.Name))
-      );
-    }
-    else{
-      this.typesSvc.updateType(type).subscribe();
-    }
-    
-    this.selection = -2;
+    this.typesSvc.updateType(type).subscribe({
+      next: () => {
+        console.log('ok'); 
+        this.selected = -1;
+      },
+      error: err => console.log(JSON.stringify(err, null, 2))
+    })
   }
 
-  addType(){
-    this.newType.Name = "";
-    this.selection = -1;
-  }
 
   removeType(id: number) {
-    this.selection = 0;
-    this.typesSvc.deleteType(id).subscribe(() => 
-      this.types = this.types.filter(type => type.Id !== id)
-    );
+    this.selected = -1;
+    this.typesSvc.deleteType(id).subscribe({
+      next: () => {
+        console.log('ok'); 
+        this.types = this.types.filter(type => type.Id !== id)
+      },
+      error: err => console.log(JSON.stringify(err, null, 2))
+    });
   }
 }

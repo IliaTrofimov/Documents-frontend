@@ -1,27 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { AppConfig } from '../app.config';
-import { User } from '../models/user';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'site-header',
   template: `
-    <nav class="hidden-print navbar navbar-expand-lg navbar-light bg-light">
-      <a class="hidden-print nav-link active noprint" [routerLink]="['/home']">Домой</a>
-      <a class="hidden-print nav-link active" [routerLink]="['/templates']">Шаблоны</a>
-      <a class="hidden-print nav-link active noprint" [routerLink]="['/documents']">Документы</a>
-      <a class="hidden-print nav-link active noprint" [routerLink]="['/templatetypes']">Доп. материалы</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="nav-link active" [routerLink]="['home/']" routerLinkActive="active">Домой</a>
+      <a class="nav-link active" [routerLink]="['templates/']" routerLinkActive="active">Шаблоны</a>
+      <a class="nav-link active" [routerLink]="['documents/']" routerLinkActive="active">Документы</a>
+      <a class="nav-link active" [routerLink]="['dictionaries/']" routerLinkActive="active">Доп. материалы</a>
     </nav>
   `,
 })
-export class SiteHeaderComponent implements OnInit {
-  user?: User;
-  apiUrl: string = "";
-
-  constructor(private config: AppConfig){}
-
-  ngOnInit(): void {
-    //this.user = this.config.auth();
-    this.apiUrl = this.config.apiUrl;
-  }
-
+export class SiteHeaderComponent {
 }

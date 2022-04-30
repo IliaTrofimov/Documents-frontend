@@ -22,7 +22,7 @@ export class TemplateTypesService{
     }
 
     createType(name: string) {
-        return this.http.post<number>(`${this.url}/post`, {name: name});
+        return this.http.post<number>(`${this.url}/post`, name);
     }
 
     deleteType(id: number){

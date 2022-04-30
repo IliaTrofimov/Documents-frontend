@@ -1,0 +1,39 @@
+<div class="panel">
+    <h4>Типы шаблонов</h4>
+    <span class="text-muted">
+        Всего {{types.length}} элементов. 
+    </span>
+    <table mat-table [dataSource]="types" fixedLayout class="w-100" *ngIf="types">
+        <ng-container matColumnDef="Id">
+            <th mat-header-cell *matHeaderCellDef>Id</th>
+            <td mat-cell *matCellDef="let type">{{type.Id}}</td>
+        </ng-container>
+        <ng-container matColumnDef="Name">
+            <th mat-header-cell *matHeaderCellDef>Название</th>
+            <td mat-cell *matCellDef="let type">
+                <ng-container *ngIf="selected != type.Id">
+                    {{(type.Name != null ? type.Name : "Без названия")}}
+                </ng-container>
+                <input *ngIf="selected == type.Id" [(ngModel)]="type.Name">
+            </td>
+        </ng-container>      
+        <ng-container matColumnDef="Edit">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let type">
+                <button *ngIf="selected == type.Id" (click)="editType(type)" class="btn btn-success btn-sm" >✓</button>
+                <button *ngIf="selected != type.Id" (click)="selected = type.Id" class="btn btn-info btn-sm" >✎</button>
+                <button class="btn btn-danger btn-sm" (click)="removeType(type.Id)">✖</button>
+            </td>
+        </ng-container>
+    
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let myRowData; columns: displayedColumns"></tr>  
+        
+    </table>
+    <div class="card" *ngIf="!types">
+        <div class="card-body">
+            <h5 class="card-title">Здесь ничего нет</h5>
+            <p class="card-text">Пока не был создан ни один тип</p>
+        </div>
+    </div>
+</div>

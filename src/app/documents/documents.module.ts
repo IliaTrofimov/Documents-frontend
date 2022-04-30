@@ -2,17 +2,15 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatTableModule } from '@angular/material/table';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { DocumentsListComponent } from './documents-list/documents-list.component';
 import { DocumentViewComponent } from './document-view/document-view.component';
 import { DocumentFieldComponent } from './document-view/document-field.component';
 import { DocumentTableComponent } from './document-view/document-table.component';
 import { DocumentsRoutingModule } from './documents-routing.module';
-
-import { HTMLInputTypePipe } from '../pipes/html-input-type.pipe';
-import { DocumentStatusPipe } from '../pipes/document-status.pipe';
-import { MatTableModule } from '@angular/material/table';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { PipesModule } from '../pipes/pipes.module';
 
 
 @NgModule({
@@ -21,8 +19,6 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     DocumentViewComponent,
     DocumentTableComponent,
     DocumentFieldComponent,
-    HTMLInputTypePipe,
-    DocumentStatusPipe,
   ],
   imports: [
     BrowserModule,
@@ -31,7 +27,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     ReactiveFormsModule,
     DocumentsRoutingModule,
     MatTableModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    PipesModule
   ],
   providers: [],
   bootstrap: [],

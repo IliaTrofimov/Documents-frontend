@@ -18,7 +18,7 @@
         </div>
         <div class="col">
             <b>Автор</b><br>
-            {{template.AuthorName}}
+            {{document.AuthorName}}
         </div>
         <div class="col">
             <b>Дата истечения</b><br>
@@ -36,18 +36,17 @@
     <hr>
 </div>
 <div class="container panel">
-    <h5>Список полей</h5>
     <h6 class="text-muted">Шаблон: {{document.Template?.Name}}</h6>
-    <p *ngFor="let field of preparedData">
-        <doc-field *ngIf="!field.table" 
-            [template]="field.templateFields[0]" 
-            [data]="field.items[0]"
+    <p *ngFor="let item of document.Template?.TemplateItems">
+        <doc-field *ngIf="!item.IsTable" 
+            [template]="$any(item)" 
+            [data]="$any(getItem(item.Id))"
             [readonly]="document.Type != 0">
         </doc-field>
-        <doc-table *ngIf="field.table"
-            [table]="field.table"
-            [columns]="field.templateFields" 
-            [data]="$any(field.items)"
+        <doc-table *ngIf="item.IsTable"
+            [table]="$any(item)"
+            [columns]="$any(item).TemplateFields" 
+            [data]="getColumns(item)"
             [readonly]="document.Type != 0">
         </doc-table>                     
     </p>

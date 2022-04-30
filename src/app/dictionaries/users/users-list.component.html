@@ -1,0 +1,69 @@
+<div class="panel">
+    <h4>Список пользователей</h4>
+    <span class="text-muted">
+        Всего {{users.length}} элементов.
+        <a (click)="addUser()">Добавить пользователя</a>
+    </span>
+
+    <table mat-table [dataSource]="users" fixedLayout class="w-100" *ngIf="users">
+        <ng-container matColumnDef="Id">
+            <th mat-header-cell *matHeaderCellDef>Id</th>
+            <td mat-cell *matCellDef="let user">{{user.Id}}</td>
+        </ng-container>
+        <ng-container matColumnDef="Lastname">
+            <th mat-header-cell *matHeaderCellDef>Фамилия</th>
+            <td mat-cell *matCellDef="let user">
+                <p *ngIf="selected != user.Id">
+                    {{(user.Name != null ? user.Lastname : "Неизвестно")}}
+                </p>
+                <input *ngIf="selected == user.Id" [(ngModel)]="user.Lastname">
+            </td>
+        </ng-container>  
+        <ng-container matColumnDef="Firstname">
+            <th mat-header-cell *matHeaderCellDef>Имя</th>
+            <td mat-cell *matCellDef="let user">
+                <p *ngIf="selected != user.Id">
+                    {{(user.Name != null ? user.Name : "Неизвестно")}}
+                </p>
+                <input *ngIf="selected == user.Id" [(ngModel)]="user.Firstname">
+            </td>
+        </ng-container>   
+        <ng-container matColumnDef="Fathersname">
+            <th mat-header-cell *matHeaderCellDef>Отчество (при наличии)</th>
+            <td mat-cell *matCellDef="let user">
+                <p *ngIf="selected != user.Id">{{user.Fathersame}}</p>
+                <input *ngIf="selected == user.Id" [(ngModel)]="user.Fathersname">
+            </td>
+        </ng-container>     
+        <ng-container matColumnDef="Permissions">
+            <th mat-header-cell *matHeaderCellDef>Разрешения</th>
+            <td mat-cell *matCellDef="let user">
+                <p *ngIf="selected != user.Id">{{user.Permissions}}</p>
+                <input *ngIf="selected == user.Id" [(ngModel)]="user.Permissions">
+            </td>
+        </ng-container>  
+        <ng-container matColumnDef="Groups">
+            <th mat-header-cell *matHeaderCellDef>Группы</th>
+            <td mat-cell *matCellDef="let user">
+                -/-
+            </td>
+        </ng-container> 
+        <ng-container matColumnDef="Edit">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let type">
+                <button *ngIf="selected == type.Id" (click)="editUser(type)" class="btn btn-success btn-sm">✓</button>
+                <button *ngIf="selected != type.Id" (click)="selected = type.Id" class="btn btn-info btn-sm" >✎</button>
+                <button class="btn btn-danger btn-sm" (click)="removeUser(type.Id)">✖</button>
+            </td>
+        </ng-container>
+    
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let myRowData; columns: displayedColumns"></tr>     
+    </table>
+    <div class="card" *ngIf="!users">
+        <div class="card-body">
+            <h5 class="card-title">Здесь ничего нет</h5>
+            <p class="card-text">Пока не был создан ни один пользователь</p>
+        </div>
+    </div>
+</div>

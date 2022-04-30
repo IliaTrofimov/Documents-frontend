@@ -1,0 +1,23 @@
+<div class="mat-dialog-content">
+    <div class="form-group">
+        <label>Фамилия</label>
+        <input [(ngModel)]="data.Lastname" class="form-control">
+    </div>
+    <div class="form-group">
+        <label>Имя</label>
+        <input [(ngModel)]="data.Firstname" class="form-control form-control-sm">
+    </div>
+    <div class="form-group">
+        <label>Отчество</label>
+        <input [(ngModel)]="data.Fathersname" class="form-control form-control-sm">
+        <small class="form-text text-muted">При наличии.</small>
+    </div>
+    <div class="form-group">
+        <label>Разрешения</label>
+        <input [(ngModel)]="data.Permissions" type="number" class="form-control form-control-sm">
+    </div>
+</div>
+<div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="data" class="btn btn-primary btn-sm">Принять</button>
+    <button mat-button [mat-dialog-close]="undefined" class="btn btn-danger btn-sm">Отменить</button>
+</div>

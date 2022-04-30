@@ -2,9 +2,8 @@ import { switchMap } from 'rxjs/operators';
 import { Component, OnInit} from '@angular/core';
 import { ActivatedRoute, Router} from '@angular/router';
 
-import { UsersService } from '../../services/users.service';
-import { DocumentsService } from '../../services/documents.service';
-import { User } from '../../models/user';
+import { UsersService } from '../services/users.service';
+import { User } from '../models/user';
 import { AppConfig } from 'src/app/app.config';
 
 
@@ -40,9 +39,7 @@ export class UserViewComponent implements OnInit {
         this.usersSvc.getUser(usr.Id).subscribe({
           next: fullUsr => {
             this.user = fullUsr; 
-            this.documentsJson = JSON.stringify(this.user.Document, null, 2);
-            this.templatesJson = JSON.stringify(this.user.Template, null, 2);
-            this.signatoriesJson = JSON.stringify(this.user.Sign, null, 2); 
+            
             console.log(JSON.stringify(this.user, null, 2))
           },
         })

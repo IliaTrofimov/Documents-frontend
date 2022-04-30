@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TemplateField } from '../../models/template-field';
 import { RestrictionTypes } from 'src/app/models/template-enums';
 import { TemplateTable } from 'src/app/models/template-table';
-import { TemplatesService } from 'src/app/services/templates.service';
 
 
 @Component({
@@ -13,9 +12,10 @@ export class TemplateTableComponent {
     @Input() table: TemplateTable = new TemplateTable(); 
     @Input() columns: TemplateField[] = []; 
     @Input() readonly: boolean = false;
-    @Output() onDelete = new EventEmitter();
-    @Output() onDeleteColumn = new EventEmitter<number>();
+    @Output() onDelete = new EventEmitter<TemplateField|TemplateTable>();
     @Output() onChangeOrder = new EventEmitter<number>(); 
+    @Output() onAddColumn = new EventEmitter<TemplateField>(); 
+    @Output() onSave = new EventEmitter<TemplateField|TemplateTable>();
 
     static _restrictionTypes = [
         RestrictionTypes.None,
@@ -27,31 +27,17 @@ export class TemplateTableComponent {
         return TemplateTableComponent._restrictionTypes;
     }
 
-    constructor(private templateSvc: TemplatesService) {}
 
-    deleteColumn(col: TemplateField){
-        this.columns.splice(col.Order, 1);
-        for (let i = col.Order; i < this.columns.length; i++)
-            this.columns[i].Order = i - 1;
-        this.templateSvc.deleteField(this.table.TemplateId, col.Id).subscribe();
-    }
-    
     addColumn(){
         let column = new TemplateField(`Столбец ${this.columns.length + 1}`, 
             this.columns.length, this.table.TemplateId, this.table.Id
         );
         this.columns.push(column);
-        this.templateSvc.updateField(this.table.TemplateId, column).subscribe();
+        this.onAddColumn.emit(column);
     }
 
-    deleteField(){
-        this.templateSvc.deleteTable(this.table.TemplateId, this.table.Id).subscribe();
-        //this.onDelete.emit();
-    }
-
-    setRows(rows: number){
-        this.table.Rows = rows;
-        this.templateSvc.updateTable(this.table.TemplateId, this.table).subscribe();
+    changeOrder(delta: number){
+        this.onChangeOrder.emit(delta);
     }
 
     onColumnChangeOrder(index: number, delta: number){
@@ -60,10 +46,24 @@ export class TemplateTableComponent {
             [this.columns[newOrder], this.columns[index]] = [this.columns[index], this.columns[newOrder]];
             this.columns[newOrder].Order = this.columns[index].Order;
             this.columns[index].Order = this.columns[newOrder].Order;
+
+            this.onSave.emit(this.columns[newOrder]);
+            this.onSave.emit(this.columns[index]);
         }
     }
 
-    changeOrder(delta: number){
-        this.onChangeOrder.emit(delta);
+    save(column?: TemplateField){
+        this.onSave.emit(column ? column : this.table);
+    }
+
+    deleteColumn(column: TemplateField){
+        this.columns.splice(column.Order, 1);
+        for (let i = column.Order; i < this.columns.length; i++)
+            this.columns[i].Order = i - 1;
+        this.onDelete.emit(column);
+    }
+
+    delete(){
+        this.onDelete.emit(this.table);
     }
 }

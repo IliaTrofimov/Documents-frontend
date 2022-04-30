@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { Document, DocumentStatus } from '../models/document';
 import { AppConfig } from '../app.config';
+import { DocumentDataItem } from '../models/document-data-item';
 
 
 @Injectable()
@@ -22,8 +23,13 @@ export class DocumentsService{
         return this.http.get<Document>(`${this.url}/${id}/get`);
     }
 
-    editDocument(document: Document){
+    updateDocument(document: Document){
         return this.http.put(`${this.url}/${document.Id}/put`, document);
+    }
+
+    updateItem(docId: number, item: DocumentDataItem){
+        
+        return this.http.put(`${this.url}/${docId}/put-field`, item);
     }
 
     updateToTemplate(id: number){

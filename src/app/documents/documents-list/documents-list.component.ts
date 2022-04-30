@@ -19,13 +19,7 @@ export class DocumentsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.documentsSvc.getDocuments().subscribe({
-      next: data => this.documents = data,
-      error: err => {
-        this.router.navigate(['error'], { queryParams: {
-          "title": "Не удалось загрузить список документов", 
-          "error": JSON.stringify(err.error, null, 2)
-        }});
-      }
+      next: data => this.documents = data
     });
   }
   

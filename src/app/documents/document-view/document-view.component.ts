@@ -3,7 +3,6 @@ import { Component, OnInit} from '@angular/core';
 import { ActivatedRoute, Router} from '@angular/router';
 
 import { Template } from "../../models/template";
-import { UsersService } from '../../services/users.service';
 import { Document, DocumentStatus } from '../../models/document';
 import { DocumentsService } from '../../services/documents.service';
 import { ValidationService } from '../../services/validation.service';
@@ -12,16 +11,16 @@ import { DocumentDataItem } from 'src/app/models/document-data-item';
 import { TemplateTable } from 'src/app/models/template-table';
 
 
-
-
 @Component({
   selector: 'app-document-view',
   templateUrl: './document-view.component.html',
   providers: [DocumentsService, ValidationService]
 })
 export class DocumentViewComponent implements OnInit {
+  Field = TemplateField;
+  Table = TemplateTable;
+
   document: Document = new Document();
-  template: Template = new Template();
   status?: [boolean, string];
   preparedData: { items: DocumentDataItem[], templateFields: TemplateField[], table?: TemplateTable }[] = [];
   private id: number = -1;
@@ -34,13 +33,13 @@ export class DocumentViewComponent implements OnInit {
   ngOnInit(){
     this.route.paramMap.pipe(switchMap(params => params.getAll('id'))).subscribe(data => this.id = +data);
     this.loadData();   
-    console.log(JSON.stringify(this.document, null, 2))
   }
 
   private loadData(){
     this.docSvc.getDocument(this.id).subscribe({
       next: document => {
         this.document = document;
+        console.log(`loaded data (id ${this.id}):`, JSON.stringify(this.document, null, 2))
       },
       error: err =>  {
         this.router.navigate(['error'], { queryParams: {
@@ -49,6 +48,17 @@ export class DocumentViewComponent implements OnInit {
         }});
       }
     });
+  }
+
+  getItem(fieldId: number){
+    return this.document.DocumentDataItems.find(i => i.FieldId == fieldId);
+  }
+
+  getColumns(table: TemplateTable){
+    let columns: DocumentDataItem[] = [];
+    for (let field of table.TemplateFields)
+      columns.concat(this.document.DocumentDataItems.filter(i => i.FieldId == field.Id));
+    return columns;
   }
 
 
@@ -68,9 +78,23 @@ export class DocumentViewComponent implements OnInit {
   }
 
   save(){
-    this.docSvc.editDocument(this.document).subscribe({
+    console.log(JSON.stringify(this.document, null, 2));
+    for (let i of this.document.DocumentDataItems){
+      this.docSvc.updateItem(this.document.Id, i).subscribe({
+        error: error => this.status = [false, JSON.stringify(error.error, null, 2)],
+        complete: () => this.status = [true, "Поле сохранено"]
+      });
+    }
+    this.docSvc.updateDocument(this.document).subscribe({
+      error: error => this.status = [false, JSON.stringify(error.error, null, 2)],
+      //complete: () => this.status = [true, "Документ сохранён"]
+    });
+  }
+
+  updateItem(item: DocumentDataItem){
+    this.docSvc.updateDocument(this.document).subscribe({
       error: error => this.status = [false, error.error],
-      complete: () => this.status = [true, "Документ сохранён"]
+      complete: () => this.status = [true, "Поле сохранено"]
     });
   }
 

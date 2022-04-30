@@ -13,7 +13,7 @@
         <mat-tab label="Документы">
           <p>Создать документ можно только по выбранному шаблону в разделе <a [routerLink]="['templates']">шаблоны</a></p>
           {{documentsJson}}
-          <table mat-table [dataSource]="user.Document" fixedLayout class="w-100">
+          <table mat-table [dataSource]="user.Documents" fixedLayout class="w-100">
             <ng-container matColumnDef="Name">
                 <th mat-header-cell *matHeaderCellDef>Название</th>
                 <td mat-cell *matCellDef="let document">
@@ -55,7 +55,7 @@
 
         <mat-tab label="Шаблоны">
           {{templatesJson}}
-          <table mat-table [dataSource]="user.Template" fixedLayout class="w-100">
+          <table mat-table [dataSource]="user.Templates" fixedLayout class="w-100">
             <ng-container matColumnDef="Name">
                 <th mat-header-cell *matHeaderCellDef>Название</th>
                 <td mat-cell *matCellDef="let template">
@@ -96,7 +96,7 @@
 
         <mat-tab label="Визирование">
           {{signatoriesJson}}
-          <table mat-table [dataSource]="user.Sign" fixedLayout class="w-100">
+          <table mat-table [dataSource]="user.Signs" fixedLayout class="w-100">
             <ng-container matColumnDef="Document">
                 <th mat-header-cell *matHeaderCellDef>Документ</th>
                 <td mat-cell *matCellDef="let sign">{{sign.DocumentName}}</td>

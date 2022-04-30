@@ -26,14 +26,6 @@
             {{template.AuthorName}}
         </div>
     </div>
-    <div class="row" *ngIf="status">
-        <div class="alert alert-{{status[0] ? 'success' : 'danger'}}" role="alert">
-            {{status[1]}}
-            <button type="button" class="close" aria-label="Close" (click)="status = undefined">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>  
-    </div>
     <hr>
 </div>
 <div class="container panel">
@@ -47,18 +39,21 @@
         <li *ngIf="template.TemplateItems.length == 0" class="list-group-item">
             <b>Пусто</b>
         </li>                
-        <li *ngFor="let f of template.TemplateItems" class="list-group-item">
-            <table-template *ngIf="f.isTable()" 
-                [columns]="(f | as: Table).TemplateFields" 
-                [table]="(f | as: Table)"
-                (onDelete)="deleteItem(f.Id, f.Order)"
-            >
-            </table-template>
-            <field-template *ngIf="!f.isTable()" 
-                [field]="(f | as: Field)" 
-                (onDelete)="deleteItem(f.Id, f.Order)"
-            >
-            </field-template>
+        <li *ngFor="let f of template.TemplateItems; let i = index" class="list-group-item">
+            <table-template *ngIf="f.IsTable" 
+                [columns]="$any(f).TemplateFields" 
+                [table]="$any(f)"
+                (onDelete)="deleteItem($event)"
+                (onSave)="updateItem($event)"
+                (onAddColumn)="addColumn($event)"
+                (onChangeOrder)="changeOrder(i, $event)"
+            ></table-template>
+            <field-template *ngIf="!f.IsTable" 
+                [field]="$any(f)" 
+                (onDelete)="deleteItem(f)"
+                (onSave)="updateItem(f)"
+                (onChangeOrder)="changeOrder(i, $event)"
+            ></field-template>
         </li>
     </ul>    
 </div>

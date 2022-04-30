@@ -5,7 +5,6 @@ import { Template } from '../models/template';
 import { AppConfig } from '../app.config';
 import { TemplateTable } from '../models/template-table';
 import { TemplateField } from '../models/template-field';
-import { map } from 'rxjs';
 
 
 @Injectable()
@@ -40,12 +39,9 @@ export class TemplatesService{
         return this.http.put<TemplateField>(`${this.url}/${templateId}/put-field`, field);
     }
 
-    deleteTable(templateId: number, tableId: number) {
-        return this.http.delete(`${this.url}/${templateId}/delete-table/${tableId}`);
-    }
-
-    deleteField(templateId: number, fieldId: number) {
-        return this.http.delete(`${this.url}/${templateId}/delete-field/${fieldId}`);
+    deleteItem(templateId: number, fieldId: number, isTable: boolean) {
+        console.log("deleting...");
+        return this.http.delete(`${this.url}/${templateId}/delete-${isTable ? "table" : "field"}/${fieldId}`);
     }
 
     deleteTemplate(id: number){

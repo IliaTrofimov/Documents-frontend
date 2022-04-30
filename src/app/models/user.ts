@@ -3,9 +3,10 @@ import { Template } from "./template";
 import { Document } from "./document";
 
 export class User {
-    public Template: Template[] = [];
-    public Sign: Signatory[] = [];
-    public Document: Document[] = [];
+    public Templates: Template[] = [];
+    public Signs: Signatory[] = [];
+    public Documents: Document[] = [];
+    public Permissions: number = 0;
 
     constructor(public Id: number, 
         public Firstname: string,

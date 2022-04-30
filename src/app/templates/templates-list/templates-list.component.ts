@@ -24,10 +24,9 @@ export class TemplatesListComponent implements OnInit {
   } 
 
   showError(error: any){
-    this.messageBar.open(`Ошибка!${JSON.stringify(error)}`, "Принять", {
+    this.messageBar.open(`Ошибка!\n${JSON.stringify(error)}`, "Принять", {
       duration: 5000     
-    });
-    
+    }); 
   }
 
   ngOnInit(): void {

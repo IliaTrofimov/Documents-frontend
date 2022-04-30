@@ -25,8 +25,8 @@ export class DocumentTableComponent implements OnInit{
     this.validSvc.on(() => {
       let status = true;
       for(let cell of this.data){
-        if (cell.Col && cell.Row)
-          status = status && this.validate(cell.Value, cell.Col, cell.Row);
+        if (cell.FieldId && cell.Row)
+          status = status && this.validate(cell.Value, cell.FieldId, cell.Row);
         else 
           return false;
       }

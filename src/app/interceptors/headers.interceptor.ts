@@ -5,8 +5,6 @@ import { Observable } from "rxjs"
 
 @Injectable()
 export class HeadersInterceptor implements HttpInterceptor {
-  
-    constructor() {}
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const modified = req.clone({ 
