@@ -3,6 +3,7 @@ import { HttpEvent, HttpRequest, HttpHandler, HttpInterceptor, HttpErrorResponse
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { SiteErrorCodes } from '../models/site-error';
 
 
 @Injectable()
@@ -15,7 +16,7 @@ export class ServerErrorInterceptor implements HttpInterceptor {
         catchError((err: any, caught: Observable<HttpEvent<any>>) => {
             if (err instanceof HttpErrorResponse && err.status == 0){
                 this.router.navigate(['error'], { queryParams: {
-                    "status": -1, 
+                    "status": SiteErrorCodes.NoConnection, 
                 }})
                 return of();
             }
