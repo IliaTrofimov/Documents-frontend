@@ -3,6 +3,7 @@ import { AsPipe } from './as.pipe';
 import { DocumentStatusPipe } from './document-status.pipe';
 import { FieldTypePipe } from './field-type.pipe';
 import { HTMLInputTypePipe } from './html-input-type.pipe';
+import { PermissionPipe } from './permission.pipe';
 import { RestrictionPipe } from './restriction.pipe';
 
 
@@ -12,7 +13,8 @@ import { RestrictionPipe } from './restriction.pipe';
     FieldTypePipe,
     HTMLInputTypePipe,
     DocumentStatusPipe,
-    RestrictionPipe
+    RestrictionPipe,
+    PermissionPipe
   ],
   providers: [],
   bootstrap: [],
@@ -21,7 +23,8 @@ import { RestrictionPipe } from './restriction.pipe';
     FieldTypePipe,
     HTMLInputTypePipe,
     DocumentStatusPipe,
-    RestrictionPipe
+    RestrictionPipe,
+    PermissionPipe
   ],
 })
 export class PipesModule { }

@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 
 import { User } from '../models/user';
 import { AppConfig } from '../app.config';
-import { map } from 'rxjs';
 
 
 @Injectable()
@@ -12,6 +11,10 @@ export class UsersService{
     
     constructor(private http: HttpClient, private configSvc: AppConfig){
         this.url = this.configSvc.apiUrl + "/users";
+    }
+
+    getCurrent(){
+        return this.http.get<User>(`${this.url}/whoami`);
     }
 
     getUsers(){

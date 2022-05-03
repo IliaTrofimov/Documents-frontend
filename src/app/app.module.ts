@@ -6,6 +6,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AppComponent } from './app.component';
 import { ErrorComponent } from './shared-items/error.component';
@@ -17,11 +19,11 @@ import { TemplatesModule } from './templates/templates.module';
 import { UserViewComponent } from './homepage/user-view.component';
 import { AppRoutingModule } from './app-routing.module';
 import { DictionariesModule } from './dictionaries/dictionaries.module';
-import { HeadersInterceptor } from './interceptors/headers.interceptor';
 
 import { AppConfig } from './app.config';
 import { GlobalErrorHandler } from './error-handler';
 import { ServerErrorInterceptor } from './interceptors/server-errors.interceptor';
+import { HeadersInterceptor } from './interceptors/headers.interceptor';
 
 
 export function loadConfig(config: AppConfig) {
@@ -47,8 +49,9 @@ export function loadConfig(config: AppConfig) {
     MatTabsModule,
     MatTableModule,
     MatSnackBarModule,
-    BrowserAnimationsModule
-    
+    BrowserAnimationsModule,
+    MatChipsModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     AppConfig,
