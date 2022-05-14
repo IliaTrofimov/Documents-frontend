@@ -11,6 +11,7 @@ import { DocumentFieldComponent } from './document-view/document-field.component
 import { DocumentTableComponent } from './document-view/document-table.component';
 import { DocumentsRoutingModule } from './documents-routing.module';
 import { PipesModule } from '../pipes/pipes.module';
+import { SharedItemsModule } from '../shared-items/shared-items.module';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { PipesModule } from '../pipes/pipes.module';
     DocumentsRoutingModule,
     MatTableModule,
     MatSnackBarModule,
-    PipesModule
+    PipesModule,
+    SharedItemsModule
   ],
   providers: [],
   bootstrap: [],

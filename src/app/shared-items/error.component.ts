@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { SiteError } from '../models/site-error';
+import { ErrorService } from '../services/errors.service';
 
 @Component({
   selector: 'error',
@@ -11,15 +11,28 @@ import { SiteError } from '../models/site-error';
     <p>{{error.Message}}</p>
     <hr>
     <b><small class="text-muted">Код: {{error.Status}}</small></b>
+    <div *ngIf="error.Info" style="width: 80%;">
+      <a (click)="hidden = !hidden" class="btn btn-outline-primary btn-sm badge" data-toggle="collapse" href="#collapse" role="button" aria-expanded="false" aria-controls="collapseExample">
+        {{hidden ? "Подробности" : "Скрыть"}}
+      </a>
+      <div class="collapse" id="collapse">
+        <pre style="font-family: consolas; font-size: 10pt;">
+Error: {{error.Info}} 
+        </pre>
+      </div>
+    </div>
+
   `
 })
 export class ErrorComponent {
+  hidden: boolean = true;
   error: SiteError = new SiteError(200);
-  private querySubscription: Subscription;
 
-  constructor(private route: ActivatedRoute){
-    this.querySubscription = route.queryParams.subscribe(
-      (param: any) => this.error = new SiteError(param['status'])
+  constructor(private route: ActivatedRoute, private errorSvc: ErrorService){
+    route.queryParams.subscribe(
+      (param: any) => {
+        this.error = errorSvc.lastError;   
+      }
     );
   }
 }

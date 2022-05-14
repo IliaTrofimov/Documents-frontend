@@ -23,7 +23,7 @@ export class TemplateViewComponent implements OnInit {
   Table = TemplateTable;
 
   template: Template = new Template();
-  templateTypes: TemplateType[] = [];
+  templateTypes?: TemplateType[];
   private vacantId: number = 0;
   private id: number = -1;
 
@@ -38,7 +38,6 @@ export class TemplateViewComponent implements OnInit {
       next: data => {
         this.template = data;
         this.vacantId = data.TemplateItems.length;
-
         console.log(`received data: ${JSON.stringify(this.template, null, 2)}`);
       },
       error: err => {

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { TemplateType } from '../../models/template-type';
 import { TemplateTypesService } from '../../services/template-types.service';
+import { NewTypeDialog } from './new-type-dialog.component';
 
 
 @Component({
@@ -10,12 +12,13 @@ import { TemplateTypesService } from '../../services/template-types.service';
   providers: [TemplateTypesService]
 })
 export class TemplateTypesComponent implements OnInit {
-  types: TemplateType[] = [];
-  newType: TemplateType = new TemplateType(-1, "");
+  types?: TemplateType[];
   selected = -2;
   displayedColumns = ['Id', 'Name', 'Edit'];
 
-  constructor(private typesSvc: TemplateTypesService, private router: Router) { }
+  constructor(private typesSvc: TemplateTypesService, 
+    private router: Router,
+    public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.typesSvc.getTypes().subscribe({
@@ -29,7 +32,24 @@ export class TemplateTypesComponent implements OnInit {
     });
   }
 
-  
+  addType(){
+    this.selected = -1;
+    const dialogRef = this.dialog.open(NewTypeDialog, {data: new TemplateType(-1, "")});
+    
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.typesSvc.createType(result).subscribe({
+          next: id => {
+            console.log('ok'); 
+            result.Id = id;
+            this.types?.push(result);
+          },
+          error: err => console.log(JSON.stringify(err, null, 2))
+        })
+      }
+    });
+  }
+
   editType(type: TemplateType){
     this.typesSvc.updateType(type).subscribe({
       next: () => {
@@ -40,15 +60,16 @@ export class TemplateTypesComponent implements OnInit {
     })
   }
 
-
   removeType(id: number) {
     this.selected = -1;
-    this.typesSvc.deleteType(id).subscribe({
-      next: () => {
-        console.log('ok'); 
-        this.types = this.types.filter(type => type.Id !== id)
-      },
-      error: err => console.log(JSON.stringify(err, null, 2))
-    });
+    if (this.types){
+      this.typesSvc.deleteType(id).subscribe({
+        next: () => {
+          console.log('ok'); 
+          this.types = this.types?.filter(type => type.Id !== id)
+        },
+        error: err => console.log(JSON.stringify(err, null, 2))
+      });
+    }
   }
 }

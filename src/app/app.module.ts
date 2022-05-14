@@ -10,20 +10,19 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AppComponent } from './app.component';
-import { ErrorComponent } from './shared-items/error.component';
-import { SiteHeaderComponent } from './shared-items/site-header.component';
-import { SiteFooterComponent } from './shared-items/site-footer.component';
 
 import { DocumentsModule } from './documents/documents.module';
 import { TemplatesModule } from './templates/templates.module';
 import { UserViewComponent } from './homepage/user-view.component';
 import { AppRoutingModule } from './app-routing.module';
 import { DictionariesModule } from './dictionaries/dictionaries.module';
+import { SharedItemsModule } from './shared-items/shared-items.module';
 
 import { AppConfig } from './app.config';
 import { GlobalErrorHandler } from './error-handler';
 import { ServerErrorInterceptor } from './interceptors/server-errors.interceptor';
 import { HeadersInterceptor } from './interceptors/headers.interceptor';
+
 
 
 export function loadConfig(config: AppConfig) {
@@ -34,18 +33,17 @@ export function loadConfig(config: AppConfig) {
 @NgModule({
   declarations: [
     AppComponent,
-    ErrorComponent,
-    SiteHeaderComponent,
-    SiteFooterComponent,
     UserViewComponent,
   ],
   imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
     DocumentsModule,
     TemplatesModule,
     DictionariesModule,
+    SharedItemsModule,
+
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
     MatTabsModule,
     MatTableModule,
     MatSnackBarModule,

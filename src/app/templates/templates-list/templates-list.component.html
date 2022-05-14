@@ -1,5 +1,7 @@
-<h4 *ngIf="!isComponentInserted">Шаблоны документов</h4>
-<p class="text-muted" *ngIf="!isComponentInserted">
+<h4>Шаблоны документов</h4>
+<loading [status]="!templates"></loading>
+
+<p class="text-muted" *ngIf="templates">
     Всего {{templates.length}} элементов&emsp;
     <span class=""><button class="btn btn-success btn-sm" (click)="addTemplate()">Создать</button></span>
 </p>
@@ -44,7 +46,7 @@
     <tr mat-row *matRowDef="let myRowData; columns: displayedColumns"></tr>     
 </table>
 
-<div class="card" *ngIf="!templates">
+<div class="card" *ngIf="templates?.length == 0">
     <div class="card-body">
         <b>Здесь ничего нет</b>
         <p class="muted">Пока не был создан ни один шаблон документа</p>

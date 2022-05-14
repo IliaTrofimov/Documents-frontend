@@ -1,0 +1,47 @@
+<div class="panel">
+    <h4>Должности пользователей</h4>
+    <span class="text-muted" *ngIf="positions">
+        <span>Всего {{positions.length}} элементов. <button class="badge btn btn-primary btn-sm" (click)="addPosition()">Добавить должность</button></span>
+    </span>
+
+    <loading [status]="!positions"></loading>
+
+    <table mat-table [dataSource]="positions" fixedLayout class="w-100" *ngIf="positions">
+        <ng-container matColumnDef="Id">
+            <th mat-header-cell *matHeaderCellDef>Id</th>
+            <td mat-cell *matCellDef="let position">{{position.Id}}</td>
+        </ng-container>
+        <ng-container matColumnDef="Name">
+            <th mat-header-cell *matHeaderCellDef>Название должности</th>
+            <td mat-cell *matCellDef="let position">
+                <ng-container *ngIf="selected != position.Id">
+                    {{(position.Name != null ? position.Name : "Без названия")}}
+                </ng-container>
+                <input *ngIf="selected == position.Id" [(ngModel)]="position.Name">
+            </td>
+        </ng-container>      
+        <ng-container matColumnDef="Edit">
+            <th mat-header-cell *matHeaderCellDef>Действия</th>
+            <td mat-cell *matCellDef="let position">
+                <ng-container *ngIf="selected == position.Id" >
+                    <button (click)="editPosition(position)" class="btn btn-success btn-sm btn-icon">✓</button>
+                    <button (click)="selected = -1" class="btn btn-secondary btn-sm btn-icon">⮌</button>
+                </ng-container>
+                <ng-container *ngIf="selected != position.Id">
+                    <button (click)="selected = position.Id" class="btn btn-warning btn-sm btn-icon">✎</button>
+                    <button (click)="removePosition(position.Id)" class="btn btn-danger btn-sm btn-icon">✖</button>
+                </ng-container>
+            </td>
+        </ng-container>
+    
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let myRowData; columns: displayedColumns"></tr>  
+        
+    </table>
+    <div class="card" *ngIf="positions?.length == 0">
+        <div class="card-body">
+            <h5 class="card-title">Здесь ничего нет</h5>
+            <p class="card-text">Пока не был создана ни рдна должность</p>
+        </div>
+    </div>
+</div>

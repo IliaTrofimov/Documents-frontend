@@ -21,8 +21,8 @@ export class TemplateTypesService{
         return this.http.put(`${this.url}/${type.Id}/put`, type);
     }
 
-    createType(name: string) {
-        return this.http.post<number>(`${this.url}/post`, name);
+    createType(type: TemplateType) {
+        return this.http.post<number>(`${this.url}/post`, type);
     }
 
     deleteType(id: number){

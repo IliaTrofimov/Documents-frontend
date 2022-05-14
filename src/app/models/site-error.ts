@@ -13,9 +13,9 @@ export enum SiteErrorCodes {
 export class SiteError {
     readonly Status: SiteErrorCodes;
     readonly Title: string;
-    readonly Message?: string;
+    readonly Message: string;
 
-    constructor(code: SiteErrorCodes = SiteErrorCodes.Unknown){
+    constructor(code: SiteErrorCodes = SiteErrorCodes.Unknown, public readonly Info?: string){
         this.Status = code;
         switch (+this.Status) {
             case SiteErrorCodes.Ok:
@@ -52,6 +52,7 @@ export class SiteError {
                 break;
             default:
                 this.Title = "Неизвестная ошибка";
+                this.Message = "";
                 break;  
         }
     }

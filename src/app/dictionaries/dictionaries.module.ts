@@ -11,8 +11,16 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { PipesModule } from '../pipes/pipes.module';
 import { NewUserDialog } from './users/new-users-dialog.component';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatButton } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { SharedItemsModule } from '../shared-items/shared-items.module';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { NewTypeDialog } from './template-types/new-type-dialog.component';
+import { PositionsComponent } from './positions/positions.component';
+import { NewPositionDialog } from './positions/new-position-dialog.component';
 
 
 @NgModule({
@@ -20,7 +28,10 @@ import { MatButton } from '@angular/material/button';
     TemplateTypesComponent,
     UsersListComponent,
     DictionariesComponent,
-    NewUserDialog
+    PositionsComponent,
+    NewUserDialog,
+    NewTypeDialog,
+    NewPositionDialog
   ],
   imports: [
     BrowserModule,
@@ -32,6 +43,12 @@ import { MatButton } from '@angular/material/button';
     MatSnackBarModule,
     PipesModule,
     MatDialogModule,
+    MatChipsModule,
+    MatFormFieldModule,
+    MatCheckboxModule,
+    SharedItemsModule,
+    MatInputModule,
+    MatSelectModule
   ],
   providers: [],
   bootstrap: []

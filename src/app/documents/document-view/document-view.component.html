@@ -1,20 +1,20 @@
-<div class="container panel" *ngIf="document">
+<div class="container panel">
     <h4>Редактирование документа</h4>
-    <button class="btn btn-outline-secondary dropdown-toggle btn-sm badge" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Действия</button>
+    <button class="btn btn-outline-secondary dropdown-toggle btn-sm badge" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" [disabled]="!document">Действия</button>
     <div class="dropdown-menu">
-        <button *ngIf="document.Type == 0" class="dropdown-item btn-sm" (click)="save()">Сохранить</button>
-        <a class="dropdown-item btn-sm" [routerLink]="['/documents/print/', document.Id]">Печать</a>
-        <button *ngIf="document.Type == 0" class="dropdown-item btn-sm" (click)="delete()">Удалить</button>
+        <button *ngIf="document?.Type == 0" class="dropdown-item btn-sm" (click)="save()">Сохранить</button>
+        <a class="dropdown-item btn-sm" [routerLink]="['/documents/print/', document?.Id]">Печать</a>
+        <button *ngIf="document?.Type == 0" class="dropdown-item btn-sm" (click)="delete()">Удалить</button>
     </div>
-    <a class="btn btn-sm" *ngIf="document.Type == 0" (click)="nextType()">Передать на подписание</a>
-    <a class="btn btn-sm" *ngIf="document.Type == 1" (click)="nextType()">Подписать</a>
-    <a class="btn btn-sm" *ngIf="document.Type == 2" (click)="nextType()">Вывести из оборота</a>
+    <a class="btn btn-sm" *ngIf="document?.Type == 0" (click)="nextType()">Передать на подписание</a>
+    <a class="btn btn-sm" *ngIf="document?.Type == 1" (click)="nextType()">Подписать</a>
+    <a class="btn btn-sm" *ngIf="document?.Type == 2" (click)="nextType()">Вывести из оборота</a>
     <hr>
     <button (click)="validate()">validate</button>
-    <div class="row">
+    <div class="row" *ngIf="document">
         <div class="col">
             <b>Название</b><br>
-            <input class="form-control form-control-sm" [(ngModel)]="document.Name" [readonly]="document.Type != 0"/>
+            <input class="form-control form-control-sm" [(ngModel)]="document.Name" [readonly]="document.Type != 0" [disabled]="!document"/>
         </div>
         <div class="col">
             <b>Автор</b><br>
@@ -22,12 +22,12 @@
         </div>
         <div class="col">
             <b>Дата истечения</b><br>
-            <input type="date" class="form-control form-control-sm" [(ngModel)]="document.ExpireDate" [readonly]="document.Type != 0"/>
+            <input type="date" class="form-control form-control-sm" [(ngModel)]="document.ExpireDate" [readonly]="document.Type != 0" [disabled]="!document"/>
         </div>
         <div class="col">
             <div *ngIf="status" class="alert alert-{{status[0] ? 'success' : 'danger'}}" role="alert">
                 {{status[1]}}
-                <button type="button" class="close" aria-label="Close" (click)="status = undefined">
+                <button type="button" class="close" aria-label="Close" (click)="status = undefined" [disabled]="!document">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div> 
@@ -35,7 +35,10 @@
     </div>
     <hr>
 </div>
-<div class="container panel">
+
+<loading [status]="!document"></loading>
+
+<div class="container panel" *ngIf="document">
     <h6 class="text-muted">Шаблон: {{document.Template?.Name}}</h6>
     <p *ngFor="let item of document.Template?.TemplateItems">
         <doc-field *ngIf="!item.IsTable" 
@@ -54,7 +57,4 @@
     <p class="text-muted">
         Обязательные поля отмечены <span class="badge badge-pill badge-info">*</span>
     </p>  
-</div>
-<div class="container panel" *ngIf="!document">
-    Ошибка, не удалось загурзить документ
 </div>

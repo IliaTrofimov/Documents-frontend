@@ -1,0 +1,16 @@
+.mat-column-UserName {
+    width: 40%;
+}  
+
+.mat-column-Permissions{
+    width: 35%;
+} 
+
+
+.permission-item{
+    margin: 2px 4px;
+}
+
+.permission-item :hover{
+    background-color: var(--info);
+}

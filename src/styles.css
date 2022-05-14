@@ -1,0 +1,17 @@
+.mat-column-Id {
+    width: 40px;
+}   
+
+.mat-column-Edit {
+    width: 60px;
+}   
+
+.loading {
+    margin: 4% auto;
+}
+
+.btn-icon{
+    width: 2em;
+    padding: 2px;
+    margin: 2px;
+}

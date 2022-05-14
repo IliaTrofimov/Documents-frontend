@@ -11,9 +11,8 @@ import { TemplateFieldComponent } from './template-view/template-field.component
 import { TemplateTableComponent } from './template-view/template-table.component';
 import { TemplatesRoutingModule } from './templates-routing.module';
 
-import { TestComponent } from './test-compnent';
 import { PipesModule } from '../pipes/pipes.module';
-
+import { SharedItemsModule } from '../shared-items/shared-items.module';
 
 @NgModule({
   declarations: [
@@ -21,7 +20,6 @@ import { PipesModule } from '../pipes/pipes.module';
     TemplateViewComponent,
     TemplateFieldComponent,
     TemplateTableComponent,
-    TestComponent,
   ],
   imports: [
     BrowserModule,
@@ -31,7 +29,8 @@ import { PipesModule } from '../pipes/pipes.module';
     TemplatesRoutingModule,
     MatTableModule,
     MatSnackBarModule,
-    PipesModule
+    PipesModule,
+    SharedItemsModule
   ],
   providers: [],
   bootstrap: [],

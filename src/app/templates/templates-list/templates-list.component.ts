@@ -14,8 +14,7 @@ import { DocumentsService } from '../../services/documents.service';
 })
 export class TemplatesListComponent implements OnInit {
   displayedColumns = ['Name', 'AuthorName', 'UpdateDate', 'Depricated', 'Actions'];
-  @Input() templates: Template[] = [];
-  isComponentInserted: boolean = false;
+  @Input() templates?: Template[];
 
   constructor(private templateSvc: TemplatesService, 
     private documetnsSvc: DocumentsService,
@@ -30,17 +29,17 @@ export class TemplatesListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    this.templateSvc.getTemplates().subscribe({
-      next: templates => {
-        this.templates = templates;
-      },
-      error: err => this.router.navigate(['error'], { queryParams: {
-        title: "Не удалось загрузить список шаблонов", 
-        error: JSON.stringify(err.error, null, 2)
-      }})
-    })
-
+    if (!this.templates){
+      this.templateSvc.getTemplates().subscribe({
+        next: templates => {
+          this.templates = templates;
+        },
+        error: err => this.router.navigate(['error'], { queryParams: {
+          title: "Не удалось загрузить список шаблонов", 
+          error: JSON.stringify(err.error, null, 2)
+        }})
+      })
+    } 
   }
   
   addTemplate() {
@@ -52,7 +51,10 @@ export class TemplatesListComponent implements OnInit {
 
   removeTemplate(id: number) {
     this.templateSvc.deleteTemplate(id).subscribe({
-      next: () => this.templates = this.templates.filter(template => template.Id !== id),
+      next: () => {
+        if (this.templates) 
+          this.templates = this.templates.filter(template => template.Id !== id)
+      },
       error: err => this.showError(err)
     });
   }

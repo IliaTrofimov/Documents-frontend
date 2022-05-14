@@ -5,6 +5,7 @@ import { FieldTypePipe } from './field-type.pipe';
 import { HTMLInputTypePipe } from './html-input-type.pipe';
 import { PermissionPipe } from './permission.pipe';
 import { RestrictionPipe } from './restriction.pipe';
+import { ShortNamePipe } from './shortname.pipe';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { RestrictionPipe } from './restriction.pipe';
     HTMLInputTypePipe,
     DocumentStatusPipe,
     RestrictionPipe,
-    PermissionPipe
+    PermissionPipe,
+    ShortNamePipe
   ],
   providers: [],
   bootstrap: [],
@@ -24,7 +26,8 @@ import { RestrictionPipe } from './restriction.pipe';
     HTMLInputTypePipe,
     DocumentStatusPipe,
     RestrictionPipe,
-    PermissionPipe
+    PermissionPipe,
+    ShortNamePipe
   ],
 })
 export class PipesModule { }

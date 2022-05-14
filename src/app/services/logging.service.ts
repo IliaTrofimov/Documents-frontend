@@ -5,7 +5,9 @@ import { Injectable } from '@angular/core';
 })
 export class LoggingService {
 
-  logError(message: string, stack: string) {
+  logError(message: string, stack?: string) {
     console.log('LoggingService: ' + message);
+    if (stack) 
+      console.log('Error stack:' + stack);
   }
 }

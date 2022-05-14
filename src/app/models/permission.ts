@@ -23,8 +23,6 @@ export class Permission {
     }
 
     static toArray(permission: number) {
-        console.log("toArray ", permission);
-
         if (permission == 0)
             return ["нет прав"];
 

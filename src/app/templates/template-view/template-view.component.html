@@ -30,6 +30,7 @@
 </div>
 <div class="container panel">
     <h5>Список полей ({{template.TemplateItems.length}})</h5>
+    <loading [status]="!template.TemplateItems"></loading>
     <p *ngIf="!template.Depricated">
         <button class="btn badge badge-success" (click)="addField()">Добавить поле</button> или 
         <button class="btn badge badge-success" (click)="addTable()">добавить таблицу</button>

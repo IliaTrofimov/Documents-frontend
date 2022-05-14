@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
+import { SiteError, SiteErrorCodes } from '../models/site-error';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ErrorService {
+    private _lastError: SiteError = new SiteError(SiteErrorCodes.Ok);  
 
     getClientMessage(error: Error): string {
         if (!navigator.onLine) {
@@ -13,15 +15,16 @@ export class ErrorService {
         return error.message ? error.message : error.toString();
     }
 
-    getClientStack(error: Error) {
-        return error.stack ? error.stack : "";
+    catchServerError(error: HttpErrorResponse){
+        if (error.status == 0)
+            return this._lastError = new SiteError(SiteErrorCodes.NoConnection)
+        else{
+            return this._lastError = new SiteError(error.status, JSON.stringify(error.error, null, 2));
+        }
     }
 
-    getServerMessage(error: HttpErrorResponse) {
-        return error.message;
+    get lastError(){
+        return this._lastError;
     }
 
-    getServerStack(error: HttpErrorResponse) {
-        return 'stack';
-    }
 }

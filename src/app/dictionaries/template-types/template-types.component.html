@@ -1,8 +1,11 @@
 <div class="panel">
     <h4>Типы шаблонов</h4>
-    <span class="text-muted">
-        Всего {{types.length}} элементов. 
+    <span class="text-muted" *ngIf="types">
+        <span>Всего {{types.length}} элементов. <button class="badge btn btn-primary btn-sm" (click)="addType()">Добавить тип</button></span>
     </span>
+
+    <loading [status]="!types"></loading>
+
     <table mat-table [dataSource]="types" fixedLayout class="w-100" *ngIf="types">
         <ng-container matColumnDef="Id">
             <th mat-header-cell *matHeaderCellDef>Id</th>
@@ -18,11 +21,16 @@
             </td>
         </ng-container>      
         <ng-container matColumnDef="Edit">
-            <th mat-header-cell *matHeaderCellDef></th>
+            <th mat-header-cell *matHeaderCellDef>Действия</th>
             <td mat-cell *matCellDef="let type">
-                <button *ngIf="selected == type.Id" (click)="editType(type)" class="btn btn-success btn-sm" >✓</button>
-                <button *ngIf="selected != type.Id" (click)="selected = type.Id" class="btn btn-info btn-sm" >✎</button>
-                <button class="btn btn-danger btn-sm" (click)="removeType(type.Id)">✖</button>
+                <ng-container *ngIf="selected == type.Id" >
+                    <button (click)="editType(type)" class="btn btn-success btn-sm btn-icon">✓</button>
+                    <button (click)="selected = -1" class="btn btn-secondary btn-sm btn-icon">⮌</button>
+                </ng-container>
+                <ng-container *ngIf="selected != type.Id">
+                    <button (click)="selected = type.Id" class="btn btn-warning btn-sm btn-icon">✎</button>
+                    <button (click)="removeType(type.Id)" class="btn btn-danger btn-sm btn-icon">✖</button>
+                </ng-container>
             </td>
         </ng-container>
     
@@ -30,7 +38,7 @@
         <tr mat-row *matRowDef="let myRowData; columns: displayedColumns"></tr>  
         
     </table>
-    <div class="card" *ngIf="!types">
+    <div class="card" *ngIf="types?.length == 0">
         <div class="card-body">
             <h5 class="card-title">Здесь ничего нет</h5>
             <p class="card-text">Пока не был создан ни один тип</p>
