@@ -2,7 +2,6 @@ import { switchMap } from 'rxjs/operators';
 import { Component, OnInit} from '@angular/core';
 import { ActivatedRoute, Router} from '@angular/router';
 
-import { Template } from "../../models/template";
 import { Document, DocumentStatus } from '../../models/document';
 import { DocumentsService } from '../../services/documents.service';
 import { ValidationService } from '../../services/validation.service';
@@ -20,7 +19,7 @@ export class DocumentViewComponent implements OnInit {
   Field = TemplateField;
   Table = TemplateTable;
 
-  document: Document = new Document();
+  document?: Document;
   status?: [boolean, string];
   preparedData: { items: DocumentDataItem[], templateFields: TemplateField[], table?: TemplateTable }[] = [];
   private id: number = -1;
@@ -42,22 +41,21 @@ export class DocumentViewComponent implements OnInit {
         console.log(`loaded data (id ${this.id}):`, JSON.stringify(this.document, null, 2))
       },
       error: err =>  {
-        this.router.navigate(['error'], { queryParams: {
-          "title": `Не удалось загрузить документ #${this.id}`, 
-          "error": JSON.stringify(err.error, null, 2)
-        }});
+         console.log(JSON.stringify(err, null, 2))
       }
     });
   }
 
   getItem(fieldId: number){
-    return this.document.DocumentDataItems.find(i => i.FieldId == fieldId);
+    return this.document?.DocumentDataItems.find(i => i.FieldId == fieldId);
   }
 
   getColumns(table: TemplateTable){
     let columns: DocumentDataItem[] = [];
-    for (let field of table.TemplateFields)
-      columns.concat(this.document.DocumentDataItems.filter(i => i.FieldId == field.Id));
+    if (this.document){
+      for (let field of table.TemplateFields)
+        columns.concat(this.document.DocumentDataItems.filter(i => i.FieldId == field.Id));
+    }
     return columns;
   }
 
@@ -78,6 +76,9 @@ export class DocumentViewComponent implements OnInit {
   }
 
   save(){
+    if (!this.document)
+      return;
+
     console.log(JSON.stringify(this.document, null, 2));
     for (let i of this.document.DocumentDataItems){
       this.docSvc.updateItem(this.document.Id, i).subscribe({
@@ -92,6 +93,9 @@ export class DocumentViewComponent implements OnInit {
   }
 
   updateItem(item: DocumentDataItem){
+    if (!this.document)
+      return;
+
     this.docSvc.updateDocument(this.document).subscribe({
       error: error => this.status = [false, error.error],
       complete: () => this.status = [true, "Поле сохранено"]
@@ -99,11 +103,16 @@ export class DocumentViewComponent implements OnInit {
   }
 
   delete(){
+    if (!this.document)
+      return;
+
     this.docSvc.deleteDocument(this.document.Id).subscribe();
     this.router.navigate(["/documents"]);
   }
 
   nextType(){
+    if (!this.document)
+      return;
     if (this.document.Type != DocumentStatus.Old) {
       if (this.document.Type == DocumentStatus.InWork) {
         this.validate();
