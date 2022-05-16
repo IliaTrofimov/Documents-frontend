@@ -3,36 +3,24 @@ import { ErrorHandler, Injectable, Injector } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { ErrorService } from './services/errors.service';
-import { NotificationService } from './services/notifications.service';
-import { LoggingService } from './services/logging.service';
+import { AlertService } from './services/alert.service';
+import { SiteError } from './models/site-error';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
 
-    constructor(private injector: Injector) { }
+    constructor(private errorSvc: ErrorService, 
+        private alertSvc: AlertService,
+        private router: Router) { }
 
     handleError(error: Error | HttpErrorResponse) {
-
-        const errorService = this.injector.get(ErrorService);
-        const logger = this.injector.get(LoggingService);
-        const notifier = this.injector.get(NotificationService);
-
-        let message;
-        let stackTrace;
-
         if (error instanceof HttpErrorResponse) {
-            // Server Error
-            message = errorService.catchServerError(error).Message;
-            notifier.showError(message);
+            console.error("server error: ", error.error);
+            this.alertSvc.error(error.message);
         } else {
-            // Client Error
-            message = errorService.getClientMessage(error);
-            stackTrace = error.stack;
-            notifier.showError(message);
+            console.error("client error: ", error);
+            this.alertSvc.error(error.message)
         }
-
-        // Always log errors
-        logger.logError(message, stackTrace);
-        console.error("error: ", error);
     }
 }

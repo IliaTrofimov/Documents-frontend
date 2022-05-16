@@ -11,7 +11,6 @@ import { DocumentsService } from '../../services/documents.service';
 })
 export class DocumentsListComponent implements OnInit {
   @Input() documents?: Document[];
-  isComponentInserted: boolean = false;
   displayedColumns = ['Name', 'AuthorName', 'UpdateDate', 'ExpireDate', 'Status', 'Actions'];
 
 

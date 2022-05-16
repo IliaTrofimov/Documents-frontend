@@ -6,6 +6,7 @@ import { TemplateType } from 'src/app/models/template-type';
 @Component({
   selector: 'new-type-dialog',
   templateUrl: 'new-type-dialog.component.html',
+  styleUrls: ['../styles.css']
 })
 export class NewTypeDialog {
   constructor(public dialogRef: MatDialogRef<NewTypeDialog>,

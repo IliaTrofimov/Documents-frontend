@@ -9,7 +9,8 @@ import { NewPositionDialog } from './new-position-dialog.component';
 @Component({
   selector: 'positions-list',
   templateUrl: './positions.component.html',
-  providers: [PositionsService]
+  providers: [PositionsService],
+  styleUrls: ['../styles.css']
 })
 export class PositionsComponent implements OnInit {
   positions: Position[] = [];

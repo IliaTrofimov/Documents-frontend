@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AppRoutingModule } from '../app-routing.module';
 
 import { ErrorComponent } from './error.component';
 import { SiteHeaderComponent } from './site-header.component';
 import { SiteFooterComponent } from './site-footer.component';
 import { LoadingComponent } from './loading.component';
+import { RouterModule } from '@angular/router';
+import { AlertComponent } from './alert.component';
+import { CommonModule } from '@angular/common';
 
 
 
@@ -15,19 +16,20 @@ import { LoadingComponent } from './loading.component';
     ErrorComponent,
     SiteHeaderComponent,
     SiteFooterComponent,
-    LoadingComponent
+    LoadingComponent,
+    AlertComponent
   ],
   imports: [
     AppRoutingModule,
-    BrowserModule,
-    MatProgressSpinnerModule
+    RouterModule,
+    CommonModule
   ],
   exports: [
     ErrorComponent,
     SiteHeaderComponent,
     SiteFooterComponent,
     LoadingComponent,
-    MatProgressSpinnerModule
+    AlertComponent
   ]
 })
 export class SharedItemsModule {

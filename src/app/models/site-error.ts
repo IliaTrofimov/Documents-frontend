@@ -56,4 +56,15 @@ export class SiteError {
                 break;  
         }
     }
+
+    static isCritical(code: number): boolean {
+        switch(code){
+            case SiteErrorCodes.Forbidden:
+            case SiteErrorCodes.NoConnection:
+            case SiteErrorCodes.Unauthorized:
+                return true;
+            default: 
+                return false;
+        }
+    }
 }

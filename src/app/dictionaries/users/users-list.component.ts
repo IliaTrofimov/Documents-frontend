@@ -14,7 +14,7 @@ import { NewUserDialog } from './new-users-dialog.component';
   selector: 'users-list',
   templateUrl: './users-list.component.html',
   providers: [UsersService, PositionsService],
-  styleUrls: ['users-list.styles.css']
+  styleUrls: ['../styles.css']
 })
 export class UsersListComponent implements OnInit {
   users?: User[];
@@ -87,7 +87,7 @@ export class UsersListComponent implements OnInit {
   editUser(user: User){
     this.userSvc.updateUser(user).subscribe({
       next: (_user: User) => {
-        console.log('ok'); 
+        console.log("received:", JSON.stringify(_user, null, 2));
         this.selected = -1;
         user.Position = _user.Position;
       },

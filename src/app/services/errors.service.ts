@@ -26,5 +26,4 @@ export class ErrorService {
     get lastError(){
         return this._lastError;
     }
-
 }

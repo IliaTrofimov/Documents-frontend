@@ -8,7 +8,6 @@ import { User } from 'src/app/models/user';
 @Component({
   selector: 'new-user-dialog',
   templateUrl: 'new-user-dialog.component.html',
-  styleUrls: ['users-list.styles.css']
 })
 export class NewUserDialog {
   Flag = PermissionFlag;

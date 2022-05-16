@@ -6,11 +6,14 @@
     width: 35%;
 } 
 
+.mat-column-Id {
+    width: 40px;
+}   
+
+.mat-column-Edit {
+    width: 90px;
+} 
 
 .permission-item{
     margin: 2px 4px;
-}
-
-.permission-item :hover{
-    background-color: var(--info);
 }

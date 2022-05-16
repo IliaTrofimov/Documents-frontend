@@ -1,6 +1,6 @@
 <h4>Документы</h4>
 <p *ngIf="documents" class="text-muted">
-    Всего {{documents.length}} элементов. Создать новый документ по шаблону, можно в разделе "шаблоны".
+    Всего {{documents.length}} элементов. Создать новый документ по шаблону, можно в разделе <a class="link" [routerLink]="['../templates']">шаблоны</a>.
 </p>
 
 <loading [status]="!documents"></loading>

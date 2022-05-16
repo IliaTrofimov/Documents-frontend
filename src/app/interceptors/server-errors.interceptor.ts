@@ -3,8 +3,8 @@ import { HttpEvent, HttpRequest, HttpHandler, HttpInterceptor, HttpErrorResponse
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { SiteErrorCodes } from '../models/site-error';
 import { ErrorService } from '../services/errors.service';
+import { SiteError } from '../models/site-error';
 
 
 @Injectable()
@@ -15,7 +15,7 @@ export class ServerErrorInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(request).pipe(
             catchError((err: any, caught: Observable<HttpEvent<any>>) => {
-                if (err instanceof HttpErrorResponse){
+                if (err instanceof HttpErrorResponse && SiteError.isCritical(err.status)){
                     this.router.navigate(['error'], { queryParams: {
                         "status": this.errorSvc.catchServerError(err).Status, 
                     }});

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'site-header',
@@ -11,8 +11,4 @@ import { Component, OnInit } from '@angular/core';
     </nav>
   `,
 })
-export class SiteHeaderComponent implements OnInit{
-  ngOnInit(): void {
-      console.log("Header is loaded")
-  }
-}
+export class SiteHeaderComponent {}

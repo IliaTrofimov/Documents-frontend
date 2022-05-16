@@ -2,8 +2,9 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'loading',
+  styleUrls: ['styles.css'],
   template: `
-    <div class="d-flex justify-content-center loading" *ngIf="status">
+    <div class="d-flex justify-content-center loading" *ngIf="status || true">
       <div class="row">
         <div class="col-sm">
           <div class="spinner-border" role="status"></div>

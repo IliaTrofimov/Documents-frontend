@@ -12,7 +12,7 @@ import { ErrorService } from '../services/errors.service';
     <hr>
     <b><small class="text-muted">Код: {{error.Status}}</small></b>
     <div *ngIf="error.Info" style="width: 80%;">
-      <a (click)="hidden = !hidden" class="btn btn-outline-primary btn-sm badge" data-toggle="collapse" href="#collapse" role="button" aria-expanded="false" aria-controls="collapseExample">
+      <a (click)="hidden = !hidden" class="link" data-toggle="collapse" href="#collapse" role="button" aria-expanded="false" aria-controls="collapseExample">
         {{hidden ? "Подробности" : "Скрыть"}}
       </a>
       <div class="collapse" id="collapse">
