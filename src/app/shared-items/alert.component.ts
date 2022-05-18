@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Alert, AlertType } from '../models/alert';
@@ -9,7 +9,9 @@ import { AlertService } from '../services/alert.service';
   template: `
   <div *ngFor="let alert of alerts" class="{{cssClass(alert)}}">
     <button class="close" (click)="removeAlert(alert)">&times;</button>
-    {{alert.message}}
+    <b>{{alert.title}}</b>
+    <hr *ngIf="alert.title && alert.message">
+    <small>{{alert.message}}</small>
   </div>
   `
 })

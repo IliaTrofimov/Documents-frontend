@@ -16,11 +16,7 @@ export class ErrorService {
     }
 
     catchServerError(error: HttpErrorResponse){
-        if (error.status == 0)
-            return this._lastError = new SiteError(SiteErrorCodes.NoConnection)
-        else{
-            return this._lastError = new SiteError(error.status, JSON.stringify(error.error, null, 2));
-        }
+        return this._lastError = new SiteError(error.status, JSON.stringify(error.error, null, 2));
     }
 
     get lastError(){
