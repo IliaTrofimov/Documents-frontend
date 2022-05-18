@@ -16,11 +16,11 @@ export class ServerErrorInterceptor implements HttpInterceptor {
         return next.handle(req).pipe(
             catchError((error) => {
                 if (error instanceof HttpErrorResponse && SiteError.isCritical(error.status)){
-                    console.error("critical server error:", error.message);
-                    this.router.navigate(['error', {queryParams: {status: this.errorSvc.catchServerError(error).Status}}]);
+                    console.log("critical server error:", error.message);
+                    this.router.navigate(['error']);
                 }
                    
-                console.error("server error:", error);
+                console.log("server error:", error);
                 return throwError(() => new Error(error.message))
             })
         )
