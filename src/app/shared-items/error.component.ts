@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { SiteError, SiteErrorCodes } from '../models/site-error';
 import { ErrorService } from '../services/errors.service';
 
@@ -9,8 +8,8 @@ import { ErrorService } from '../services/errors.service';
     <h2 *ngIf="error.Status != Codes.Ok">Не удалось загрузить страницу :(</h2>
     <h4>{{error.Title}}</h4>
     <b><small class="text-muted">Код: {{error.Status}}</small></b>
-    <p>{{error.Message}}</p>
     <hr>
+    <p>{{error.Message}}</p>
     <div *ngIf="error.Info" style="width: 80%;">
       <a (click)="hidden = !hidden" class="link" data-toggle="collapse" href="#collapse" role="button" aria-expanded="false" aria-controls="collapseExample">
         {{hidden ? "Подробности" : "Скрыть"}}
@@ -22,16 +21,14 @@ import { ErrorService } from '../services/errors.service';
 
   `
 })
-export class ErrorComponent {
+export class ErrorComponent implements OnInit {
   Codes = SiteErrorCodes;
   hidden: boolean = true;
   error: SiteError = new SiteError(200);
 
-  constructor(private route: ActivatedRoute, private errorSvc: ErrorService){
-    route.queryParams.subscribe(
-      (param: any) => {
-        this.error = errorSvc.lastError;   
-      }
-    );
+  constructor(private errorSvc: ErrorService){}
+
+  ngOnInit(){
+    this.error = this.errorSvc.lastError;   
   }
 }

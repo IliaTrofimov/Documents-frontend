@@ -33,12 +33,8 @@ export class TemplatesListComponent implements OnInit {
       this.templateSvc.getTemplates().subscribe({
         next: templates => {
           this.templates = templates;
-        },
-        error: err => this.router.navigate(['error'], { queryParams: {
-          title: "Не удалось загрузить список шаблонов", 
-          error: JSON.stringify(err.error, null, 2)
-        }})
-      })
+        }
+      });
     } 
   }
   

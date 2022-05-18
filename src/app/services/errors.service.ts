@@ -6,7 +6,7 @@ import { SiteError, SiteErrorCodes } from '../models/site-error';
     providedIn: 'root'
 })
 export class ErrorService {
-    private _lastError: SiteError = new SiteError(SiteErrorCodes.Ok);  
+    private _lastError: SiteError = SiteError.Ok;  
 
     getClientMessage(error: Error): string {
         if (!navigator.onLine) {
@@ -15,9 +15,15 @@ export class ErrorService {
         return error.message ? error.message : error.toString();
     }
 
-    catchServerError(error: HttpErrorResponse){
+    setServerError(error: HttpErrorResponse){
         return this._lastError = new SiteError(error.status, JSON.stringify(error.error, null, 2));
     }
+
+    clearError(){
+        this._lastError = SiteError.Ok; 
+    }
+
+
 
     get lastError(){
         return this._lastError;
