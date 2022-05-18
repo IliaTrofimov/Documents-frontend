@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Position } from 'src/app/models/position';
+import { AlertService } from 'src/app/services/alert.service';
 import { PositionsService } from 'src/app/services/positions.service';
 import { NewPositionDialog } from './new-position-dialog.component';
 
@@ -19,17 +20,13 @@ export class PositionsComponent implements OnInit {
 
   constructor(private positionsSvc: PositionsService, 
     private router: Router,
-    public dialog: MatDialog) { }
+    public dialog: MatDialog,
+    private alertSvc: AlertService) { }
 
   ngOnInit(): void {
     this.positionsSvc.getPositions().subscribe({
       next: positions => this.positions = positions,
-      error: err => {
-        this.router.navigate(['error'], { queryParams: {
-          "title": "Не удалось загрузить список типов должностей", 
-          "error": JSON.stringify(err.error, null, 2)
-        }});
-      }
+      error: err => this.alertSvc.error("Не удалось загрузить данные")
     });
   }
 
@@ -41,11 +38,11 @@ export class PositionsComponent implements OnInit {
       if (result) {
         this.positionsSvc.createPosition(result).subscribe({
           next: id => {
-            console.log('ok'); 
+            this.alertSvc.info("Должность создана", {message: "Обновите страницу", autoClose: true, single: true});
             result.Id = id;
             this.positions?.push(result);
           },
-          error: err => console.log(JSON.stringify(err, null, 2))
+          error: err => this.alertSvc.error("Не удалось создать должность", {message: JSON.stringify(err, null, 2)})
         })
       }
     });
@@ -54,10 +51,10 @@ export class PositionsComponent implements OnInit {
   editPosition(type: Position){
     this.positionsSvc.updatePosition(type).subscribe({
       next: () => {
-        console.log('ok'); 
+        this.alertSvc.info("Должность обновлена", {autoClose: true, single: true});
         this.selected = -1;
       },
-      error: err => console.log(JSON.stringify(err, null, 2))
+      error: err => this.alertSvc.error("Не удалось изменить должность", {message: JSON.stringify(err, null, 2)})
     })
   }
 
@@ -65,10 +62,10 @@ export class PositionsComponent implements OnInit {
     this.selected = -1;
     this.positionsSvc.deletePosition(id).subscribe({
       next: () => {
-        console.log('ok'); 
+        this.alertSvc.info("Должность удалена", {autoClose: true, single: true});
         this.positions = this.positions.filter(type => type.Id !== id)
       },
-      error: err => console.log(JSON.stringify(err, null, 2))
+      error: err => this.alertSvc.error("Не удалось удалить должность", {message: JSON.stringify(err, null, 2)})
     });
   }
 }

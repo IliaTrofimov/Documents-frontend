@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Permission, PermissionFlag } from 'src/app/models/permission';
 import { Position } from 'src/app/models/position';
 import { User } from 'src/app/models/user';
+import { AlertService } from 'src/app/services/alert.service';
 import { PositionsService } from 'src/app/services/positions.service';
 import { UsersService } from 'src/app/services/users.service';
 import { NewUserDialog } from './new-users-dialog.component';
@@ -47,20 +48,17 @@ export class UsersListComponent implements OnInit {
   constructor(private userSvc: UsersService, 
     private positionsSvc: PositionsService,
     private router: Router,
-    public dialog: MatDialog) { }
+    public dialog: MatDialog,
+    private alertSvc: AlertService) { }
 
   ngOnInit(): void {
     this.userSvc.getUsers().subscribe({
       next: users => this.users = users,
-      error: err => {
-        console.log(JSON.stringify(err, null, 2))
-      }
+      error: err => this.alertSvc.error("Не удалось загрузить данные")
     });
     this.positionsSvc.getPositions().subscribe({
       next: positions => this.positions = positions,
-      error: err => {
-        console.log(JSON.stringify(err, null, 2))
-      }
+      error: err => this.alertSvc.error("Не удалось загрузить данные")
     });
   }
 
@@ -74,11 +72,11 @@ export class UsersListComponent implements OnInit {
       if (result) {
         this.userSvc.createUser(result).subscribe({
           next: id => {
-            console.log('ok'); 
+            this.alertSvc.info("Пользователь создан", {message: "Обновите страницу", autoClose: true, single: true});
             result.Id = id;
             this.users?.push(result);
           },
-          error: err => console.log(JSON.stringify(err, null, 2))
+          error: err => this.alertSvc.error("Не удалось создать пользователя", {message: JSON.stringify(err, null, 2)})
         })
       }
     });
@@ -87,11 +85,11 @@ export class UsersListComponent implements OnInit {
   editUser(user: User){
     this.userSvc.updateUser(user).subscribe({
       next: (_user: User) => {
-        console.log("received:", JSON.stringify(_user, null, 2));
+        this.alertSvc.info("Пользователь обновлён", {autoClose: true, single: true});
         this.selected = -1;
         user.Position = _user.Position;
       },
-      error: err => console.log(JSON.stringify(err, null, 2))
+      error: err => this.alertSvc.error("Не удалось изменить пользователя", {message: JSON.stringify(err, null, 2)})
     })
   }
 
@@ -99,10 +97,10 @@ export class UsersListComponent implements OnInit {
     this.selected = -1;
     this.userSvc.deleteUser(id).subscribe({
       next: () => {
-        console.log('ok'); 
+        this.alertSvc.info("Пользователь удалён", {autoClose: true, single: true});
         this.users = this.users?.filter(user => user.Id !== id)
       },
-      error: err => console.log(JSON.stringify(err, null, 2))
+      error: err => this.alertSvc.error("Не удалось удалить пользователя", {message: JSON.stringify(err, null, 2)})
     });
   }
 

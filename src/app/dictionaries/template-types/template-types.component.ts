@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { AlertService } from 'src/app/services/alert.service';
 import { TemplateType } from '../../models/template-type';
 import { TemplateTypesService } from '../../services/template-types.service';
 import { NewTypeDialog } from './new-type-dialog.component';
@@ -18,17 +19,13 @@ export class TemplateTypesComponent implements OnInit {
 
   constructor(private typesSvc: TemplateTypesService, 
     private router: Router,
-    public dialog: MatDialog) { }
+    public dialog: MatDialog,
+    private alertSvc: AlertService) { }
 
   ngOnInit(): void {
     this.typesSvc.getTypes().subscribe({
       next: types => this.types = types,
-      error: err => {
-        this.router.navigate(['error'], { queryParams: {
-          "title": "Не удалось загрузить список типов шаблонов", 
-          "error": JSON.stringify(err.error, null, 2)
-        }});
-      }
+      error: err => this.alertSvc.error("Не удалось загрузить данные")
     });
   }
 
@@ -40,11 +37,11 @@ export class TemplateTypesComponent implements OnInit {
       if (result) {
         this.typesSvc.createType(result).subscribe({
           next: id => {
-            console.log('ok'); 
+            this.alertSvc.info("Тип создан", {message: "Обновите страницу", autoClose: true, single: true});
             result.Id = id;
             this.types?.push(result);
           },
-          error: err => console.log(JSON.stringify(err, null, 2))
+          error: err => this.alertSvc.error("Не удалось создать тип", {message: JSON.stringify(err, null, 2)})
         })
       }
     });
@@ -53,10 +50,10 @@ export class TemplateTypesComponent implements OnInit {
   editType(type: TemplateType){
     this.typesSvc.updateType(type).subscribe({
       next: () => {
-        console.log('ok'); 
+        this.alertSvc.info("Тип обновлён", {autoClose: true, single: true});
         this.selected = -1;
       },
-      error: err => console.log(JSON.stringify(err, null, 2))
+      error: err => this.alertSvc.error("Не удалось изменить тип", {message: JSON.stringify(err, null, 2)})
     })
   }
 
@@ -66,9 +63,10 @@ export class TemplateTypesComponent implements OnInit {
       this.typesSvc.deleteType(id).subscribe({
         next: () => {
           console.log('ok'); 
+          this.alertSvc.info("Тип удалён", {autoClose: true, single: true});
           this.types = this.types?.filter(type => type.Id !== id)
         },
-        error: err => console.log(JSON.stringify(err, null, 2))
+        error: err => this.alertSvc.error("Не удалось удалить тип", {message: JSON.stringify(err, null, 2)})
       });
     }
   }
