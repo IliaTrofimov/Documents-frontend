@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpRequest, HttpHandler, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ErrorService } from '../services/errors.service';
@@ -12,18 +12,17 @@ export class ServerErrorInterceptor implements HttpInterceptor {
 
     constructor(private router: Router, private errorSvc: ErrorService) {}
 
-    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        return next.handle(request).pipe(
-            catchError((err: any, caught: Observable<HttpEvent<any>>) => {
-                if (err instanceof HttpErrorResponse && SiteError.isCritical(err.status)){
-                    this.router.navigate(['error'], { queryParams: {
-                        "status": this.errorSvc.catchServerError(err).Status, 
-                    }});
-                    return of();
+    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        return next.handle(req).pipe(
+            catchError((error) => {
+                if (error instanceof HttpErrorResponse && SiteError.isCritical(error.status)){
+                    console.error("critical server error:", error.message);
+                    this.router.navigate(['error', {queryParams: {status: this.errorSvc.catchServerError(error).Status}}]);
                 }
-                else
-                    return caught;
-            }),
-        );    
-    }
+                   
+                console.error("server error:", error);
+                return throwError(() => new Error(error.message))
+            })
+        )
+      }
 }

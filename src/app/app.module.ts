@@ -19,7 +19,6 @@ import { DictionariesModule } from './dictionaries/dictionaries.module';
 import { SharedItemsModule } from './shared-items/shared-items.module';
 
 import { AppConfig } from './app.config';
-import { GlobalErrorHandler } from './error-handler';
 import { ServerErrorInterceptor } from './interceptors/server-errors.interceptor';
 import { HeadersInterceptor } from './interceptors/headers.interceptor';
 
@@ -53,7 +52,6 @@ export function loadConfig(config: AppConfig) {
   ],
   providers: [
     AppConfig,
-    { provide: ErrorHandler, useClass: GlobalErrorHandler },
     { provide: APP_INITIALIZER, useFactory: loadConfig, deps: [AppConfig],  multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: HeadersInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ServerErrorInterceptor, multi: true },

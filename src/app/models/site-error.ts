@@ -1,5 +1,5 @@
 export enum SiteErrorCodes {
-    Unknown = 0,
+    Unknown = -1,
     Ok = 200,
     BadRequest = 400,
     Unauthorized = 401,
@@ -8,12 +8,24 @@ export enum SiteErrorCodes {
     Conflict = 409,
     Internal = 500,
     NoConnection = 521,
+    Unavaliable = 503,
+    ServerTimeout = 522,
+    Timeout = 524
 }
 
 export class SiteError {
     readonly Status: SiteErrorCodes;
     readonly Title: string;
     readonly Message: string;
+
+    static readonly Ok: SiteError = new SiteError(SiteErrorCodes.Ok);
+    static readonly BadRequest: SiteError = new SiteError(SiteErrorCodes.BadRequest);
+    static readonly Unauthorized: SiteError = new SiteError(SiteErrorCodes.Unauthorized);
+    static readonly Forbidden: SiteError = new SiteError(SiteErrorCodes.Forbidden);
+    static readonly NotFound: SiteError = new SiteError(SiteErrorCodes.NotFound);
+    static readonly Conflict: SiteError = new SiteError(SiteErrorCodes.Conflict);
+    static readonly Internal: SiteError = new SiteError(SiteErrorCodes.Internal);
+    static readonly NoConnection: SiteError = new SiteError(SiteErrorCodes.NoConnection);
 
     constructor(code: SiteErrorCodes = SiteErrorCodes.Unknown, public readonly Info?: string){
         this.Status = code;
@@ -47,6 +59,9 @@ export class SiteError {
                 this.Message = "Выполнить действие не удалось из-за ошибки со стороны сервера.";
                 break;
             case SiteErrorCodes.NoConnection: 
+            case SiteErrorCodes.Unavaliable:
+            case SiteErrorCodes.Timeout:
+            case SiteErrorCodes.ServerTimeout:
                 this.Title = "Нет соединения";
                 this.Message = "Не удалось подключиться к серверу. Возможно у Вас отсутсвует интернет-соединение или сервер не работает.";
                 break;
@@ -59,8 +74,12 @@ export class SiteError {
 
     static isCritical(code: number): boolean {
         switch(code){
+            case 0:
             case SiteErrorCodes.Forbidden:
-            case SiteErrorCodes.NoConnection:
+            case SiteErrorCodes.NoConnection: 
+            case SiteErrorCodes.Unavaliable:
+            case SiteErrorCodes.Timeout:
+            case SiteErrorCodes.ServerTimeout:
             case SiteErrorCodes.Unauthorized:
                 return true;
             default: 
