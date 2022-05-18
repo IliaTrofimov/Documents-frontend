@@ -1,5 +1,6 @@
 export enum SiteErrorCodes {
     Unknown = -1,
+    ConnectionRefused = 0,
     Ok = 200,
     BadRequest = 400,
     Unauthorized = 401,
@@ -58,6 +59,7 @@ export class SiteError {
                 this.Title = "Внутренняя ошибка";
                 this.Message = "Выполнить действие не удалось из-за ошибки со стороны сервера.";
                 break;
+            case SiteErrorCodes.ConnectionRefused:
             case SiteErrorCodes.NoConnection: 
             case SiteErrorCodes.Unavaliable:
             case SiteErrorCodes.Timeout:
@@ -67,7 +69,7 @@ export class SiteError {
                 break;
             default:
                 this.Title = "Неизвестная ошибка";
-                this.Message = "";
+                this.Message = "Ошибка не была распознана.";
                 break;  
         }
     }
