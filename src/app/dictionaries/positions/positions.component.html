@@ -14,21 +14,25 @@
         <ng-container matColumnDef="Name">
             <th mat-header-cell *matHeaderCellDef>Название должности</th>
             <td mat-cell *matCellDef="let position">
-                <ng-container *ngIf="selected != position.Id">
+                <ng-container *ngIf="selected.Id != position.Id">
                     {{(position.Name != null ? position.Name : "Без названия")}}
                 </ng-container>
-                <input *ngIf="selected == position.Id" [(ngModel)]="position.Name">
+                <form #nameForm="ngForm" *ngIf="selected.Id == position.Id">
+                    <mat-form-field>
+                      <input matInput [(ngModel)]="position.Name" required name="name">
+                    </mat-form-field>
+                </form>
             </td>
         </ng-container>      
         <ng-container matColumnDef="Edit">
             <th mat-header-cell *matHeaderCellDef>Действия</th>
             <td mat-cell *matCellDef="let position">
-                <ng-container *ngIf="selected == position.Id" >
-                    <button (click)="editPosition(position)" class="btn btn-success btn-sm btn-icon">✓</button>
-                    <button (click)="selected = -1" class="btn btn-secondary btn-sm btn-icon">⮌</button>
+                <ng-container *ngIf="selected.Id == position.Id" >
+                    <button (click)="editPosition(position)" [disabled]="!position.Name" class="btn btn-success btn-sm btn-icon">✓</button>
+                    <button (click)="reset(position)" class="btn btn-secondary btn-sm btn-icon">⮌</button>
                 </ng-container>
-                <ng-container *ngIf="selected != position.Id">
-                    <button (click)="selected = position.Id" class="btn btn-warning btn-sm btn-icon">✎</button>
+                <ng-container *ngIf="selected.Id != position.Id">
+                    <button (click)="beginEdit(position)" class="btn btn-warning btn-sm btn-icon">✎</button>
                     <button (click)="removePosition(position.Id)" class="btn btn-danger btn-sm btn-icon">✖</button>
                 </ng-container>
             </td>

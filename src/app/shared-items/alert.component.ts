@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Alert, AlertType } from '../models/alert';
@@ -6,12 +6,21 @@ import { AlertService } from '../services/alert.service';
 
 @Component({
   selector: 'alert',
+  styleUrls: ['styles.css'],
   template: `
-  <div *ngFor="let alert of alerts" class="{{cssClass(alert)}}">
-    <button class="close" (click)="removeAlert(alert)">&times;</button>
-    <b>{{alert.title}}</b>
-    <hr *ngIf="alert.title && alert.message">
-    <small>{{alert.message}}</small>
+  <div *ngFor="let alert of alerts; let i = index" class="{{cssClass(alert)}}">
+    <ng-container *ngIf="alert.message">
+      <a class="alert-link" *ngIf="alert.message" (click)="alert.collapsed = !alert.collapsed" role="button">
+        {{alert.title}}
+      </a><br>
+      <ng-container *ngIf="!alert.collapsed">
+        {{alert.message}}
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="!alert.message">
+      {{alert.title}}
+    </ng-container>
+    <button class="close" (click)="removeAlert(alert)"><span aria-hidden="true">&times;</span></button>
   </div>
   `
 })
@@ -23,16 +32,23 @@ export class AlertComponent implements OnInit {
   alertSubscription?: Subscription;
   routeSubscription?: Subscription;
 
-  constructor(private router: Router, private alertService: AlertService) { 
-    this.alertSubscription = this.alertService.onAlert(this.id).subscribe(alert => {
-      if (!alert.message) {
+  constructor(private router: Router, 
+    private alertService: AlertService, 
+    private detector: ChangeDetectorRef) { 
+    this.alertSubscription = this.alertService.onAlert().subscribe(alert => {
+      if (!alert.title && !alert.message) {
         this.alerts = this.alerts.filter(x => x.keepAfterRouteChange);
         return;
       }
+      if (alert.single)
+        this.alerts = this.alerts.filter(x => x.type != alert.type);
+      
       this.alerts.push(alert);
-      console.log("alert: ", alert.message);
-      if (alert.autoClose)
-        setTimeout(() => this.removeAlert(alert), 3000);
+      this.detector.detectChanges();
+      console.log("alert: ", alert.title);
+
+      if (alert.closeTime)
+        setTimeout(() => this.removeAlert(alert), alert.closeTime);
     });
   }
 
@@ -55,22 +71,11 @@ export class AlertComponent implements OnInit {
 
   cssClass(alert?: Alert) {
     if (!alert) return;
-
-    const classes = ['alert', 'alert-dismissable'];
-                
-    const alertTypeClass = {
-      [AlertType.Success]: 'alert alert-success',
-      [AlertType.Error]: 'alert alert-danger',
-      [AlertType.Info]: 'alert alert-info',
-      [AlertType.Warning]: 'alert alert-warning'
+    switch (alert.type){
+      case AlertType.Success: return 'alert alert-dismissible fade show alert-success';
+      case AlertType.Error: return 'alert alert-dismissible fade show alert-danger';
+      case AlertType.Info: return 'alert alert-dismissible fade show alert-info';
+      case AlertType.Warning: return'alert alert-dismissible fade show alert-warning';
     }
-
-    classes.push(alertTypeClass[alert.type]);
-
-    if (alert.fade) {
-      classes.push('fade');
-    }
-
-    return classes.join(' ');
   }
 }

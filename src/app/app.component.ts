@@ -6,8 +6,8 @@ import { AlertService } from './services/alert.service';
   selector: 'app-root',
   template: `
     <site-header></site-header>
-    <alert></alert>
     <div class="container">
+      <alert></alert>
       <router-outlet></router-outlet>
     </div>
     <site-footer></site-footer>

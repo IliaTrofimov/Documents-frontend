@@ -14,21 +14,25 @@
         <ng-container matColumnDef="Name">
             <th mat-header-cell *matHeaderCellDef>Название</th>
             <td mat-cell *matCellDef="let type">
-                <ng-container *ngIf="selected != type.Id">
+                <ng-container *ngIf="selected.Id != type.Id">
                     {{(type.Name != null ? type.Name : "Без названия")}}
                 </ng-container>
-                <input *ngIf="selected == type.Id" [(ngModel)]="type.Name">
+                <form #nameForm="ngForm" *ngIf="selected.Id == type.Id">
+                    <mat-form-field>
+                      <input matInput [(ngModel)]="type.Name" required name="name">
+                    </mat-form-field>
+                </form>
             </td>
         </ng-container>      
         <ng-container matColumnDef="Edit">
             <th mat-header-cell *matHeaderCellDef>Действия</th>
             <td mat-cell *matCellDef="let type">
-                <ng-container *ngIf="selected == type.Id" >
-                    <button (click)="editType(type)" class="btn btn-success btn-sm btn-icon">✓</button>
-                    <button (click)="selected = -1" class="btn btn-secondary btn-sm btn-icon">⮌</button>
+                <ng-container *ngIf="selected.Id == type.Id" >
+                    <button (click)="editType(type)" [disabled]="!type.Name" class="btn btn-success btn-sm btn-icon">✓</button>
+                    <button (click)="reset(type)" class="btn btn-secondary btn-sm btn-icon">⮌</button>
                 </ng-container>
-                <ng-container *ngIf="selected != type.Id">
-                    <button (click)="selected = type.Id" class="btn btn-warning btn-sm btn-icon">✎</button>
+                <ng-container *ngIf="selected.Id != type.Id">
+                    <button (click)="beginEdit(type)" class="btn btn-warning btn-sm btn-icon">✎</button>
                     <button (click)="removeType(type.Id)" class="btn btn-danger btn-sm btn-icon">✖</button>
                 </ng-container>
             </td>

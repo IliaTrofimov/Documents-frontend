@@ -15,7 +15,7 @@ import { NewPositionDialog } from './new-position-dialog.component';
 })
 export class PositionsComponent implements OnInit {
   positions: Position[] = [];
-  selected = -2;
+  selected: Position = new Position(-1, "");
   displayedColumns = ['Id', 'Name', 'Edit'];
 
   constructor(private positionsSvc: PositionsService, 
@@ -31,35 +31,44 @@ export class PositionsComponent implements OnInit {
   }
 
   addPosition(){
-    this.selected = -1;
+    this.selected = new Position(-1, "");
     const dialogRef = this.dialog.open(NewPositionDialog, {data: new Position(-1, "")});
     
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.positionsSvc.createPosition(result).subscribe({
-          next: id => {
-            this.alertSvc.info("Должность создана", {message: "Обновите страницу", autoClose: true, single: true});
-            result.Id = id;
-            this.positions?.push(result);
-          },
-          error: err => this.alertSvc.error("Не удалось создать должность", {message: JSON.stringify(err, null, 2)})
-        })
+      if (!result) return;
+
+      if (result instanceof Position) {
+        this.alertSvc.info("Должность создана", {closeTime: 5000, single: true, keepAfterRouteChange: true});
+        location.reload();
       }
+      else 
+        this.alertSvc.error("Не удалось создать должность", {message: JSON.stringify(result, null, 2)});
     });
+  }
+
+  beginEdit(position: Position){
+    this.selected.Id = position.Id;
+    this.selected.Name = position.Name;
+  }
+
+  reset(position: Position){
+    position.Id = this.selected.Id;
+    position.Name = this.selected.Name;
+    this.selected = new Position(-1, "");
   }
 
   editPosition(type: Position){
     this.positionsSvc.updatePosition(type).subscribe({
       next: () => {
         this.alertSvc.info("Должность обновлена", {autoClose: true, single: true});
-        this.selected = -1;
+        this.selected = new Position(-1, "");
       },
       error: err => this.alertSvc.error("Не удалось изменить должность", {message: JSON.stringify(err, null, 2)})
     })
   }
 
   removePosition(id: number) {
-    this.selected = -1;
+    this.selected = new Position(-1, "");
     this.positionsSvc.deletePosition(id).subscribe({
       next: () => {
         this.alertSvc.info("Должность удалена", {autoClose: true, single: true});

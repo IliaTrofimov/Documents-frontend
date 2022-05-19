@@ -3,9 +3,10 @@ export class Alert {
     type: AlertType = AlertType.Success;
     title: string = "";
     message: string = "";
-    autoClose: boolean = false;
+    closeTime?: number;
     keepAfterRouteChange: boolean = false;
     fade: boolean = false;
+    collapsed: boolean = true;
     single: boolean = false;
 
     constructor(init?:Partial<Alert>) {

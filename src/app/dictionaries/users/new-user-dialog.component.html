@@ -1,40 +1,40 @@
 <div class="mat-dialog-content">
-    <div class="form-group">
-        <label>Фамилия</label>
-        <input [(ngModel)]="data.user.Lastname" class="form-control">
-    </div>
-    <div class="form-group">
-        <label>Имя</label>
-        <input [(ngModel)]="data.user.Firstname" class="form-control form-control-sm">
-    </div>
-    <div class="form-group">
-        <label>Отчество</label>
-        <input [(ngModel)]="data.user.Fathersname" class="form-control form-control-sm">
-        <small class="form-text text-muted">При наличии</small>
-    </div>
-    <div class="form-group">
-        <label>Должность</label>
-        <loading [status]="!data.positions"></loading>
-        <mat-form-field *ngIf="data.positions">
+    <form #nameForm="ngForm" novalidate>
+        <mat-form-field appearance="outline">
+            <mat-label>Фамилия</mat-label>
+            <input matInput [(ngModel)]="data.user.Lastname" required name="lastname">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Имя</mat-label>
+            <input matInput [(ngModel)]="data.user.Firstname" required name="firstname">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Отчество</mat-label>
+            <input matInput [(ngModel)]="data.user.Fathersname" name="fathersname">
+        </mat-form-field>
+    </form>
+    <form #positionForm="ngForm" novalidate>
+        <mat-form-field appearance="outline">
+            <mat-label>Должность</mat-label>
             <mat-select [(ngModel)]="data.user.PositionId" required>
                 <mat-option *ngFor="let pos of data.positions" [value]="pos.Id">
                     {{pos.Name}}
                 </mat-option>
             </mat-select>
-        </mat-form-field>
-    </div>
+          </mat-form-field>
+    </form>
     <div class="form-group">
         <label>Разрешения</label>
         <div class="overflow-auto d-flex flex-wrap">
             <button *ngFor="let p of allPermissions" 
                 (click)="toggle(p)"
-                class="btn btn-sm badge badge-{{has(p) ? 'info' : 'secondary'}} permission-item">
+                class="permission-item btn btn-sm badge badge-{{has(p) ? 'info' : 'secondary'}}">
                 {{p | permission}}
             </button>
         </div>
     </div>
 </div>
 <div mat-dialog-actions>
-    <button mat-button [mat-dialog-close]="data.user" class="btn btn-primary btn-sm">Принять</button>
+    <button mat-button (click)="ok()" [disabled]="positionForm.invalid || nameForm.invalid" class="btn btn-primary btn-sm">Принять</button>
     <button mat-button [mat-dialog-close]="undefined" class="btn btn-danger btn-sm">Отменить</button>
 </div>
