@@ -42,10 +42,10 @@
         <tr mat-row *matRowDef="let myRowData; columns: displayedColumns"></tr>  
         
     </table>
-    <div class="card" *ngIf="positions?.length == 0">
+    <div class="card" *ngIf="positions && positions.length == 0">
         <div class="card-body">
             <h5 class="card-title">Здесь ничего нет</h5>
-            <p class="card-text">Пока не был создана ни рдна должность</p>
+            <p class="card-text">Пока не был создана ни одна должность</p>
         </div>
     </div>
 </div>

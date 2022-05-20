@@ -4,9 +4,9 @@
         <span>Всего {{types.length}} элементов. <button class="badge btn btn-primary btn-sm" (click)="addType()">Добавить тип</button></span>
     </span>
 
-    <loading [status]="!types"></loading>
+    <loading [status]="!types || !positions"></loading>
 
-    <table mat-table [dataSource]="types" fixedLayout class="w-100" *ngIf="types">
+    <table mat-table [dataSource]="types" fixedLayout class="w-100" *ngIf="types && positions">
         <ng-container matColumnDef="Id">
             <th mat-header-cell *matHeaderCellDef>Id</th>
             <td mat-cell *matCellDef="let type">{{type.Id}}</td>
@@ -23,7 +23,28 @@
                     </mat-form-field>
                 </form>
             </td>
-        </ng-container>      
+        </ng-container>    
+        <ng-container matColumnDef="Position">
+            <th mat-header-cell *matHeaderCellDef>Подписанты</th>
+            <td mat-cell *matCellDef="let type">
+                <div *ngIf="selected.Id != type.Id" class="overflow-auto d-flex flex-wrap">
+                    <div *ngFor="let pos of type.SignersPositions" class="badge badge-info permission-item">
+                        {{pos.Name}}
+                    </div>
+                    <i *ngIf="type.SignersPositions && type.SignersPositions.length == 0">
+                        Не требуется подпись
+                    </i>
+                </div>
+                <mat-form-field appearance="fill" *ngIf="selected.Id == type.Id">
+                    <mat-label>Подписанты</mat-label>
+                    <mat-select multiple [(ngModel)]="type.SignersPositions">
+                      <mat-option *ngFor="let pos of positions" [value]="pos">
+                          {{pos.Name}}
+                      </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </td>
+        </ng-container>  
         <ng-container matColumnDef="Edit">
             <th mat-header-cell *matHeaderCellDef>Действия</th>
             <td mat-cell *matCellDef="let type">
@@ -42,7 +63,7 @@
         <tr mat-row *matRowDef="let myRowData; columns: displayedColumns"></tr>  
         
     </table>
-    <div class="card" *ngIf="types?.length == 0">
+    <div class="card" *ngIf="types && types.length == 0">
         <div class="card-body">
             <h5 class="card-title">Здесь ничего нет</h5>
             <p class="card-text">Пока не был создан ни один тип</p>

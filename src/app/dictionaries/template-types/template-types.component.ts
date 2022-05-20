@@ -1,8 +1,10 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { Position } from 'src/app/models/position';
 import { Template } from 'src/app/models/template';
 import { AlertService } from 'src/app/services/alert.service';
+import { PositionsService } from 'src/app/services/positions.service';
 import { TemplateType } from '../../models/template-type';
 import { TemplateTypesService } from '../../services/template-types.service';
 import { NewTypeDialog } from './new-type-dialog.component';
@@ -11,23 +13,29 @@ import { NewTypeDialog } from './new-type-dialog.component';
 @Component({
   selector: 'template-types-list',
   templateUrl: './template-types.component.html',
-  providers: [TemplateTypesService],
+  providers: [TemplateTypesService, PositionsService],
   styleUrls: ['../styles.css']
 })
 export class TemplateTypesComponent implements OnInit {
   types?: TemplateType[];
+  positions?: Position[];
   selected: TemplateType = new TemplateType(-1, "");
-  displayedColumns = ['Id', 'Name', 'Edit'];
+  displayedColumns = ['Id', 'Name', 'Position','Edit'];
 
   constructor(private typesSvc: TemplateTypesService, 
     private router: Router,
     public dialog: MatDialog,
     private alertSvc: AlertService,
-    private detector: ChangeDetectorRef) { }
+    private detector: ChangeDetectorRef,
+    private positionsSvc: PositionsService) { }
 
   ngOnInit(): void {
     this.typesSvc.getTypes().subscribe({
-      next: types => this.types = types,
+      next: types => {this.types = types; console.log(types)},
+      error: err => this.alertSvc.error("Не удалось загрузить данные")
+    });
+    this.positionsSvc.getPositions().subscribe({
+      next: positions => this.positions = positions,
       error: err => this.alertSvc.error("Не удалось загрузить данные")
     });
   }
