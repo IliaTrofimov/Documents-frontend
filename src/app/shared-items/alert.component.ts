@@ -8,19 +8,21 @@ import { AlertService } from '../services/alert.service';
   selector: 'alert',
   styleUrls: ['styles.css'],
   template: `
-  <div *ngFor="let alert of alerts; let i = index" class="{{cssClass(alert)}}">
-    <ng-container *ngIf="alert.message">
-      <a class="alert-link" *ngIf="alert.message" (click)="alert.collapsed = !alert.collapsed" role="button">
-        {{alert.title}}
-      </a><br>
-      <ng-container *ngIf="!alert.collapsed">
-        {{alert.message}}
+  <div *ngIf="alerts.length != 0" class="sticky-top">
+    <div *ngFor="let alert of alerts" class="{{cssClass(alert)}}">
+      <ng-container *ngIf="alert.message">
+        <a class="alert-link" *ngIf="alert.message" (click)="alert.collapsed = !alert.collapsed" role="button">
+          {{alert.title}}
+        </a><br>
+        <ng-container *ngIf="!alert.collapsed">
+          {{alert.message}}
+        </ng-container>
       </ng-container>
-    </ng-container>
-    <ng-container *ngIf="!alert.message">
-      {{alert.title}}
-    </ng-container>
-    <button class="close" (click)="removeAlert(alert)"><span aria-hidden="true">&times;</span></button>
+      <ng-container *ngIf="!alert.message">
+        {{alert.title}}
+      </ng-container>
+      <button class="close" (click)="removeAlert(alert)"><span aria-hidden="true">&times;</span></button>
+    </div>
   </div>
   `
 })
