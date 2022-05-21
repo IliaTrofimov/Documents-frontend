@@ -7,7 +7,6 @@ import { Component } from '@angular/core';
     <ul class="list-group">
       <li class="list-group-item"><a [routerLink]="['users']">Список пользователей</a></li>
       <li class="list-group-item"><a [routerLink]="['positions']">Список должностей</a></li>
-      <hr>
       <li class="list-group-item"><a [routerLink]="['templatetypes']">Список типов шаблонов</a></li>
     </ul>
   `

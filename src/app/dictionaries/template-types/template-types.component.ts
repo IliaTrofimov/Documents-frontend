@@ -20,6 +20,7 @@ export class TemplateTypesComponent implements OnInit {
   types?: TemplateType[];
   positions?: Position[];
   selected: TemplateType = new TemplateType(-1, "");
+  selectedPositions: Position[] = [];
   displayedColumns = ['Id', 'Name', 'Position','Edit'];
 
   constructor(private typesSvc: TemplateTypesService, 
@@ -30,19 +31,13 @@ export class TemplateTypesComponent implements OnInit {
     private positionsSvc: PositionsService) { }
 
   ngOnInit(): void {
-    this.typesSvc.getTypes().subscribe({
-      next: types => {this.types = types; console.log(types)},
-      error: err => this.alertSvc.error("Не удалось загрузить данные")
-    });
-    this.positionsSvc.getPositions().subscribe({
-      next: positions => this.positions = positions,
-      error: err => this.alertSvc.error("Не удалось загрузить данные")
-    });
+    this.typesSvc.getTypes().subscribe(types => {this.types = types; console.log(this.types)});
+    this.positionsSvc.getPositions().subscribe(positions => {this.positions = positions; console.log(this.positions)});
   }
 
   addType(){
     this.selected = new TemplateType(-1, "");
-    const dialogRef = this.dialog.open(NewTypeDialog, {data: new TemplateType(-1, "")});
+    const dialogRef = this.dialog.open(NewTypeDialog, {data: {type: new TemplateType(-1, ""), positions: this.positions}});
     
     dialogRef.afterClosed().subscribe(result => {
       if (!result) return;
@@ -57,6 +52,12 @@ export class TemplateTypesComponent implements OnInit {
   }
 
   beginEdit(type: TemplateType){
+    this.selectedPositions = [];
+    this.selected.TemplateTypePositions = [];
+    for (let pos of type.TemplateTypePositions){
+      this.selectedPositions.push(pos.Position);
+      this.selected.TemplateTypePositions.push(pos);
+    }
     this.selected.Id = type.Id;
     this.selected.Name = type.Name;
   }
@@ -72,6 +73,9 @@ export class TemplateTypesComponent implements OnInit {
       this.alertSvc.error("Заполните обязательные поля", {closeTime: 5000});
       return;
     }
+    
+    for(let p of this.selectedPositions)
+      type.TemplateTypePositions.push({Id: -1, TemplateTypeId: type.Id, Position: p});
 
     this.typesSvc.updateType(type).subscribe({
       next: () => {

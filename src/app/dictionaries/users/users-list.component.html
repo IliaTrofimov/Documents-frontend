@@ -50,9 +50,12 @@
             <th mat-header-cell *matHeaderCellDef>Разрешения</th>   
             <td mat-cell *matCellDef="let user">
                 <div *ngIf="selected.Id != user.Id" class="overflow-auto d-flex flex-wrap">
-                    <div *ngFor="let p of permissionArray(user)" class="badge badge-info permission-item">
-                        {{p}}
-                    </div>
+                    <ng-container *ngIf="user.Permissions != 0">
+                        <div *ngFor="let p of permissionArray(user)" class="badge badge-info permission-item">
+                            {{p}}
+                        </div>
+                    </ng-container>
+                    <i *ngIf="user.Permissions == 0">Нет разрешений</i>
                 </div>
                 <div *ngIf="selected?.Id == user.Id" class="overflow-auto d-flex flex-wrap">
                     <button *ngFor="let p of allPermissions" 

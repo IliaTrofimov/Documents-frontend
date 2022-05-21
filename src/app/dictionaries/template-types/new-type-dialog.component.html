@@ -1,4 +1,6 @@
 <div class="mat-dialog-content">
+    <strong>Новый тип шаблона</strong>
+    <hr>
     <form #nameForm="ngForm" novalidate>
         <mat-form-field appearance="outline">
             <mat-label>Название</mat-label>
@@ -6,9 +8,9 @@
         </mat-form-field>
     </form>
     <form #signersForm="ngForm" novalidate>
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline" *ngIf="data.positions">
             <mat-label>Подписанты</mat-label>
-            <mat-select multiple [(ngModel)]="data.type.SignersPositions" >
+            <mat-select multiple [(ngModel)]="selectedPositions" (ngModelChange)="selectedPositions">
               <mat-option *ngFor="let pos of data.positions" [value]="pos">{{pos.Name}}</mat-option>
             </mat-select>
         </mat-form-field>

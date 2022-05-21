@@ -1,7 +1,13 @@
 import { Position } from "./position";
 
+export interface ITemplateTypePosition{
+    Position: Position;
+    TemplateTypeId: number;
+    Id: number;
+}
+
 export class TemplateType {
-    public SignersPositions: Position[] = [];
+    public TemplateTypePositions: ITemplateTypePosition[] = [];
 
     constructor(public Id: number, public Name: string) { }
 }
