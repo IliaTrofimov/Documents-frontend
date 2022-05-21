@@ -23,7 +23,7 @@ export class ServerErrorInterceptor implements HttpInterceptor {
                 }
                 this.errorSvc.setServerError(error);
                 console.log("server error:", error);
-                return throwError(() => new Error(error.message))
+                return throwError(() => error)
             })
         )
       }
