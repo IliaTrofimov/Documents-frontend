@@ -17,13 +17,20 @@
         </div>
         <div class="col">
             <b>Тип</b><br>
-            <select class="form-control form-control-sm" [(ngModel)]="template.TemplateTypeId">
-                <option *ngFor="let t of templateTypes" [ngValue]="t.Id">{{t.Name}}</option>
+            <select class="form-control form-control-sm" [(ngModel)]="template.TemplateType">
+                <option *ngFor="let t of templateTypes" [ngValue]="t">{{t.Name}}</option>
             </select>
         </div>
         <div class="col">
-            <b>Автор</b><br>
-            {{template.AuthorName}}
+            <b>Подписанты</b><br>
+            <div *ngIf="template.TemplateType.TemplateTypePositions.length != 0" class="overflow-auto d-flex flex-wrap">
+                <div *ngFor="let pos of template.TemplateType.TemplateTypePositions" class="badge badge-info permission-item">
+                    {{pos.Position?.Name}}
+                </div>
+            </div>
+            <i *ngIf="template.TemplateType.TemplateTypePositions && template.TemplateType.TemplateTypePositions.length == 0">
+                Не требуется подпись
+            </i>
         </div>
     </div>
     <hr>

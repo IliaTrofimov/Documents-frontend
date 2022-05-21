@@ -14,9 +14,7 @@ import { AlertService } from '../services/alert.service';
         <a class="alert-link" *ngIf="alert.message" (click)="alert.collapsed = !alert.collapsed" role="button">
           {{alert.title}}
         </a><br>
-        <ng-container *ngIf="!alert.collapsed">
-          {{alert.message}}
-        </ng-container>
+        <pre *ngIf="!alert.collapsed">{{alert.message}}</pre>
       </ng-container>
       <ng-container *ngIf="!alert.message">
         {{alert.title}}

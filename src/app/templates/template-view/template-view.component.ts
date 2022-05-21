@@ -39,7 +39,10 @@ export class TemplateViewComponent implements OnInit {
       this.vacantId = data.TemplateItems.length;
       console.log(`received data: ${JSON.stringify(this.template, null, 2)}`);
     });
-    this.typesSvc.getTypes().subscribe(data => this.templateTypes = data);
+    this.typesSvc.getTypes().subscribe(data => {
+      this.templateTypes = data;
+      console.log(`received types: ${JSON.stringify(this.templateTypes, null, 2)}`);
+    });
   }
 
   changeUsage(){

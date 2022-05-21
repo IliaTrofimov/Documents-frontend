@@ -76,7 +76,7 @@ export class SiteError {
 
     static isCritical(code: number): boolean {
         switch(code){
-            case 0:
+            case SiteErrorCodes.ConnectionRefused:
             case SiteErrorCodes.Forbidden:
             case SiteErrorCodes.NoConnection: 
             case SiteErrorCodes.Unavaliable:
@@ -87,5 +87,9 @@ export class SiteError {
             default: 
                 return false;
         }
+    }
+
+    static isHandleable(code: number){
+        return code in SiteErrorCodes;
     }
 }

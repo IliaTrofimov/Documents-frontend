@@ -31,7 +31,7 @@
             <td mat-cell *matCellDef="let type">
                 <div *ngIf="selected.Id != type.Id" class="overflow-auto d-flex flex-wrap">
                     <div *ngFor="let pos of type.TemplateTypePositions" class="badge badge-info permission-item">
-                        {{pos.Position.Name}}
+                        {{pos.Position?.Name}}
                     </div>
                     <i *ngIf="type.TemplateTypePositions && type.TemplateTypePositions.length == 0">
                         Не требуется подпись

@@ -55,8 +55,10 @@ export class TemplateTypesComponent implements OnInit {
     this.selectedPositions = [];
     this.selected.TemplateTypePositions = [];
     for (let pos of type.TemplateTypePositions){
-      this.selectedPositions.push(pos.Position);
-      this.selected.TemplateTypePositions.push(pos);
+      if (pos.Position){
+        this.selectedPositions.push(pos.Position);
+        this.selected.TemplateTypePositions.push(pos);
+      }
     }
     this.selected.Id = type.Id;
     this.selected.Name = type.Name;

@@ -1,7 +1,7 @@
 import { Position } from "./position";
 
 export interface ITemplateTypePosition{
-    Position: Position;
+    Position?: Position;
     TemplateTypeId: number;
     Id: number;
 }

@@ -11,10 +11,10 @@ import { ErrorService } from '../services/errors.service';
     <hr>
     <p>{{error.Message}}</p>
     <div *ngIf="error.Info" style="width: 80%;">
-      <a (click)="hidden = !hidden" class="link" data-toggle="collapse" href="#collapse" role="button" aria-expanded="false" aria-controls="collapseExample">
+      <a (click)="hidden = !hidden" class="link">
         {{hidden ? "Подробности..." : "Скрыть"}}
       </a>
-      <div class="collapse card" id="collapse">
+      <div class="card" *ngIf="!hidden">
         <pre style="font-family: consolas; font-size: 10pt;">Error: {{error.Info}} </pre>
       </div>
     </div>
