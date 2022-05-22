@@ -54,6 +54,7 @@
         </li>                
         <li *ngFor="let f of template.TemplateItems; let i = index" class="list-group-item">
             <table-template *ngIf="f.IsTable" 
+                [readonly]="template.Depricated"
                 [columns]="$any(f).TemplateFields" 
                 [table]="$any(f)"
                 (onDelete)="deleteItem($event)"
@@ -62,6 +63,7 @@
                 (onChangeOrder)="changeOrder(i, $event)">
             </table-template>
             <field-template *ngIf="!f.IsTable" 
+                [readonly]="template.Depricated"
                 [field]="$any(f)" 
                 (onDelete)="deleteItem(f)"
                 (onSave)="updateItem(f)"
