@@ -88,8 +88,4 @@ export class SiteError {
                 return false;
         }
     }
-
-    static isHandleable(code: number){
-        return code in SiteErrorCodes;
-    }
 }

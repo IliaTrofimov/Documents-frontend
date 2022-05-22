@@ -7,7 +7,7 @@
 } 
 
 .mat-column-Id {
-    width: 40px;
+    width: max-content;
 }   
 
 .mat-column-Edit {

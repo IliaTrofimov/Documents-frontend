@@ -1,23 +1,26 @@
 <div class="container panel">
-    <h4>Редактирование шаблона</h4>
-    <button class="btn btn-outline-secondary dropdown-toggle btn-sm badge" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Действия</button>
-    <div class="dropdown-menu">
-        <button class="dropdown-item btn-sm" (click)="save()">Сохранить</button>
-        <button class="dropdown-item btn-sm" (click)="template.Depricated = !template.Depricated">
-            {{template.Depricated  ? "Отметить актуальным" : "Отметить устаревшим"}}
-        </button>
-        <button class="dropdown-item btn-sm" (click)="delete()">Удалить</button>
-    </div>
-    <br>
-    <br>
-    <div class="row">
+    <h4>Редактирование шаблона 
+        <small>
+            <button [disabled]="!template" class="btn btn-outline-secondary dropdown-toggle btn-sm badge" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Действия
+            </button>
+            <div class="dropdown-menu">
+                <button class="dropdown-item btn-sm" (click)="save()">Сохранить</button>
+                <button *ngIf="template" class="dropdown-item btn-sm" (click)="template.Depricated = !template.Depricated">
+                    {{template.Depricated  ? "Отметить актуальным" : "Отметить устаревшим"}}
+                </button>
+                <button class="dropdown-item btn-sm" (click)="delete()">Удалить</button>
+            </div>
+        </small>
+    </h4>
+    <div class="row" *ngIf="template">
         <div class="col">
             <b>Название</b><br>
-            <input class="form-control form-control-sm" [(ngModel)]="template.Name"/>
+            <input [(ngModel)]="template.Name" class="form-control form-control-sm"/>
         </div>
         <div class="col">
             <b>Тип</b><br>
-            <select class="form-control form-control-sm" [(ngModel)]="template.TemplateType">
+            <select [disabled]="!template" [(ngModel)]="template.TemplateType" (ngModelChange)="template.TemplateType" class="form-control form-control-sm">
                 <option *ngFor="let t of templateTypes" [ngValue]="t">{{t.Name}}</option>
             </select>
         </div>
@@ -35,15 +38,17 @@
     </div>
     <hr>
 </div>
-<div class="container panel">
+
+<loading [status]=" !template"></loading>
+
+<div class="container panel" *ngIf="template">
     <h5>Список полей ({{template.TemplateItems.length}})</h5>
-    <loading [status]="!template.TemplateItems"></loading>
+
     <p *ngIf="!template.Depricated">
-        <button class="btn badge badge-success" (click)="addField()">Добавить поле</button> или 
-        <button class="btn badge badge-success" (click)="addTable()">добавить таблицу</button>
-        <br>
+        <button [disabled]="!template" (click)="addField()" class="btn badge badge-success">добавить поле</button> или 
+        <button [disabled]="!template"  (click)="addTable()" class="btn badge badge-success">добавить таблицу</button>
     </p>
-    <ul class="list-group">
+    <ul class="list-group" *ngIf="template">
         <li *ngIf="template.TemplateItems.length == 0" class="list-group-item">
             <b>Пусто</b>
         </li>                
@@ -54,17 +59,14 @@
                 (onDelete)="deleteItem($event)"
                 (onSave)="updateItem($event)"
                 (onAddColumn)="addColumn($event)"
-                (onChangeOrder)="changeOrder(i, $event)"
-            ></table-template>
+                (onChangeOrder)="changeOrder(i, $event)">
+            </table-template>
             <field-template *ngIf="!f.IsTable" 
                 [field]="$any(f)" 
                 (onDelete)="deleteItem(f)"
                 (onSave)="updateItem(f)"
-                (onChangeOrder)="changeOrder(i, $event)"
-            ></field-template>
+                (onChangeOrder)="changeOrder(i, $event)">
+            </field-template>
         </li>
     </ul>    
-</div>
-<div class="container panel" *ngIf="!template">
-    Ошибка, не удалось загурзить шаблон
 </div>

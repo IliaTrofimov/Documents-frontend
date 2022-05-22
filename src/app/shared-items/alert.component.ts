@@ -9,11 +9,12 @@ import { AlertService } from '../services/alert.service';
   styleUrls: ['styles.css'],
   template: `
   <div *ngIf="alerts.length != 0" class="sticky-top">
-    <div *ngFor="let alert of alerts" class="{{cssClass(alert)}}">
+    <div *ngFor="let alert of alerts" class="{{cssClass(alert)}}" style="max-height: 8%;">
       <ng-container *ngIf="alert.message">
-        <a class="alert-link" *ngIf="alert.message" (click)="alert.collapsed = !alert.collapsed" role="button">
-          {{alert.title}}
-        </a><br>
+        {{alert.title}} 
+        <small><a class="alert-link" *ngIf="alert.message" (click)="alert.collapsed = !alert.collapsed" role="button">
+          {{alert.collapsed ? 'подробнее' : 'скрыть'}}
+        </a></small><br>
         <pre *ngIf="!alert.collapsed">{{alert.message}}</pre>
       </ng-container>
       <ng-container *ngIf="!alert.message">

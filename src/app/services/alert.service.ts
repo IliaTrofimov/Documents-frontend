@@ -23,7 +23,7 @@ export class AlertService {
     }
 
     info(title: string, options?: any) {
-      this.alert(new Alert({ ...options, type: AlertType.Info, title: title }));
+      this.alert(new Alert({ ...options, type: AlertType.Info, title: title, single: true, closeTime: 5000 }));
     }
 
     warn(title: string, options?: any) {

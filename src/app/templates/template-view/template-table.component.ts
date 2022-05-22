@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TemplateField } from '../../models/template-field';
 import { RestrictionTypes } from 'src/app/models/template-enums';
 import { TemplateTable } from 'src/app/models/template-table';
@@ -29,9 +29,7 @@ export class TemplateTableComponent {
 
 
     addColumn(){
-        let column = new TemplateField(`Столбец ${this.columns.length + 1}`, 
-            this.columns.length, this.table.TemplateId, this.table.Id
-        );
+        let column = new TemplateField("Новый столбец", this.columns.length, this.table.TemplateId, this.table.Id);
         this.columns.push(column);
         this.onAddColumn.emit(column);
     }

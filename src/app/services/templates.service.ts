@@ -7,7 +7,7 @@ import { TemplateTable } from '../models/template-table';
 import { TemplateField } from '../models/template-field';
 import { AlertService } from './alert.service';
 import { catchError, throwError } from 'rxjs';
-import { SiteError, SiteErrorCodes } from '../models/site-error';
+import { SiteErrorCodes } from '../models/site-error';
 
 
 @Injectable()
@@ -29,7 +29,7 @@ export class TemplatesService{
     createTemplate(){
         return this.http.post<number>(`${this.url}/post`, {authorId: 0}).pipe(
             catchError((error) => {
-                this.alertSvc.error("Не удалось создать шаблон", {message: error.message});
+                this.alertSvc.error("Не удалось создать шаблон", {message: JSON.stringify(error.error, null, 2)});
                 return throwError(() => new Error(error.message))
             })
         ); 
@@ -44,7 +44,7 @@ export class TemplatesService{
                             this.alertSvc.error("Не удалось изменить шаблон", {message: "Данные не найдены"}); 
                             break;
                         default: 
-                            this.alertSvc.error("Не удалось изменить шаблон", {message: error.message}); 
+                            this.alertSvc.error("Не удалось изменить шаблон", {message: JSON.stringify(error.error, null, 2)}); 
                             break;
                     }
                 }
@@ -65,7 +65,7 @@ export class TemplatesService{
                             this.alertSvc.error("Не удалось изменить таблицу", {message: "Некоторые документы уже используют эти данные."}); 
                             break;
                         default: 
-                            this.alertSvc.error("Не удалось изменить таблицу", {message: error.message}); 
+                            this.alertSvc.error("Не удалось изменить таблицу", {message: JSON.stringify(error.error, null, 2)}); 
                             break;
                     }
                 }
@@ -86,7 +86,7 @@ export class TemplatesService{
                             this.alertSvc.error("Не удалось изменить поле", {message: "Некоторые документы уже используют эти данные."}); 
                             break;
                         default: 
-                            this.alertSvc.error("Не удалось изменить поле", {message: error.message}); 
+                            this.alertSvc.error("Не удалось изменить поле", {message: JSON.stringify(error.error, null, 2)}); 
                             break;
                     }
                 }
@@ -107,7 +107,7 @@ export class TemplatesService{
                             this.alertSvc.error("Не удалось удалить элемент", {message: "Некоторые документы уже используют эти данные."}); 
                             break;
                         default: 
-                            this.alertSvc.error("Не удалось удалить элемент", {message: error.message}); 
+                            this.alertSvc.error("Не удалось удалить элемент", {message: JSON.stringify(error.error, null, 2)}); 
                             break;
                     }
                 }
@@ -127,7 +127,7 @@ export class TemplatesService{
                             this.alertSvc.error("Не удалось переместить элементы", {message: "Данные не найдены."}); 
                             break;
                         default: 
-                            this.alertSvc.error("Не удалось переместить элементы", {message: error.message}); 
+                            this.alertSvc.error("Не удалось переместить элементы", {message: JSON.stringify(error.error, null, 2)}); 
                             break;
                     }
                 }
@@ -148,7 +148,7 @@ export class TemplatesService{
                             this.alertSvc.error("Не удалось удалить шаблон", {message: "Некоторые документы уже используют эти данные."}); 
                             break;
                         default: 
-                            this.alertSvc.error("Не удалось удалить шаблон", {message: error.message}); 
+                            this.alertSvc.error("Не удалось удалить шаблон", {message: JSON.stringify(error.error, null, 2)}); 
                             break;
                     }
                 }

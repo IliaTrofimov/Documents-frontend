@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, tap  } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ErrorService } from '../services/errors.service';
-import { SiteError } from '../models/site-error';
+import { SiteError, SiteErrorCodes } from '../models/site-error';
 import { AlertService } from '../services/alert.service';
 
 
@@ -23,12 +23,13 @@ export class ServerErrorInterceptor implements HttpInterceptor {
                         this.errorSvc.setServerError(error);
                         this.router.navigate(['error']);
                     }
-                    else if (SiteError.isHandleable(error.status))
-                        this.alertSvc.error("Необработанная ошибка (см. подробности)", {message: error.message + "\n" + JSON.stringify(error.error, null, 2)});
+                    else if (!(+error.status in SiteErrorCodes)){
+                        console.log("unkown server error:", error);
+                        this.alertSvc.error("Необработанная ошибка", {message: error.message + "\n" + JSON.stringify(error.error, null, 2)});
+                    }
+                    else 
+                        console.log("server error:", error);
                 }
-                
-                this.errorSvc.setServerError(error);
-                console.log("server error:", error);
                 return throwError(() => error)
             })
         )
