@@ -61,7 +61,7 @@ export class TemplateTypesService{
                             this.alertSvc.error("Не удалось удалить тип", {message: "Некоторые документы уже используют эти данные."}); 
                             break;
                         default: 
-                            this.alertSvc.error("Не удалось изменить тип", {message: JSON.stringify(error.error, null, 2)}); 
+                            this.alertSvc.error("Не удалось удалить тип", {message: JSON.stringify(error.error, null, 2)}); 
                             break;
                     }
                 }
