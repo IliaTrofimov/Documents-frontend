@@ -1,15 +1,18 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 import { User } from '../models/user';
 import { AppConfig } from '../app.config';
+import { catchError, throwError } from 'rxjs';
+import { SiteErrorCodes } from '../models/site-error';
+import { AlertService } from './alert.service';
 
 
 @Injectable()
 export class UsersService{
     private url = "";
     
-    constructor(private http: HttpClient, private configSvc: AppConfig){
+    constructor(private http: HttpClient, private configSvc: AppConfig, private alertSvc: AlertService){
         this.url = this.configSvc.apiUrl + "/users";
     }
 
@@ -26,14 +29,52 @@ export class UsersService{
     }
 
     updateUser(user: User){
-        return this.http.put<User>(`${this.url}/${user.Id}/put`, user);
+        return this.http.put<User>(`${this.url}/${user.Id}/put`, user).pipe(
+            catchError((error) => {
+                if (error instanceof HttpErrorResponse){
+                    switch (error.status){
+                        case SiteErrorCodes.NotFound: 
+                            this.alertSvc.error("Не удалось изменить пользователя", {message: "Данные не найдены."}); 
+                            break;
+                        default: 
+                            this.alertSvc.error("Не удалось изменить пользователя", {message: JSON.stringify(error.error, null, 2)}); 
+                            break;
+                    }
+                }
+                return throwError(() => new Error(error.message))
+            })
+        ); 
     }
 
     createUser(user: User){
-        return this.http.post<number>(`${this.url}/post`, user);
+        return this.http.post<number>(`${this.url}/post`, user).pipe(
+            catchError((error) => {
+                if (error instanceof HttpErrorResponse){
+                    this.alertSvc.error("Не удалось создать пользователя", {message: JSON.stringify(error.error, null, 2)}); 
+                }
+                return throwError(() => new Error(error.message))
+            })
+        ); 
     }
 
     deleteUser(id: number){
-        return this.http.delete<number>(`${this.url}/${id}/delete`);
+        return this.http.delete<number>(`${this.url}/${id}/delete`).pipe(
+            catchError((error) => {
+                if (error instanceof HttpErrorResponse){
+                    switch (error.status){
+                        case SiteErrorCodes.NotFound: 
+                            this.alertSvc.error("Не удалось удалить пользователя", {message: "Данные уже удалены."}); 
+                            break;
+                        case SiteErrorCodes.Conflict: 
+                            this.alertSvc.error("Не удалось удалить пользователя", {message: "Некоторые документы уже используют эти данные."}); 
+                            break;
+                        default: 
+                            this.alertSvc.error("Не удалось удалить пользователя", {message: JSON.stringify(error.error, null, 2)}); 
+                            break;
+                    }
+                }
+                return throwError(() => new Error(error.message))
+            })
+        ); 
     }
 }
