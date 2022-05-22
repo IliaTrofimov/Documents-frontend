@@ -8,6 +8,7 @@ import { ValidationService } from '../../services/validation.service';
 import { TemplateField } from 'src/app/models/template-field';
 import { DocumentDataItem } from 'src/app/models/document-data-item';
 import { TemplateTable } from 'src/app/models/template-table';
+import { AlertService } from 'src/app/services/alert.service';
 
 
 @Component({
@@ -27,23 +28,15 @@ export class DocumentViewComponent implements OnInit {
   constructor(private docSvc: DocumentsService,
     private validSvc: ValidationService,
     private route: ActivatedRoute, 
-    private router: Router) { }
+    private router: Router,
+    private alertSvc: AlertService) { }
 
   ngOnInit(){
     this.route.paramMap.pipe(switchMap(params => params.getAll('id'))).subscribe(data => this.id = +data);
-    this.loadData();   
-  }
-
-  private loadData(){
-    this.docSvc.getDocument(this.id).subscribe({
-      next: document => {
-        this.document = document;
-        console.log(`loaded data (id ${this.id}):`, JSON.stringify(this.document, null, 2))
-      },
-      error: err =>  {
-         console.log(JSON.stringify(err, null, 2))
-      }
-    });
+    this.docSvc.getDocument(this.id).subscribe(document => {
+      this.document = document;
+      console.log(`loaded data (id ${this.id}):`, JSON.stringify(this.document, null, 2))
+    }); 
   }
 
   getItem(fieldId: number){
@@ -69,7 +62,7 @@ export class DocumentViewComponent implements OnInit {
       },
       error: () => {
         validated = false;
-        this.status = [false, "Документ не сохранён, недопустимые значения"]
+        this.alertSvc.info("Документ не сохранён, проверьте введённые значения");
       }
     });
     return validated;
@@ -80,26 +73,15 @@ export class DocumentViewComponent implements OnInit {
       return;
 
     console.log(JSON.stringify(this.document, null, 2));
-    for (let i of this.document.DocumentDataItems){
-      this.docSvc.updateItem(this.document.Id, i).subscribe({
-        error: error => this.status = [false, JSON.stringify(error.error, null, 2)],
-        complete: () => this.status = [true, "Поле сохранено"]
-      });
-    }
-    this.docSvc.updateDocument(this.document).subscribe({
-      error: error => this.status = [false, JSON.stringify(error.error, null, 2)],
-      //complete: () => this.status = [true, "Документ сохранён"]
-    });
+    for (let i of this.document.DocumentDataItems)
+      this.docSvc.updateItem(this.document.Id, i).subscribe(() => this.alertSvc.info("Данные сохранены"));
+    this.docSvc.updateDocument(this.document).subscribe(() => this.alertSvc.info("Документ сохранён"));
   }
 
   updateItem(item: DocumentDataItem){
     if (!this.document)
       return;
-
-    this.docSvc.updateDocument(this.document).subscribe({
-      error: error => this.status = [false, error.error],
-      complete: () => this.status = [true, "Поле сохранено"]
-    });
+    this.docSvc.updateItem(this.document.Id, item).subscribe(() => this.alertSvc.info("Данные сохранены"));
   }
 
   delete(){
@@ -122,5 +104,14 @@ export class DocumentViewComponent implements OnInit {
         this.save();
       }
     }
-  } 
+  }
+  
+  getDocumentStatusAction(){
+    switch(this.document?.Type){
+      case DocumentStatus.InWork: return "Передать на подписание";
+      case DocumentStatus.Signing: return "Подписать";
+      case DocumentStatus.InUse: return "Вывести из оборота";
+      default: return "";
+    }
+  }
 }
