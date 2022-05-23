@@ -18,13 +18,12 @@ import { ErrorService } from '../services/errors.service';
         <pre style="font-family: consolas; font-size: 10pt;">Error: {{error.Info}} </pre>
       </div>
     </div>
-
   `
 })
 export class ErrorComponent implements OnInit {
   Codes = SiteErrorCodes;
   hidden: boolean = true;
-  error: SiteError = new SiteError(200);
+  error: SiteError = SiteError.Ok
 
   constructor(private errorSvc: ErrorService){}
 

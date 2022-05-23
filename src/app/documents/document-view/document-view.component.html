@@ -5,7 +5,7 @@
         <button *ngIf="document?.Type == 0" class="dropdown-item btn-sm" (click)="save()">Сохранить</button>
         <button *ngIf="document?.Type == 0" class="dropdown-item btn-sm" (click)="delete()">Удалить</button>
     </div>
-    <a class="btn btn-sm" (click)="nextType()">getDocumentStatusAction()</a>
+    <a class="btn btn-sm" (click)="nextType()">{{getDocumentStatusAction()}}</a>
     <div class="row" *ngIf="document">
         <div class="col">
             <b>Название</b><br>

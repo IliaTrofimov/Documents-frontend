@@ -1,5 +1,6 @@
 export enum SiteErrorCodes {
-    Unknown = -1,
+    Unknown = -2,
+    PageNotFound = -1,
     ConnectionRefused = 0,
     Ok = 200,
     BadRequest = 400,
@@ -20,6 +21,7 @@ export class SiteError {
     readonly Message: string;
 
     static readonly Ok: SiteError = new SiteError(SiteErrorCodes.Ok);
+    static readonly PageNotFound: SiteError = new SiteError(SiteErrorCodes.PageNotFound);
     static readonly BadRequest: SiteError = new SiteError(SiteErrorCodes.BadRequest);
     static readonly Unauthorized: SiteError = new SiteError(SiteErrorCodes.Unauthorized);
     static readonly Forbidden: SiteError = new SiteError(SiteErrorCodes.Forbidden);
@@ -31,6 +33,10 @@ export class SiteError {
     constructor(code: SiteErrorCodes = SiteErrorCodes.Unknown, public readonly Info?: string){
         this.Status = code;
         switch (+this.Status) {
+            case SiteErrorCodes.PageNotFound:
+                this.Title = "Страница не существует";
+                this.Message = "Проверьте правильность адреса.";
+                break;
             case SiteErrorCodes.Ok:
                 this.Title = "Нет ошибок";
                 this.Message = "Все действия завершены успешно.";

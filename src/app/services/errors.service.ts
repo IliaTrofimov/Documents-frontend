@@ -8,13 +8,6 @@ import { SiteError, SiteErrorCodes } from '../models/site-error';
 export class ErrorService {
     private _lastError: SiteError = SiteError.Ok;  
 
-    getClientMessage(error: Error): string {
-        if (!navigator.onLine) {
-            return 'No Internet Connection';
-        }
-        return error.message ? error.message : error.toString();
-    }
-
     setServerError(error: HttpErrorResponse){
         return this._lastError = new SiteError(error.status, JSON.stringify(error.error, null, 2));
     }
@@ -23,6 +16,9 @@ export class ErrorService {
         this._lastError = SiteError.Ok; 
     }
 
+    setWorngUrlError(url?: string){
+        this._lastError = new SiteError(SiteErrorCodes.PageNotFound, url);
+    }
 
 
     get lastError(){

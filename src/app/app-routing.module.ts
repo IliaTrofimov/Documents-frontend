@@ -6,12 +6,13 @@ import { DocumentsRoutingModule } from './documents/documents-routing.module';
 import { TemplatesRoutingModule } from './templates/templates-routing.module';
 import { DictionariesRoutingModule } from './dictionaries/dictionaries-routing.module';
 import { UserViewComponent } from './homepage/user-view.component';
+import { WrongUrlComponent } from './shared-items/wrong-url.component';
 
 
 const routes: Routes = [
   { path: 'home', component: UserViewComponent },
   { path: 'error', component: ErrorComponent },
-  { path: '**', redirectTo: 'error' },
+  { path: '**', component: WrongUrlComponent },
 ];
 
 @NgModule({

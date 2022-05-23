@@ -8,6 +8,7 @@ import { LoadingComponent } from './loading.component';
 import { RouterModule } from '@angular/router';
 import { AlertComponent } from './alert.component';
 import { CommonModule } from '@angular/common';
+import { WrongUrlComponent } from './wrong-url.component';
 
 
 
@@ -17,7 +18,8 @@ import { CommonModule } from '@angular/common';
     SiteHeaderComponent,
     SiteFooterComponent,
     LoadingComponent,
-    AlertComponent
+    AlertComponent,
+    WrongUrlComponent
   ],
   imports: [
     AppRoutingModule,
@@ -29,7 +31,8 @@ import { CommonModule } from '@angular/common';
     SiteHeaderComponent,
     SiteFooterComponent,
     LoadingComponent,
-    AlertComponent
+    AlertComponent,
+    WrongUrlComponent
   ]
 })
 export class SharedItemsModule {
