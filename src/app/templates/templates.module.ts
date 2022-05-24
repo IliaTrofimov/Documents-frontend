@@ -13,6 +13,10 @@ import { TemplatesRoutingModule } from './templates-routing.module';
 
 import { PipesModule } from '../pipes/pipes.module';
 import { SharedItemsModule } from '../shared-items/shared-items.module';
+import { NewTemplateDialog } from './templates-list/new-template-dialog.component';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -20,6 +24,7 @@ import { SharedItemsModule } from '../shared-items/shared-items.module';
     TemplateViewComponent,
     TemplateFieldComponent,
     TemplateTableComponent,
+    NewTemplateDialog,
   ],
   imports: [
     BrowserModule,
@@ -28,9 +33,11 @@ import { SharedItemsModule } from '../shared-items/shared-items.module';
     ReactiveFormsModule,
     TemplatesRoutingModule,
     MatTableModule,
-    MatSnackBarModule,
+    MatInputModule,
+    MatSelectModule,
+    MatDialogModule,
     PipesModule,
-    SharedItemsModule
+    SharedItemsModule 
   ],
   providers: [],
   bootstrap: [],

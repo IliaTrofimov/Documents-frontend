@@ -12,6 +12,7 @@ import { DocumentTableComponent } from './document-view/document-table.component
 import { DocumentsRoutingModule } from './documents-routing.module';
 import { PipesModule } from '../pipes/pipes.module';
 import { SharedItemsModule } from '../shared-items/shared-items.module';
+import { MatInputModule } from '@angular/material/input';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { SharedItemsModule } from '../shared-items/shared-items.module';
     MatTableModule,
     MatSnackBarModule,
     PipesModule,
-    SharedItemsModule
+    SharedItemsModule,
+    MatInputModule
   ],
   providers: [],
   bootstrap: [],

@@ -20,11 +20,11 @@
         </div>
         <div class="col">
             <b>Тип</b><br>
-            <select [disabled]="!template" [(ngModel)]="template.TemplateType" (ngModelChange)="template.TemplateType" class="form-control form-control-sm">
-                <option *ngFor="let t of templateTypes" [ngValue]="t">{{t.Name}}</option>
+            <select [disabled]="!template || !templateTypes" [(ngModel)]="template.TemplateTypeId" (ngModelChange)="selectType($event)" class="form-control form-control-sm">
+                <option *ngFor="let t of templateTypes" [ngValue]="t.Id">{{t.Name}}</option>
             </select>
         </div>
-        <div class="col">
+        <div class="col" *ngIf="template.TemplateType">
             <b>Подписанты</b><br>
             <div *ngIf="template.TemplateType.TemplateTypePositions.length != 0" class="overflow-auto d-flex flex-wrap">
                 <div *ngFor="let pos of template.TemplateType.TemplateTypePositions" class="badge badge-info permission-item">
@@ -39,7 +39,7 @@
     <hr>
 </div>
 
-<loading [status]=" !template"></loading>
+<loading [status]="!template"></loading>
 
 <div class="container panel" *ngIf="template">
     <h5>Список полей ({{template.TemplateItems.length}})</h5>

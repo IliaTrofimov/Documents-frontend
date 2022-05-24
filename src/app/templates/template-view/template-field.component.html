@@ -1,6 +1,4 @@
-<loading [status]="!this.field"></loading>
-
-<div class="row" *ngIf="this.field">
+<div class="row">
     <div class="col-10">
         <input (blur)="save()" [(ngModel)]="field.Name" [readonly]="readonly" class="form-control form-control-sm" placeholder="Название поля"/>
         <div class="input-group mb-3">

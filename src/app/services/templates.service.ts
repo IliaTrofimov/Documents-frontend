@@ -26,8 +26,8 @@ export class TemplatesService{
         return this.http.get<Template>(`${this.url}/${id}/get`);
     }
 
-    createTemplate(){
-        return this.http.post<number>(`${this.url}/post`, {authorId: 0}).pipe(
+    createTemplate(template: Template){
+        return this.http.post<number>(`${this.url}/post`, template).pipe(
             catchError((error) => {
                 this.alertSvc.error("Не удалось создать шаблон", {message: JSON.stringify(error.error, null, 2)});
                 return throwError(() => new Error(error.message))

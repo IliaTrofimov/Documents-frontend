@@ -15,7 +15,7 @@ export class AlertService {
     }
 
     success(title: string, options?: any) {
-      this.alert(new Alert({ ...options, type: AlertType.Success, title: title }));
+      this.alert(new Alert({ ...options, type: AlertType.Success, title: title, closeTime: 5000 }));
     }
 
     error(title: string, options?: any) {

@@ -1,22 +1,18 @@
 <div class="container">
+  <h4>Домашняя страница</h4>
+  <hr>
   <div class="row">
     <div class="col">
-      <div class="card">    
-        <div class="card-body">
-          <h5 class="card-title">{{user.Lastname}} {{user.Firstname}} {{user.Fathersname}}</h5>
-            <p class="muted">Должность ...</p>
-        </div>
-      </div>
+      <h5 class="card-title">{{user.Lastname}} {{user.Firstname}} {{user.Fathersname}}</h5>
+      <p class="muted">Должность: {{user.Position.Name}}</p>
     </div>
     <div class="col">
-      <div class="card">    
-        <div class="card-body">
-          <h5 class="card-title">Список ваших разрешений</h5>    
-          <div *ngFor="let p of permissions" >
-            <span class="badge badge-secondary badge-pill">{{p}}</span>
-          </div>
+      <h5 class="card-title">Список ваших разрешений</h5>   
+      <div>
+        <div *ngFor="let p of permissions" class="badge badge-secondary badge-pill">
+          {{p}}
         </div>
-      </div>
+      </div> 
     </div>
   </div>
   <div class="row">

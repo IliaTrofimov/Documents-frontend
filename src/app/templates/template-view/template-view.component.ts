@@ -43,6 +43,13 @@ export class TemplateViewComponent implements OnInit {
     });
   }
 
+  selectType(id: number){
+    let type = this.templateTypes?.find(t => t.Id == id);
+    if(this.template && type){
+      this.template.TemplateType = type;
+    }
+  }
+
   changeUsage(){
     if (!this.template) return;
 
@@ -127,6 +134,10 @@ export class TemplateViewComponent implements OnInit {
 
   save(){
     if (!this.template) return;
+    if (!this.template.TemplateType){
+      this.alertSvc.error("Нельзя сохраить шаблон. Сначала выберите тип шаблона.");
+      return;
+    }
     this.templateSvc.updateTemplate(this.template).subscribe(() => this.alertSvc.info("Шаблон сохранён"));
   }
 

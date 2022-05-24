@@ -3,24 +3,16 @@
         {{template.Name}} <span *ngIf="template.Required" class="badge badge-pill badge-info">*</span>
     </label>   
     <textarea *ngIf="template.DataType == 0"
-        class="form-control {{error ? 'is-invalid' : ''}}"
-        (blur)="validate()"
+        class="form-control {{error != ValidationErrors.Ok ? 'is-invalid' : ''}}"
         [(ngModel)]="data.Value"
         [disabled]="readonly">
     </textarea>
     <input *ngIf="template.DataType != 0"
         type="{{template.DataType | inputtype}}"
-        class="form-control {{error ? 'is-invalid' : ''}}"
-        (blur)="validate()"
+        class="form-control {{error != ValidationErrors.Ok ? 'is-invalid' : ''}}"
         [(ngModel)]="data.Value"
         [disabled]="readonly">
-    <div *ngIf="error" class="alert alert-danger">
-        <div *ngIf="error == 'required'">Обязательное поле!</div>
-        <div *ngIf="error == 'except'">
-            Поле не может принимать значения из списка: {{choices}}
-        </div>
-        <div *ngIf="error == 'only'">
-            Поле должно принимать значение из списка:  {{choices}}
-        </div>
+    <div *ngIf="error != ValidationErrors.Ok" class="alert alert-danger">
+        {{errorMsg()}}
     </div>
 </div> 

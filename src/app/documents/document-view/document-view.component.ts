@@ -71,8 +71,6 @@ export class DocumentViewComponent implements OnInit {
   save(){
     if (!this.document)
       return;
-
-    console.log(JSON.stringify(this.document, null, 2));
     for (let i of this.document.DocumentDataItems)
       this.docSvc.updateItem(this.document.Id, i).subscribe(() => this.alertSvc.info("Данные сохранены"));
     this.docSvc.updateDocument(this.document).subscribe(() => this.alertSvc.info("Документ сохранён"));

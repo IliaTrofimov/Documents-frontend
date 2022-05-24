@@ -46,7 +46,7 @@ export class AlertComponent implements OnInit {
       
       this.alerts.push(alert);
       this.detector.detectChanges();
-      console.log("alert: ", alert.title);
+      console.log(`alert at ${new Date().toTimeString().split(' ', 2)[0]} '${alert.title}'`);
 
       if (alert.closeTime)
         setTimeout(() => this.removeAlert(alert), alert.closeTime);
