@@ -49,6 +49,6 @@ export class TemplatesListComponent implements OnInit {
   }
 
   createDocument(templateId: number) {
-    this.documetnsSvc.createDocument(templateId).subscribe(id => this.router.navigate(["documents/" + id]));
+    this.documetnsSvc.createDocument("Новый документ" , templateId).subscribe(id => this.router.navigate(["documents/" + id]));
   }
 }

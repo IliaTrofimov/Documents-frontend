@@ -37,7 +37,7 @@ export class DocumentsListComponent implements OnInit {
     const dialogRef = this.dialog.open(NewDocumentDialog);
     dialogRef.afterClosed().subscribe(result => {
       if (result) 
-        this.documentsSvc.createDocument(result).subscribe(id => this.router.navigate(["/documents", id]));
+        this.documentsSvc.createDocument(result.Name, result.TemplateId).subscribe(id => this.router.navigate(["/documents", id]));
     }); 
   }
 

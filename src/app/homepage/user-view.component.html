@@ -1,10 +1,10 @@
 <div class="container">
   <h4>Домашняя страница</h4>
   <hr>
-  <div class="row">
+  <div class="row" *ngIf="user">
     <div class="col">
       <h5 class="card-title">{{user.Lastname}} {{user.Firstname}} {{user.Fathersname}}</h5>
-      <p class="muted">Должность: {{user.Position.Name}}</p>
+      <p class="muted">Должность: <i>{{user.Position.Name}}</i></p>
     </div>
     <div class="col">
       <h5 class="card-title">Список ваших разрешений</h5>   
@@ -15,7 +15,43 @@
       </div> 
     </div>
   </div>
-  <div class="row">
-    
+  <hr>
+  <div *ngIf="user">
+    <div class="container round-border">
+      <strong name="templates">Шаблоны</strong>
+      <loading [status]="!user.Templates"></loading>
+      <ul class="list-group" *ngIf="user.Templates">
+        <li *ngFor="let template of user.Templates" class="list-group-item" style="padding: 2px; margin: 1px;">
+          <a [routerLink]="['/templates', template.Id]">{{template.Name | nullname}}</a>
+        </li>
+      </ul>
+      <i *ngIf="user.Templates && user.Templates.length == 0">Нет шаблонов</i>
+    </div>
+    <br>
+    <div class="container round-border">
+      <strong name="documents">Документы</strong>
+      <loading [status]="!user.Documents"></loading>
+      <ul class="list-group" *ngIf="user.Documents">
+        <li *ngFor="let document of user.Documents" class="list-group-item" style="padding: 2px; margin: 1px;">
+          <a [routerLink]="['/documents', document.Id]">{{document.Name | nullname}}</a>
+        </li>
+      </ul>
+      <i *ngIf="user.Documents && user.Documents.length == 0">Нет документов</i>
+    </div>
+    <br>
+    <div class="container round-border">
+      <strong name="signs">Подписи</strong>
+      <loading [status]="!user.Signs"></loading>
+      <ul  class="list-group" *ngIf="user.Signs">
+        <li *ngFor="let s of user.Signs" class="list-group-item" style="padding: 2px; margin: 1px;">
+          {{s.DocumentName}} 
+          <button (click)="sign(s)" class="btn btn-sm badge btn-{{s.Signed ? 'danger' : 'primary'}}">
+            {{s.Signed ? 'Отозвать' : 'Подписать'}}
+          </button>
+        </li>
+      </ul>
+      <i *ngIf="user.Signs && user.Signs.length == 0">Нет документов на подписании</i>
+    </div>
+
   </div>
 </div>

@@ -7,13 +7,16 @@ import { DocumentDataItem } from '../models/document-data-item';
 import { catchError, throwError } from 'rxjs';
 import { SiteErrorCodes } from '../models/site-error';
 import { AlertService } from './alert.service';
+import { UsersService } from './users.service';
 
 
 @Injectable()
 export class DocumentsService{
     private url = "";
     
-    constructor(private http: HttpClient, private config: AppConfig, private alertSvc: AlertService){
+    constructor(private http: HttpClient, 
+        private config: AppConfig, 
+        private alertSvc: AlertService){
         this.url = this.config.apiUrl + "/documents";
     }
     
@@ -66,8 +69,9 @@ export class DocumentsService{
         return this.http.put(`${this.url}/${id}/update`, document);
     }
 
-    createDocument(templateId: number, previousVersionId?: number){
+    createDocument(name: string, templateId: number, previousVersionId?: number){
         const body = {
+            Name: name,
             TemplateId: templateId, 
             PreviousVersionId: previousVersionId,
             AuthorId: 0

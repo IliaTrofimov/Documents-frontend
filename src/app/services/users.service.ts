@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 import { User } from '../models/user';
 import { AppConfig } from '../app.config';
-import { catchError, throwError } from 'rxjs';
+import { catchError, of, tap, throwError } from 'rxjs';
 import { SiteErrorCodes } from '../models/site-error';
 import { AlertService } from './alert.service';
 
@@ -11,13 +11,20 @@ import { AlertService } from './alert.service';
 @Injectable()
 export class UsersService{
     private url = "";
+    private currentUser?: User;
     
     constructor(private http: HttpClient, private configSvc: AppConfig, private alertSvc: AlertService){
         this.url = this.configSvc.apiUrl + "/users";
     }
 
     getCurrent(){
-        return this.http.get<User>(`${this.url}/whoami`);
+        if (this.currentUser) 
+            return of(this.currentUser);
+        else 
+            return this.http.get<User>(`${this.url}/whoami`).pipe(tap(user => 
+                this.currentUser = user
+            ));
+        
     }
 
     getUsers(){

@@ -21,6 +21,7 @@ import { SharedItemsModule } from './shared-items/shared-items.module';
 import { AppConfig } from './app.config';
 import { ServerErrorInterceptor } from './interceptors/server-errors.interceptor';
 import { HeadersInterceptor } from './interceptors/headers.interceptor';
+import { PipesModule } from './pipes/pipes.module';
 
 
 
@@ -39,6 +40,7 @@ export function loadConfig(config: AppConfig) {
     TemplatesModule,
     DictionariesModule,
     SharedItemsModule,
+    PipesModule,
 
     BrowserModule,
     AppRoutingModule,
