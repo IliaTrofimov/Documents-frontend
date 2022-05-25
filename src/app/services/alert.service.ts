@@ -42,12 +42,13 @@ export class AlertService {
 
     alert(alert: Alert) {
       alert.id = ++this.maxId;
-      this.currentId = alert.message.length >= 500 ? -1 : this.maxId;
+      this.currentId = alert.message.length >= 400 ? -1 : this.maxId;
       alert.root = alert.root || this.defaultRoot;
       this.subject.next(alert);
     }
 
     clear(root = this.defaultRoot) {
+      this.currentId = -1;
       this.subject.next(new Alert({ root: root }));
     }
 }
