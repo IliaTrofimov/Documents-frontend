@@ -9,7 +9,13 @@
 }
 
 .round-border{
-    border: 1px solid #ced4da;;
+    border: 1px solid #ced4da;
+    border-radius: 0.2rem;
+    padding: 2px 4px 8px 4px;
+}
+
+.round-border-error{
+    border: 3px solid #f44336;
     border-radius: 0.2rem;
     padding: 2px 4px 8px 4px;
 }

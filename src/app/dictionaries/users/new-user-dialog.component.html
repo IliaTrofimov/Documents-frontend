@@ -37,6 +37,12 @@
     </div>
 </div>
 <div mat-dialog-actions>
-    <button mat-button (click)="ok()" [disabled]="positionForm.invalid || nameForm.invalid" class="btn btn-primary btn-sm">Принять</button>
-    <button mat-button [mat-dialog-close]="undefined" class="btn btn-danger btn-sm">Отменить</button>
+    <div class="row">
+        <div class="col">
+            <button mat-button (click)="ok()" [disabled]="positionForm.invalid || nameForm.invalid" class="btn btn-primary btn-sm">Принять</button>
+        </div>
+        <div class="col">
+            <button mat-button [mat-dialog-close]="undefined" class="btn btn-danger btn-sm">Отменить</button>
+        </div>
+    </div>
 </div>

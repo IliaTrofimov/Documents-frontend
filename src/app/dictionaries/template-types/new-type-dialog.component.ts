@@ -31,7 +31,7 @@ export class NewTypeDialog implements OnInit{
         this.data.type.Id = id;
         this.dialogRef.close(this.data.type);
       },
-      error: error => this.dialogRef.close(error)
+      error: error => this.dialogRef.close(undefined)
     })
   }
 }

@@ -14,11 +14,11 @@ export class NewTemplateDialog implements OnInit{
   types?: TemplateType[];
   template: Template = new Template();
 
-  constructor(public dialogRef: MatDialogRef<NewTemplateDialog>, 
-    @Inject(MAT_DIALOG_DATA) public data: boolean,
+  constructor(public dialogRef: MatDialogRef<NewTemplateDialog>,
     private typesSvc: TemplateTypesService) { }
 
   ngOnInit(){
     this.typesSvc.getTypes().subscribe(types => this.types = types);
+    this.template.Id = -1;
   }
 }

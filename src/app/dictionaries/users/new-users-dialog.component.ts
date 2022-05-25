@@ -35,7 +35,7 @@ export class NewUserDialog {
         this.data.user.Id = id;
         this.dialogRef.close(this.data.user);
       },
-      error: err => this.dialogRef.close(err)
+      error: err => this.dialogRef.close(undefined)
     });
   }
 

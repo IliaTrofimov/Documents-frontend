@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Position } from 'src/app/models/position';
@@ -14,14 +14,15 @@ import { NewPositionDialog } from './new-position-dialog.component';
   styleUrls: ['../styles.css']
 })
 export class PositionsComponent implements OnInit {
-  positions: Position[] = [];
+  positions?: Position[];
   selected: Position = new Position(-1, "");
   displayedColumns = ['Id', 'Name', 'Edit'];
 
   constructor(private positionsSvc: PositionsService, 
     private router: Router,
     public dialog: MatDialog,
-    private alertSvc: AlertService) { }
+    private alertSvc: AlertService,
+    private detector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.positionsSvc.getPositions().subscribe({
@@ -35,14 +36,13 @@ export class PositionsComponent implements OnInit {
     const dialogRef = this.dialog.open(NewPositionDialog, {data: new Position(-1, "")});
     
     dialogRef.afterClosed().subscribe(result => {
-      if (!result) return;
-
-      if (result instanceof Position) {
-        this.alertSvc.info("Должность создана", {closeTime: 5000, single: true, keepAfterRouteChange: true});
-        location.reload();
+      if (result) {
+        this.positions?.push(result);
+        this.alertSvc.info("Должность создана");
+        this.detector.detectChanges();
+        this.detector.detectChanges();
+        this.detector.detectChanges();
       }
-      else 
-        this.alertSvc.error("Не удалось создать должность", {message: JSON.stringify(result, null, 2)});
     });
   }
 
@@ -58,23 +58,17 @@ export class PositionsComponent implements OnInit {
   }
 
   editPosition(type: Position){
-    this.positionsSvc.updatePosition(type).subscribe({
-      next: () => {
-        this.alertSvc.info("Должность обновлена", {autoClose: true, single: true});
-        this.selected = new Position(-1, "");
-      },
-      error: err => this.alertSvc.error("Не удалось изменить должность", {message: JSON.stringify(err, null, 2)})
+    this.positionsSvc.updatePosition(type).subscribe(() => {
+      this.alertSvc.info("Должность обновлена", {autoClose: true, single: true});
+      this.selected = new Position(-1, "");
     })
   }
 
   removePosition(id: number) {
     this.selected = new Position(-1, "");
-    this.positionsSvc.deletePosition(id).subscribe({
-      next: () => {
-        this.alertSvc.info("Должность удалена", {autoClose: true, single: true});
-        this.positions = this.positions.filter(type => type.Id !== id)
-      },
-      error: err => this.alertSvc.error("Не удалось удалить должность", {message: JSON.stringify(err, null, 2)})
+    this.positionsSvc.deletePosition(id).subscribe(() => {
+      this.alertSvc.info("Должность удалена", {autoClose: true, single: true});
+      this.positions = this.positions?.filter(type => type.Id !== id)
     });
   }
 }

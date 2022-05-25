@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatListModule } from '@angular/material/list';
 
 import { DocumentsListComponent } from './documents-list/documents-list.component';
 import { DocumentViewComponent } from './document-view/document-view.component';
@@ -13,6 +13,9 @@ import { DocumentsRoutingModule } from './documents-routing.module';
 import { PipesModule } from '../pipes/pipes.module';
 import { SharedItemsModule } from '../shared-items/shared-items.module';
 import { MatInputModule } from '@angular/material/input';
+import { MatDialogModule } from '@angular/material/dialog';
+import { NewDocumentDialog } from './documents-list/new-document-dialog.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 @NgModule({
@@ -21,6 +24,7 @@ import { MatInputModule } from '@angular/material/input';
     DocumentViewComponent,
     DocumentTableComponent,
     DocumentFieldComponent,
+    NewDocumentDialog,
   ],
   imports: [
     BrowserModule,
@@ -29,10 +33,12 @@ import { MatInputModule } from '@angular/material/input';
     ReactiveFormsModule,
     DocumentsRoutingModule,
     MatTableModule,
-    MatSnackBarModule,
     PipesModule,
     SharedItemsModule,
-    MatInputModule
+    MatInputModule,
+    MatDialogModule,
+    MatListModule,
+    MatCheckboxModule
   ],
   providers: [],
   bootstrap: [],

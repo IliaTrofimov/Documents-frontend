@@ -1,6 +1,7 @@
 <h4>Документы</h4>
 <p *ngIf="documents" class="text-muted">
-    Всего {{documents?.length}} элементов. Создать новый документ по шаблону, можно в разделе <a class="link" [routerLink]="['../templates']">шаблоны</a>.
+    Всего {{documents?.length}} элементов.
+    <span><button (click)="createDocument()" class="btn btn-primary btn-sm badge">создать документ</button></span>
 </p>
 
 <loading [status]="!documents"></loading>
@@ -9,7 +10,13 @@
     <ng-container matColumnDef="Name">
         <th mat-header-cell *matHeaderCellDef>Название</th>
         <td mat-cell *matCellDef="let document">
-            <a [routerLink]="['/documents', document.Id]">{{(document.Name != null ? document.Name : "Без названия")}}</a>
+            <a [routerLink]="['/documents', document.Id]">{{document.Name | nullname}}</a>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="Template">
+        <th mat-header-cell *matHeaderCellDef>Шаблон</th>
+        <td mat-cell *matCellDef="let document">
+            <a [routerLink]="['/templates', document.TemplateId]">{{document.TemplateName | nullname}}</a>
         </td>
     </ng-container>
     <ng-container matColumnDef="AuthorName">
@@ -18,12 +25,12 @@
     </ng-container>
     <ng-container matColumnDef="UpdateDate">
         <th mat-header-cell *matHeaderCellDef>Изменено</th>
-        <td mat-cell *matCellDef="let document">{{document.UpdateDate | date:"longDate"}}</td>
+        <td mat-cell *matCellDef="let document">{{document.UpdateDate | date:"dd.mm.yyyy"}}</td>
     </ng-container>
     <ng-container matColumnDef="ExpireDate">
         <th mat-header-cell *matHeaderCellDef>Устареет</th>
         <td mat-cell *matCellDef="let document">
-            <ng-container *ngIf="document.ExpireDate">{{document.ExpireDate | date:"longDate"}}</ng-container>
+            <ng-container *ngIf="document.ExpireDate">{{document.ExpireDate | date:"dd.mm.yyyy"}}</ng-container>
             <i *ngIf="!document.ExpireDate">никогда</i>
         </td>
     </ng-container>

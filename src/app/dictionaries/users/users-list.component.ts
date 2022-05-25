@@ -55,14 +55,8 @@ export class UsersListComponent implements OnInit {
     private detector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.userSvc.getUsers().subscribe({
-      next: users => this.users = users,
-      error: err => this.alertSvc.error("Не удалось загрузить данные")
-    });
-    this.positionsSvc.getPositions().subscribe({
-      next: positions => this.positions = positions,
-      error: err => this.alertSvc.error("Не удалось загрузить данные")
-    });
+    this.userSvc.getUsers().subscribe(users => this.users = users);
+    this.positionsSvc.getPositions().subscribe(positions => this.positions = positions);
   }
 
   addUser(){
@@ -72,14 +66,10 @@ export class UsersListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (!result) return;
-      if (result instanceof User) {
+      if (result) {
         this.users?.push(result);
-        this.alertSvc.info("Пользователь создан", {closeTime: 5000, single: true});
+        this.alertSvc.info("Пользователь создан");
         this.detector.detectChanges();
-      }
-      else{
-        this.alertSvc.error("Не удалось создать пользователя", {message: JSON.stringify(result, null, 2)})
       }
     });
   }
@@ -90,25 +80,18 @@ export class UsersListComponent implements OnInit {
       return;
     }
 
-    this.userSvc.updateUser(user).subscribe({
-      next: (_user: User) => {
-        console.log(_user);
-        this.alertSvc.info("Пользователь обновлён", {closeTime: 5000, single: true});
-        this.selected = new User(-1, "", "");
-        user.Position = _user.Position;
-      },
-      error: err => this.alertSvc.error("Не удалось изменить пользователя", {message: JSON.stringify(err, null, 2)})
+    this.userSvc.updateUser(user).subscribe((_user: User) => {
+      this.alertSvc.info("Пользователь обновлён", {closeTime: 5000, single: true});
+      this.selected = new User(-1, "", "");
+      user.Position = _user.Position;
     })
   }
 
   removeUser(id: number) {
     this.selected = new User(-1, "", "");
-    this.userSvc.deleteUser(id).subscribe({
-      next: () => {
-        this.alertSvc.info("Пользователь удалён", {closeTime: 5000, single: true});
-        this.users = this.users?.filter(user => user.Id !== id)
-      },
-      error: err => this.alertSvc.error("Не удалось удалить пользователя", {message: JSON.stringify(err, null, 2)})
+    this.userSvc.deleteUser(id).subscribe(() => {
+      this.alertSvc.info("Пользователь удалён", {closeTime: 5000, single: true});
+      this.users = this.users?.filter(user => user.Id !== id)
     });
   }
 

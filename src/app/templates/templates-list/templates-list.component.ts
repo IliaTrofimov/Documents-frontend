@@ -6,7 +6,6 @@ import { TemplatesService } from '../../services/templates.service';
 import { DocumentsService } from '../../services/documents.service';
 import { AlertService } from 'src/app/services/alert.service';
 import { TemplateType } from 'src/app/models/template-type';
-import { TemplateTypesService } from 'src/app/services/template-types.service';
 import { MatDialog } from '@angular/material/dialog';
 import { NewTemplateDialog } from './new-template-dialog.component';
 

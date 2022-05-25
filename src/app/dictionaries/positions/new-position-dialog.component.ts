@@ -20,7 +20,7 @@ export class NewPositionDialog {
           this.data.Id = id;
           this.dialogRef.close(this.data);
         },
-        error: error => this.dialogRef.close(error)
+        error: error => this.dialogRef.close(undefined)
       })
     }
 }

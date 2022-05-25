@@ -1,0 +1,31 @@
+<div mat-dialog-content>
+    <strong>Новый документ</strong>
+    <hr>
+    <form #nameForm="ngForm" novalidate>
+        <mat-form-field appearance="outline">
+            <mat-label>Название шаблона</mat-label>
+            <input matInput [(ngModel)]="document.Name" required name="name">
+        </mat-form-field>
+    </form>
+    <loading [status]="!templates"></loading>
+    <div class="form-group round-border{{document.TemplateId == -1 ? '-error' : ''}}">
+        <label *ngIf="document.TemplateId == -1" style="color: #f44336">Шаблон <small>обязательное поле</small></label>
+        <label *ngIf="document.TemplateId != -1">Шаблон *</label>
+        <div *ngFor="let template of templates" class="form-check">
+            <input class="form-check-input" type="radio" [checked]="template.Id == document.TemplateId" (change)="document.TemplateId = template.Id">
+            <label class="form-check-label">
+                {{template.Name | nullname}}
+            </label>
+        </div>
+    </div>
+</div> 
+<div mat-dialog-actions>
+    <div class="row"> 
+        <div class="col">
+            <button mat-button [mat-dialog-close]="document" [disabled]="nameForm.invalid || document.TemplateId == -1" class="btn btn-primary btn-sm">Принять</button>
+        </div>
+        <div class="col">
+            <button mat-button [mat-dialog-close]="undefined" class="btn btn-danger btn-sm">Отменить</button>
+        </div>
+    </div>
+</div>

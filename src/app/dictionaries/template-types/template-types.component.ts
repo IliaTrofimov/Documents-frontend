@@ -31,8 +31,8 @@ export class TemplateTypesComponent implements OnInit {
     private positionsSvc: PositionsService) { }
 
   ngOnInit(): void {
-    this.typesSvc.getTypes().subscribe(types => {this.types = types; console.log(this.types)});
-    this.positionsSvc.getPositions().subscribe(positions => {this.positions = positions; console.log(this.positions)});
+    this.typesSvc.getTypes().subscribe(types => this.types = types);
+    this.positionsSvc.getPositions().subscribe(positions => this.positions = positions);
   }
 
   addType(){
@@ -40,14 +40,11 @@ export class TemplateTypesComponent implements OnInit {
     const dialogRef = this.dialog.open(NewTypeDialog, {data: {type: new TemplateType(-1, ""), positions: this.positions}});
     
     dialogRef.afterClosed().subscribe(result => {
-      if (!result) return;
-
-      if (result instanceof Template) {
-        this.alertSvc.info("Тип шаблона создан", {closeTime: 5000, single: true, keepAfterRouteChange: true});
-        location.reload();
+      if (result) {
+        this.types?.push(result);
+        this.alertSvc.info("Тип шаблона создан");
+        this.detector.detectChanges();
       }
-      else 
-        this.alertSvc.error("Не удалось создать тип", {message: JSON.stringify(result, null, 2)});
     });
   }
 
@@ -79,25 +76,18 @@ export class TemplateTypesComponent implements OnInit {
     for(let p of this.selectedPositions)
       type.TemplateTypePositions.push({Id: -1, TemplateTypeId: type.Id, Position: p});
 
-    this.typesSvc.updateType(type).subscribe({
-      next: () => {
-        this.alertSvc.info("Тип обновлён", {closeTime: 5000, single: true});
-        this.selected = new TemplateType(-1, "");
-      },
-      error: err => this.alertSvc.error("Не удалось изменить тип", {message: JSON.stringify(err, null, 2)})
+    this.typesSvc.updateType(type).subscribe(() => {
+      this.alertSvc.info("Тип обновлён", {closeTime: 5000, single: true});
+      this.selected = new TemplateType(-1, "");
     })
   }
 
   removeType(id: number) {
     this.selected = new TemplateType(-1, "");
     if (this.types){
-      this.typesSvc.deleteType(id).subscribe({
-        next: () => {
-          console.log('ok'); 
-          this.alertSvc.info("Тип удалён", {closeTime: 5000, single: true});
-          this.types = this.types?.filter(type => type.Id !== id)
-        },
-        error: err => this.alertSvc.error("Не удалось удалить тип", {message: JSON.stringify(err, null, 2)})
+      this.typesSvc.deleteType(id).subscribe(() => {
+        this.alertSvc.info("Тип удалён", {closeTime: 5000, single: true});
+        this.types = this.types?.filter(type => type.Id !== id)
       });
     }
   }
