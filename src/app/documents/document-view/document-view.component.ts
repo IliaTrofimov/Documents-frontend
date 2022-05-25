@@ -62,7 +62,7 @@ export class DocumentViewComponent implements OnInit {
       },
       error: () => {
         validated = false;
-        this.alertSvc.info("Документ не сохранён, проверьте введённые значения");
+        this.alertSvc.warn("Документ не сохранён, проверьте введённые значения");
       }
     });
     return validated;

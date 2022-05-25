@@ -14,7 +14,7 @@ import { NewDocumentDialog } from './new-document-dialog.component';
 })
 export class DocumentsListComponent implements OnInit {
   @Input() documents?: Document[];
-  displayedColumns = ['Name', 'Template', 'AuthorName', 'UpdateDate', 'ExpireDate', 'Status', 'Actions'];
+  displayedColumns = ['Name', 'Template', 'AuthorName', 'UpdateDate', 'ExpireDate', 'Actions'];
 
 
   constructor(private documentsSvc: DocumentsService, 

@@ -3,7 +3,7 @@
 
 <p class="text-muted" *ngIf="templates">
     Всего {{templates.length}} элементов.
-    <span><button class="btn btn-primary btn-sm badge" (click)="addTemplate()">создать шаблон</button></span>
+    <span><button class="btn btn-primary btn-sm badge" (click)="addTemplate()">Создать шаблон</button></span>
 </p>
 
 <table mat-table [dataSource]="templates" fixedLayout class="w-100" *ngIf="templates">
@@ -22,7 +22,7 @@
     </ng-container>
     <ng-container matColumnDef="UpdateDate">
         <th mat-header-cell *matHeaderCellDef>Изменено</th>
-        <td mat-cell *matCellDef="let template">{{template.UpdateDate | date:"dd.mm.yyyy"}}</td>
+        <td mat-cell *matCellDef="let template">{{template.UpdateDate | date:"dd.MM.yyyy"}}</td>
     </ng-container>
     <ng-container matColumnDef="Depricated">
         <th mat-header-cell *matHeaderCellDef>Статус</th>
