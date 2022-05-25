@@ -9,13 +9,13 @@ import { AlertService } from '../services/alert.service';
   styleUrls: ['styles.css'],
   template: `
   <div *ngIf="alerts.length != 0" class="sticky-top">
-    <div *ngFor="let alert of alerts" class="{{cssClass(alert)}}" style="max-height: 8%;">
+    <div *ngFor="let alert of alerts" class="{{cssClass(alert)}}" style="max-height: 5%;">
       <ng-container *ngIf="alert.message">
         {{alert.title}} 
-        <small><a class="alert-link" *ngIf="alert.message" (click)="alert.collapsed = !alert.collapsed" role="button">
-          {{alert.collapsed ? 'подробнее' : 'скрыть'}}
+        <small><a class="alert-link" *ngIf="alert.message" (click)="select(alert.id)" role="button">
+          {{alert.id != getSelectedId() ? 'подробнее' : 'скрыть'}}
         </a></small><br>
-        <pre *ngIf="!alert.collapsed">{{alert.message}}</pre>
+        <pre *ngIf="alert.id == getSelectedId()">{{alert.message}}</pre>
       </ng-container>
       <ng-container *ngIf="!alert.message">
         {{alert.title}}
@@ -68,6 +68,17 @@ export class AlertComponent implements OnInit {
   removeAlert(alert: Alert) {
     if (!this.alerts.includes(alert)) return;
     this.alerts = this.alerts.filter(x => x !== alert);
+  }
+
+  getSelectedId(){
+    return this.alertService.getSelected();
+  }
+
+  select(id: number){
+    if (id == this.alertService.getSelected())
+      this.alertService.select();
+    else
+      this.alertService.select(id);
   }
 
   cssClass(alert?: Alert) {

@@ -8,10 +8,11 @@ import { Alert, AlertType } from '../models/alert';
 @Injectable({ providedIn: 'root' })
 export class AlertService {
     private subject = new Subject<Alert>();
-    private defaultId = 'root';
+    private defaultRoot = 'root';
+    private currentId: number = -1;
 
-    onAlert(id = this.defaultId): Observable<Alert> {
-      return this.subject.asObservable().pipe(filter(x => x && x.id === id));
+    onAlert(root = this.defaultRoot): Observable<Alert> {
+      return this.subject.asObservable().pipe(filter(x => x && x.root === root));
     }
 
     success(title: string, options?: any) {
@@ -30,12 +31,21 @@ export class AlertService {
       this.alert(new Alert({ ...options, type: AlertType.Warning, title: title }));
     }
 
+    select(id: number = -1){
+      this.currentId = id;
+    }
+
+    getSelected(){
+      return this.currentId;
+    }
+
     alert(alert: Alert) {
-      alert.id = alert.id || this.defaultId;
+      alert.id = ++this.currentId;
+      alert.root = alert.root || this.defaultRoot;
       this.subject.next(alert);
     }
 
-    clear(id = this.defaultId) {
-      this.subject.next(new Alert({ id }));
+    clear(root = this.defaultRoot) {
+      this.subject.next(new Alert({ root: root }));
     }
 }

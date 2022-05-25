@@ -1,12 +1,11 @@
 export class Alert {
-    id: string = "root";
+    root: string = "root";
     type: AlertType = AlertType.Success;
     title: string = "";
     message: string = "";
     closeTime?: number;
     keepAfterRouteChange: boolean = false;
-    fade: boolean = false;
-    collapsed: boolean = true;
+    id: number = 0;
     single: boolean = false;
 
     constructor(init?:Partial<Alert>) {
