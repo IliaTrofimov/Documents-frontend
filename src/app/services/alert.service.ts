@@ -10,6 +10,7 @@ export class AlertService {
     private subject = new Subject<Alert>();
     private defaultRoot = 'root';
     private currentId: number = -1;
+    private maxId: number = 0;
 
     onAlert(root = this.defaultRoot): Observable<Alert> {
       return this.subject.asObservable().pipe(filter(x => x && x.root === root));
@@ -40,7 +41,8 @@ export class AlertService {
     }
 
     alert(alert: Alert) {
-      alert.id = ++this.currentId;
+      alert.id = ++this.maxId;
+      this.currentId = alert.message.length >= 500 ? -1 : this.maxId;
       alert.root = alert.root || this.defaultRoot;
       this.subject.next(alert);
     }
