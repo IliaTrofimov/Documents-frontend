@@ -1,16 +1,16 @@
-<div>
+<div class="round-border">
+    <strong>{{table.Name}}</strong> 
     <table>
         <tr><td *ngFor="let col of table.TemplateFields; let c = index">
             <table>
                 <tr>
-                    <th>{{col.Name}}<span *ngIf="col.Required" class="badge badge-pill badge-info">*</span></th>
+                    <td><i>{{col.Name}}</i><span *ngIf="col.Required" class="badge badge-pill badge-info">*</span></td>
                 </tr>
-                <tr *ngFor="let row of data.slice(c*table.Rows, (c + 1)*table.Rows); let r = index; trackBy:trackByFn">
+                <tr *ngFor="let cell of preparedData[c]; let r = index; trackBy:trackByFn">
                     <td>
                         <input type="{{col.DataType | inputtype}}"
-                            id="c_{{r}}_{{c}}" 
                             class="form-control form-control-sm {{error.error != ValidationErrors.Ok && error.row == r && error.col == c ? 'is-invalid' : ''}}"
-                            [(ngModel)]="row.Value"
+                            [(ngModel)]="cell.Value"
                         >
                     </td>
                 </tr>

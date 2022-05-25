@@ -7,3 +7,9 @@
 .permission-item{
     margin: 2px 4px;
 }
+
+.round-border{
+    border: 1px solid #ced4da;;
+    border-radius: 0.2rem;
+    padding: 2px 4px 8px 4px;
+}

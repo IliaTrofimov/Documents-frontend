@@ -47,7 +47,7 @@ export class DocumentViewComponent implements OnInit {
     let columns: DocumentDataItem[] = [];
     if (this.document){
       for (let field of table.TemplateFields)
-        columns.concat(this.document.DocumentDataItems.filter(i => i.FieldId == field.Id));
+        columns = columns.concat(this.document.DocumentDataItems.filter(i => i.FieldId == field.Id));
     }
     return columns;
   }
