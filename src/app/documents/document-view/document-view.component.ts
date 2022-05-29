@@ -9,34 +9,45 @@ import { TemplateField } from 'src/app/models/template-field';
 import { DocumentDataItem } from 'src/app/models/document-data-item';
 import { TemplateTable } from 'src/app/models/template-table';
 import { AlertService } from 'src/app/services/alert.service';
+import { UsersService } from 'src/app/services/users.service';
+import { SignatoriesService } from 'src/app/services/signatories.service';
+import { Signatory } from 'src/app/models/signatory';
+import { User } from 'src/app/models/user';
 
 
 @Component({
   selector: 'app-document-view',
   templateUrl: './document-view.component.html',
-  providers: [DocumentsService, ValidationService]
+  providers: [DocumentsService, ValidationService, UsersService, SignatoriesService]
 })
 export class DocumentViewComponent implements OnInit {
   Field = TemplateField;
   Table = TemplateTable;
 
   document?: Document;
-  status?: [boolean, string];
-  preparedData: { items: DocumentDataItem[], templateFields: TemplateField[], table?: TemplateTable }[] = [];
+  selectedSigners: User[] = [];
+  users: User[] = [];
   private id: number = -1;
 
   constructor(private docSvc: DocumentsService,
     private validSvc: ValidationService,
     private route: ActivatedRoute, 
     private router: Router,
-    private alertSvc: AlertService) { }
+    private alertSvc: AlertService,
+    private usersSvc: UsersService,
+    private signsSvc: SignatoriesService) { }
 
   ngOnInit(){
     this.route.paramMap.pipe(switchMap(params => params.getAll('id'))).subscribe(data => this.id = +data);
     this.docSvc.getDocument(this.id).subscribe(document => {
       this.document = document;
-      console.log(`loaded data (id ${this.id}):`, JSON.stringify(this.document, null, 2))
+      if (this.document.Template){
+        for (let p of this.document.Template.TemplateType.TemplateTypePositions)
+          this.selectedSigners.push(new User(-1, "", ""));
+      }
+      
     }); 
+    this.usersSvc.getUsers().subscribe(users => this.users = users);
   }
 
   getItem(fieldId: number){

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 import { Template } from '../models/template';
 import { AppConfig } from '../app.config';
@@ -18,8 +18,9 @@ export class TemplatesService{
         this.url = this.config.apiUrl + "/templates";
     }
     
-    getTemplates(author?: string){
-        return this.http.get<Template[]>(`${this.url}/list`);
+    getTemplates(query?: { [param: string]: number }){
+        const options = query ? { params: new HttpParams().appendAll(query) } : {};
+        return this.http.get<Template[]>(`${this.url}/list`, options);
     }
     
     getTemplate(id: number){

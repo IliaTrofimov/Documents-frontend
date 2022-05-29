@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 import { User } from '../models/user';
 import { AppConfig } from '../app.config';
@@ -27,7 +27,8 @@ export class UsersService{
         
     }
 
-    getUsers(){
+    getUsers(query?: { [param: string]: number }){
+        const options = query ? { params: new HttpParams().appendAll(query) } : {};
         return this.http.get<User[]>(`${this.url}/list`);
     }
     

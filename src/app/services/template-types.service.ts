@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 import { TemplateType } from "../models/template-type";
 import { AppConfig } from '../app.config';
@@ -16,8 +16,9 @@ export class TemplateTypesService{
         this.url = this.config.apiUrl + "/templatetypes";
     }
     
-    getTypes(){
-        return this.http.get<TemplateType[]>(`${this.url}/list`);
+    getTypes(query?: { [param: string]: number }){
+        const options = query ? { params: new HttpParams().appendAll(query) } : {};
+        return this.http.get<TemplateType[]>(`${this.url}/list`, options);
     }
 
     updateType(type: TemplateType) {

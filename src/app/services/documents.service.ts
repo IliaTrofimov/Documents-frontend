@@ -1,13 +1,12 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Injectable, Query } from '@angular/core';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 
-import { Document, DocumentStatus } from '../models/document';
+import { Document } from '../models/document';
 import { AppConfig } from '../app.config';
 import { DocumentDataItem } from '../models/document-data-item';
 import { catchError, throwError } from 'rxjs';
 import { SiteErrorCodes } from '../models/site-error';
 import { AlertService } from './alert.service';
-import { UsersService } from './users.service';
 
 
 @Injectable()
@@ -19,10 +18,11 @@ export class DocumentsService{
         private alertSvc: AlertService){
         this.url = this.config.apiUrl + "/documents";
     }
-    
 
-    getDocuments(type?: DocumentStatus){
-        return this.http.get<Document[]>(`${this.url}/list`);
+
+    getDocuments(query?: { [param: string]: number }){
+        const options = query ? { params: new HttpParams().appendAll(query) } : {};
+        return this.http.get<Document[]>(`${this.url}/list`, options);
     }
 
     getDocument(id: number){

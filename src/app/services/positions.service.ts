@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 import { Position } from "../models/position";
 import { AppConfig } from '../app.config';
@@ -16,8 +16,9 @@ export class PositionsService{
         this.url = this.config.apiUrl + "/positions";
     }
     
-    getPositions(){
-        return this.http.get<Position[]>(`${this.url}/list`);
+    getPositions(query?: { [param: string]: number }){
+        const options = query ? { params: new HttpParams().appendAll(query) } : {};
+        return this.http.get<Position[]>(`${this.url}/list`, options);
     }
 
     updatePosition(pos: Position) {

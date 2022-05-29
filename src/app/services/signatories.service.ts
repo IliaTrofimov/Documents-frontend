@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 import { Signatory } from '../models/signatory';
 import { AppConfig } from '../app.config';
@@ -16,16 +16,9 @@ export class SignatoriesService{
         this.url = this.config.apiUrl + "/signs";
     }
 
-    getSignsByUser(userId: number){
-        return this.http.get<Signatory[]>(`${this.url}/get?userId=${userId}`);
-    }
-
-    getSignsByDocument(documentId: number){
-        return this.http.get<Signatory[]>(`${this.url}/get?documentId=${documentId}`);
-    }
-
-    getSign(userId: number, documentId: number){
-        return this.http.get<Signatory[]>(`${this.url}/get?documentId=${documentId}&userId=${userId}`).pipe(
+    getSigns(query?: { [param: string]: number }){
+        const options = query ? { params: new HttpParams().appendAll(query) } : {};
+        return this.http.get<Signatory[]>(`${this.url}/get`, options).pipe(
             catchError((error) => {
                 if (error instanceof HttpErrorResponse){
                     switch (error.status){
@@ -40,6 +33,10 @@ export class SignatoriesService{
                 return throwError(() => new Error(error.message))
             })
         ); 
+    }
+
+    getSign(userId: number, documentId: number){
+        return this.getSigns({"userId": userId, "documentId": documentId});
     }
 
     updateSign(sign: Signatory){
