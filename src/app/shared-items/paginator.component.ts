@@ -1,9 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { SiteError, SiteErrorCodes } from '../models/site-error';
-import { ErrorService } from '../services/errors.service';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'page',
+  styleUrls: ['styles.css'],
   template: `
   <div class="paginator-container">
     <button [disabled]="page == 0" (click)="onClick.emit(-1)" class="badge btn btn-outline-primary btn-sm">
