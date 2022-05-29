@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Position } from 'src/app/models/position';
@@ -22,6 +22,9 @@ export class TemplateTypesComponent implements OnInit {
   selected: TemplateType = new TemplateType(-1, "");
   selectedPositions: Position[] = [];
   displayedColumns = ['Id', 'Name', 'Position','Edit'];
+  @Input() page: number = 0;
+  @Input() pageSize: number = 20;
+  @Input() maxPages: number = 0;
 
   constructor(private typesSvc: TemplateTypesService, 
     private router: Router,
@@ -31,8 +34,18 @@ export class TemplateTypesComponent implements OnInit {
     private positionsSvc: PositionsService) { }
 
   ngOnInit(): void {
-    this.typesSvc.getTypes().subscribe(types => this.types = types);
+    const query = {
+      "page": this.page, 
+      "pageSize": this.pageSize, 
+    };
+    this.typesSvc.getTypes(query).subscribe(types => this.types = types);
     this.positionsSvc.getPositions().subscribe(positions => this.positions = positions);
+    this.typesSvc.count(query).subscribe(count => this.maxPages = Math.floor(count / this.pageSize));
+  }
+
+  nextPage(delta: number){
+    this.page += delta;
+    this.ngOnInit();
   }
 
   addType(){

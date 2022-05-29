@@ -1,3 +1,11 @@
 .loading {
     margin: 4% auto;
 }
+.paginator-container{
+    margin-top: 10px; 
+    margin-bottom: 5px
+}
+.page{
+    margin-left: 2em; 
+    margin-right: 2em;
+}

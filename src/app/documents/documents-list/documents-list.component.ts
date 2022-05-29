@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AlertService } from 'src/app/services/alert.service';
-import { Document } from '../../models/document';
+import { Document, DocumentStatus } from '../../models/document';
 import { DocumentsService } from '../../services/documents.service';
 import { NewDocumentDialog } from './new-document-dialog.component';
 
@@ -14,6 +14,13 @@ import { NewDocumentDialog } from './new-document-dialog.component';
 })
 export class DocumentsListComponent implements OnInit {
   @Input() documents?: Document[];
+  @Input() page: number = 0;
+  @Input() pageSize: number = 20;
+  @Input() authorId: number = -1;
+  @Input() templateId: number = -1;
+  @Input() type: DocumentStatus = -1;
+  @Input() maxPages: number = 0;
+
   displayedColumns = ['Name', 'Template', 'AuthorName', 'UpdateDate', 'ExpireDate', 'Actions'];
 
 
@@ -23,7 +30,20 @@ export class DocumentsListComponent implements OnInit {
     public dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.documentsSvc.getDocuments().subscribe(data => this.documents = data);
+    const query = {
+      "page": this.page, 
+      "pageSize": this.pageSize, 
+      "type":  this.type, 
+      "userId": this.authorId, 
+      "templateId": this.templateId
+    };
+    this.documentsSvc.getDocuments(query).subscribe(data => this.documents = data);
+    this.documentsSvc.count(query).subscribe(count => this.maxPages = Math.floor(count / this.pageSize));
+  }
+
+  nextPage(delta: number){
+    this.page += delta;
+    this.ngOnInit();
   }
   
   removeDocument(id: number) {

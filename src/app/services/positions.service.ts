@@ -15,6 +15,11 @@ export class PositionsService{
     constructor(private http: HttpClient, private config: AppConfig, private alertSvc: AlertService){
         this.url = this.config.apiUrl + "/positions";
     }
+
+    count(query?: { [param: string]: number }){
+        const options = query ? { params: new HttpParams().appendAll(query) } : {};
+        return this.http.get<number>(`${this.url}/count`, options);
+    }
     
     getPositions(query?: { [param: string]: number }){
         const options = query ? { params: new HttpParams().appendAll(query) } : {};

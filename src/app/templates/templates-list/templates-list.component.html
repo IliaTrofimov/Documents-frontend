@@ -52,3 +52,5 @@
         <p class="muted">Пока не был создан ни один шаблон документа</p>
     </div>
 </div>
+
+<page *ngIf="templates" [page]="page" [maxPage]="maxPages" (onClick)="nextPage($event)"></page>

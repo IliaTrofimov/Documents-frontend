@@ -21,6 +21,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { NewTypeDialog } from './template-types/new-type-dialog.component';
 import { PositionsComponent } from './positions/positions.component';
 import { NewPositionDialog } from './positions/new-position-dialog.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 @NgModule({
@@ -48,7 +49,8 @@ import { NewPositionDialog } from './positions/new-position-dialog.component';
     MatCheckboxModule,
     SharedItemsModule,
     MatInputModule,
-    MatSelectModule
+    MatSelectModule,
+    MatPaginatorModule
   ],
   providers: [],
   bootstrap: []

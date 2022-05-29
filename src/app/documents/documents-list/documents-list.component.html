@@ -58,3 +58,6 @@
         <p class="muted">Пока не был создан ни один документ</p>
     </div>
 </div>
+
+
+<page *ngIf="documents" [page]="page" [maxPage]="maxPages" (onClick)="nextPage($event)"></page>

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Position } from 'src/app/models/position';
@@ -17,6 +17,9 @@ export class PositionsComponent implements OnInit {
   positions?: Position[];
   selected: Position = new Position(-1, "");
   displayedColumns = ['Id', 'Name', 'Edit'];
+  @Input() page: number = 0;
+  @Input() pageSize: number = 20;
+  @Input() maxPages: number = 0;
 
   constructor(private positionsSvc: PositionsService, 
     private router: Router,
@@ -25,10 +28,17 @@ export class PositionsComponent implements OnInit {
     private detector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.positionsSvc.getPositions().subscribe({
-      next: positions => this.positions = positions,
-      error: err => this.alertSvc.error("Не удалось загрузить данные")
-    });
+    const query = {
+      "page": this.page, 
+      "pageSize": this.pageSize, 
+    };
+    this.positionsSvc.getPositions(query).subscribe(positions => this.positions = positions);
+    this.positionsSvc.count().subscribe(count => this.maxPages = Math.floor(count / this.pageSize));
+  }
+
+  nextPage(delta: number){
+    this.page += delta;
+    this.ngOnInit();
   }
 
   addPosition(){

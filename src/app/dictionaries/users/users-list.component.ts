@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Permission, PermissionFlag } from 'src/app/models/permission';
@@ -21,6 +21,11 @@ export class UsersListComponent implements OnInit {
   selected: User = new User(-1, "", "");
   positions?: Position[];
   displayedColumns = ['UserName', 'Position', 'Permissions', 'Edit'];
+
+  @Input() page: number = 0;
+  @Input() pageSize: number = 20;
+  @Input() positionId: number = -1;
+  @Input() maxPages: number = 0;
 
   Flag = PermissionFlag;
   has(user: User, flag: PermissionFlag){
@@ -55,8 +60,19 @@ export class UsersListComponent implements OnInit {
     private detector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.userSvc.getUsers().subscribe(users => this.users = users);
+    const query = {
+      "page": this.page, 
+      "pageSize": this.pageSize, 
+      "positionId":  this.positionId, 
+    };
+    this.userSvc.count(query).subscribe(count => this.maxPages = Math.floor(count / this.pageSize));
+    this.userSvc.getUsers(query).subscribe(users => this.users = users);
     this.positionsSvc.getPositions().subscribe(positions => this.positions = positions);
+  }
+
+  nextPage(delta: number){
+    this.page += delta;
+    this.ngOnInit();
   }
 
   addUser(){

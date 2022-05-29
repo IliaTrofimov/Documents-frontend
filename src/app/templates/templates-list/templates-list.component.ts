@@ -18,6 +18,11 @@ import { NewTemplateDialog } from './new-template-dialog.component';
 export class TemplatesListComponent implements OnInit {
   displayedColumns = ['Name', 'AuthorName', 'UpdateDate', 'Depricated', 'Actions'];
   @Input() templates?: Template[];
+  @Input() page: number = 0;
+  @Input() pageSize: number = 20;
+  @Input() authorId: number = -1;
+  @Input() templateId: number = -1;
+  @Input() maxPages: number = 0;
   templateTypes?: TemplateType[];
 
   constructor(private templateSvc: TemplatesService, 
@@ -28,10 +33,21 @@ export class TemplatesListComponent implements OnInit {
 
 
   ngOnInit(): void {
-    if (!this.templates)
-      this.templateSvc.getTemplates().subscribe(templates => this.templates = templates);
+    const query = {
+      "page": this.page, 
+      "pageSize": this.pageSize, 
+      "userId": this.authorId, 
+      "templateId": this.templateId
+    };
+    this.templateSvc.getTemplates().subscribe(templates => this.templates = templates);
+    this.templateSvc.count(query).subscribe(count => this.maxPages = Math.floor(count / this.pageSize));
   }
-  
+
+  nextPage(delta: number){
+    this.page += delta;
+    this.ngOnInit();
+  }
+
   addTemplate() {
     const dialogRef = this.dialog.open(NewTemplateDialog);
     dialogRef.afterClosed().subscribe(result => {

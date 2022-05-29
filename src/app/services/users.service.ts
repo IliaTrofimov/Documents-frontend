@@ -17,6 +17,11 @@ export class UsersService{
         this.url = this.configSvc.apiUrl + "/users";
     }
 
+    count(query?: { [param: string]: number }){
+        const options = query ? { params: new HttpParams().appendAll(query) } : {};
+        return this.http.get<number>(`${this.url}/count`, options);
+    }
+
     getCurrent(){
         if (this.currentUser) 
             return of(this.currentUser);
@@ -29,7 +34,7 @@ export class UsersService{
 
     getUsers(query?: { [param: string]: number }){
         const options = query ? { params: new HttpParams().appendAll(query) } : {};
-        return this.http.get<User[]>(`${this.url}/list`);
+        return this.http.get<User[]>(`${this.url}/list`, options);
     }
     
     getUser(id: number){

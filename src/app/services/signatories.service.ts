@@ -16,6 +16,11 @@ export class SignatoriesService{
         this.url = this.config.apiUrl + "/signs";
     }
 
+    count(query?: { [param: string]: number }){
+        const options = query ? { params: new HttpParams().appendAll(query) } : {};
+        return this.http.get<number>(`${this.url}/count`, options);
+    }
+
     getSigns(query?: { [param: string]: number }){
         const options = query ? { params: new HttpParams().appendAll(query) } : {};
         return this.http.get<Signatory[]>(`${this.url}/get`, options).pipe(

@@ -9,6 +9,7 @@ import { RouterModule } from '@angular/router';
 import { AlertComponent } from './alert.component';
 import { CommonModule } from '@angular/common';
 import { WrongUrlComponent } from './wrong-url.component';
+import { PaginatorComponent } from './paginator.component';
 
 
 
@@ -19,7 +20,8 @@ import { WrongUrlComponent } from './wrong-url.component';
     SiteFooterComponent,
     LoadingComponent,
     AlertComponent,
-    WrongUrlComponent
+    WrongUrlComponent,
+    PaginatorComponent
   ],
   imports: [
     AppRoutingModule,
@@ -32,6 +34,7 @@ import { WrongUrlComponent } from './wrong-url.component';
     SiteFooterComponent,
     LoadingComponent,
     AlertComponent,
+    PaginatorComponent,
     WrongUrlComponent
   ]
 })

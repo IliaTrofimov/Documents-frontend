@@ -37,15 +37,16 @@
                 </ng-container>
             </td>
         </ng-container>
-    
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let myRowData; columns: displayedColumns"></tr>  
-        
     </table>
+
     <div class="card" *ngIf="positions && positions.length == 0">
         <div class="card-body">
             <h5 class="card-title">Здесь ничего нет</h5>
             <p class="card-text">Пока не был создана ни одна должность</p>
         </div>
     </div>
+
+    <page *ngIf="positions" [page]="page" [maxPage]="maxPages" (onClick)="nextPage($event)"></page>
 </div>

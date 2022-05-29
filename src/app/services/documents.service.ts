@@ -19,6 +19,10 @@ export class DocumentsService{
         this.url = this.config.apiUrl + "/documents";
     }
 
+    count(query?: { [param: string]: number }){
+        const options = query ? { params: new HttpParams().appendAll(query) } : {};
+        return this.http.get<number>(`${this.url}/count`, options);
+    }
 
     getDocuments(query?: { [param: string]: number }){
         const options = query ? { params: new HttpParams().appendAll(query) } : {};
