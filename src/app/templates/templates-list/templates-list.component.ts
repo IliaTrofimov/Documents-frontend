@@ -36,8 +36,7 @@ export class TemplatesListComponent implements OnInit {
     const query = {
       "page": this.page, 
       "pageSize": this.pageSize, 
-      "userId": this.authorId, 
-      "templateId": this.templateId
+      "user": this.authorId
     };
     this.templateSvc.getTemplates().subscribe(templates => this.templates = templates);
     this.templateSvc.count(query).subscribe(count => this.maxPages = Math.floor(count / this.pageSize));

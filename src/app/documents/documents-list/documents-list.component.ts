@@ -34,8 +34,8 @@ export class DocumentsListComponent implements OnInit {
       "page": this.page, 
       "pageSize": this.pageSize, 
       "type":  this.type, 
-      "userId": this.authorId, 
-      "templateId": this.templateId
+      "user": this.authorId, 
+      "template": this.templateId
     };
     this.documentsSvc.getDocuments(query).subscribe(data => this.documents = data);
     this.documentsSvc.count(query).subscribe(count => this.maxPages = Math.floor(count / this.pageSize));
