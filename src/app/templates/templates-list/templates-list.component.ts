@@ -23,6 +23,7 @@ export class TemplatesListComponent implements OnInit {
   @Input() authorId: number = -1;
   @Input() templateId: number = -1;
   @Input() maxPages: number = 0;
+  totalElements: number = 0;
   templateTypes?: TemplateType[];
 
   constructor(private templateSvc: TemplatesService, 
@@ -39,7 +40,7 @@ export class TemplatesListComponent implements OnInit {
       "user": this.authorId
     };
     this.templateSvc.getTemplates().subscribe(templates => this.templates = templates);
-    this.templateSvc.count(query).subscribe(count => this.maxPages = Math.floor(count / this.pageSize));
+    this.templateSvc.count(query).subscribe(count => this.maxPages = Math.floor((this.totalElements = count) / this.pageSize));
   }
 
   nextPage(delta: number){

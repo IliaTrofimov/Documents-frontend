@@ -7,7 +7,7 @@ export interface ITemplateTypePosition{
 }
 
 export class TemplateType {
-    public TemplateTypePositions: ITemplateTypePosition[] = [];
+    public Positions: Position[] = [];
 
     constructor(public Id: number, public Name: string) { }
 }

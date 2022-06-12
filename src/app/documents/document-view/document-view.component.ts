@@ -13,6 +13,8 @@ import { UsersService } from 'src/app/services/users.service';
 import { SignatoriesService } from 'src/app/services/signatories.service';
 import { Signatory } from 'src/app/models/signatory';
 import { User } from 'src/app/models/user';
+import { DocumentSignigComponent } from './document-signing.component';
+import { MatDialog } from '@angular/material/dialog';
 
 
 @Component({
@@ -26,7 +28,6 @@ export class DocumentViewComponent implements OnInit {
 
   document?: Document;
   selectedSigners: User[] = [];
-  users: User[] = [];
   private id: number = -1;
 
   constructor(private docSvc: DocumentsService,
@@ -34,7 +35,7 @@ export class DocumentViewComponent implements OnInit {
     private route: ActivatedRoute, 
     private router: Router,
     private alertSvc: AlertService,
-    private usersSvc: UsersService,
+    private dialog: MatDialog,
     private signsSvc: SignatoriesService) { }
 
   ngOnInit(){
@@ -42,12 +43,17 @@ export class DocumentViewComponent implements OnInit {
     this.docSvc.getDocument(this.id).subscribe(document => {
       this.document = document;
       if (this.document.Template){
-        for (let p of this.document.Template.TemplateType.TemplateTypePositions)
+        for (let p of this.document.Template.TemplateType.Positions)
           this.selectedSigners.push(new User(-1, "", ""));
       }
-      
     }); 
-    this.usersSvc.getUsers().subscribe(users => this.users = users);
+  }
+
+  sign(){
+    const dialogRef = this.dialog.open(DocumentSignigComponent, {data: this.document});
+    dialogRef.afterClosed().subscribe(res => {
+      if (res) this.alertSvc.success("Ok");
+    }); 
   }
 
   getItem(fieldId: number){
@@ -66,7 +72,7 @@ export class DocumentViewComponent implements OnInit {
 
   validate(){
     let validated = true;
-    let listner = this.validSvc.start().subscribe({
+    this.validSvc.start().subscribe({
       complete: () => {
         validated = true;
         this.save();

@@ -1,7 +1,7 @@
 <div class="panel">
     <h4>Типы шаблонов</h4>
     <span class="text-muted" *ngIf="types">
-        <span>Всего {{types.length}} элементов. <button class="badge btn btn-primary btn-sm" (click)="addType()">Добавить тип</button></span>
+        <span>Всего {{totalElements}} элементов. <button class="badge btn btn-primary btn-sm" (click)="addType()">Добавить тип</button></span>
     </span>
 
     <loading [status]="!types || !positions"></loading>
@@ -30,20 +30,19 @@
             <th mat-header-cell *matHeaderCellDef>Подписанты</th>
             <td mat-cell *matCellDef="let type">
                 <div *ngIf="selected.Id != type.Id" class="overflow-auto d-flex flex-wrap">
-                    <div *ngFor="let pos of type.TemplateTypePositions" class="badge badge-info permission-item">
-                        {{pos.Position?.Name}}
+                    <div *ngFor="let pos of type.Positions" class="badge badge-info permission-item">
+                        {{pos.Name}}
                     </div>
-                    <i *ngIf="type.TemplateTypePositions && type.TemplateTypePositions.length == 0">
+                    <i *ngIf="type.Positions && type.Positions.length == 0">
                         Не требуется подпись
                     </i>
                 </div>
-                <form #positionForm="ngForm" *ngIf="selected.Id == type.Id">
-                    <mat-form-field appearance="outline" *ngIf="positions">
-                        <mat-select multiple [(ngModel)]="selectedPositions" (ngModelChange)="selectedPositions" >
-                          <mat-option *ngFor="let pos of positions" [value]="pos">{{pos.Name}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </form>
+                <div class="form-group" *ngIf="selected.Id == type.Id" >
+                    <select multiple [(ngModel)]="type.Positions" [compareWith]="objComparisonFn" class="form-control select-box">
+                        <option *ngFor="let pos of positions" [ngValue]="pos">{{pos.Name}}</option>
+                    </select>
+                    <small class="form-text text-muted">Зажмите <span class="badge badge-pill badge-secondary">Ctrl</span>, чтобы выбрать несколько элементов</small>
+                </div>
             </td>
         </ng-container>  
         <ng-container matColumnDef="Edit">

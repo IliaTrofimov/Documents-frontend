@@ -3,7 +3,7 @@
     <loading [status]="!users"></loading>
 
     <span class="text-muted" *ngIf="users">
-        <span>Всего {{users.length}} элементов. <button class="badge btn btn-primary btn-sm" (click)="addUser()">Добавить пользователя</button></span>
+        <span>Всего {{totalElements}} элементов. <button class="badge btn btn-primary btn-sm" (click)="addUser()">Добавить пользователя</button></span>
     </span>
 
     <table mat-table [dataSource]="users" fixedLayout class="w-100" *ngIf="users">

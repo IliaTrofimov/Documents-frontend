@@ -10,7 +10,7 @@
     <form #signersForm="ngForm" novalidate>
         <mat-form-field appearance="outline" *ngIf="data.positions">
             <mat-label>Подписанты</mat-label>
-            <mat-select multiple [(ngModel)]="selectedPositions" (ngModelChange)="selectedPositions">
+            <mat-select multiple [(ngModel)]="data.type.Positions" (ngModelChange)="data.type.Positions">
               <mat-option *ngFor="let pos of data.positions" [value]="pos">{{pos.Name}}</mat-option>
             </mat-select>
         </mat-form-field>

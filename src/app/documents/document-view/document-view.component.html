@@ -15,18 +15,8 @@
             <b>Автор</b><br>
             {{document.AuthorName}}
         </div>
-        <div class="col" *ngIf="document.Template?.TemplateType?.TemplateTypePositions">
-            <b>Подписанты</b><br>
-            <div *ngFor="let pos of document.Template?.TemplateType?.TemplateTypePositions; let i = index">
-                <mat-form-field appearance="outline">
-                    <mat-label>{{pos.Position?.Name | nullname}}</mat-label>
-                    <mat-select [(ngModel)]="selectedSigners[i]">
-                        <mat-option *ngFor="let user of users" [value]="user">
-                            {{user | shortname}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
+        <div class="col" *ngIf="document.Template?.TemplateType?.Positions">
+            <b><a (click)="sign()">Подписанты</a></b>
         </div>
         <div class="col">
             <b>Дата истечения</b><br>

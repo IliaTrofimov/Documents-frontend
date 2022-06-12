@@ -11,9 +11,7 @@ import { TemplateTypesService } from 'src/app/services/template-types.service';
   styleUrls: ['../styles.css'],
   providers: [TemplateTypesService]
 })
-export class NewTypeDialog implements OnInit{
-  selectedPositions: Position[] = []; 
-
+export class NewTypeDialog implements OnInit{ 
   constructor(public dialogRef: MatDialogRef<NewTypeDialog>,
     @Inject(MAT_DIALOG_DATA) public data: {type: TemplateType, positions?: Position[]}, 
     private typesSvc: TemplateTypesService) { }
@@ -23,9 +21,7 @@ export class NewTypeDialog implements OnInit{
   }
    
   ok(){
-    for(let p of this.selectedPositions)
-      this.data.type.TemplateTypePositions.push({Id: -1, TemplateTypeId: -1, Position: p});
-    
+
     this.typesSvc.createType(this.data.type).subscribe({
       next: id => {
         this.data.type.Id = id;

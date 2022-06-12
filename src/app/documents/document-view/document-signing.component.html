@@ -1,0 +1,26 @@
+<div mat-dialog-content>
+    <h4>{{data.Name}}</h4>
+    <strong>Выбора подписантов</strong>
+    <hr>
+    <form *ngFor="let signer in users">
+        ssss 
+        <mat-form-field>
+            <mat-label>{{signer}}</mat-label>
+            <mat-select [(ngModel)]="selectedSigners[signer]">
+                <mat-option *ngFor="let user of users[signer]" [value]="user">
+                    {{user | shortname}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </form>
+</div> 
+<div mat-dialog-actions>
+    <div class="row"> 
+        <div class="col">
+            <button mat-button (click)="ok()" [disabled]="!isValid()" class="btn btn-primary btn-sm">Принять</button>
+        </div>
+        <div class="col">
+            <button mat-button [mat-dialog-close]="false" class="btn btn-danger btn-sm">Отменить</button>
+        </div>
+    </div>
+</div>

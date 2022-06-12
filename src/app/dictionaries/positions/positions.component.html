@@ -1,7 +1,7 @@
 <div class="panel">
     <h4>Должности пользователей</h4>
     <span class="text-muted" *ngIf="positions">
-        <span>Всего {{positions.length}} элементов. <button class="badge btn btn-primary btn-sm" (click)="addPosition()">Добавить должность</button></span>
+        <span>Всего {{totalElements}} элементов. <button class="badge btn btn-primary btn-sm" (click)="addPosition()">Добавить должность</button></span>
     </span>
 
     <loading [status]="!positions"></loading>

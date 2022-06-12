@@ -2,7 +2,6 @@ import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Position } from 'src/app/models/position';
-import { Template } from 'src/app/models/template';
 import { AlertService } from 'src/app/services/alert.service';
 import { PositionsService } from 'src/app/services/positions.service';
 import { TemplateType } from '../../models/template-type';
@@ -20,11 +19,13 @@ export class TemplateTypesComponent implements OnInit {
   types?: TemplateType[];
   positions?: Position[];
   selected: TemplateType = new TemplateType(-1, "");
-  selectedPositions: Position[] = [];
+  selectedPositionsIds: number[] = [];
+  selectedPositionsNames: string[] = [];
   displayedColumns = ['Id', 'Name', 'Position','Edit'];
   @Input() page: number = 0;
   @Input() pageSize: number = 20;
   @Input() maxPages: number = 0;
+  totalElements: number = 0;
 
   constructor(private typesSvc: TemplateTypesService, 
     private router: Router,
@@ -33,6 +34,10 @@ export class TemplateTypesComponent implements OnInit {
     private detector: ChangeDetectorRef,
     private positionsSvc: PositionsService) { }
 
+  public objComparisonFn = function(option:any, value:any) : boolean {
+    return option.Id === value.Id;
+  }
+
   ngOnInit(): void {
     const query = {
       "page": this.page, 
@@ -40,7 +45,7 @@ export class TemplateTypesComponent implements OnInit {
     };
     this.typesSvc.getTypes(query).subscribe(types => this.types = types);
     this.positionsSvc.getPositions().subscribe(positions => this.positions = positions);
-    this.typesSvc.count(query).subscribe(count => this.maxPages = Math.floor(count / this.pageSize));
+    this.typesSvc.count(query).subscribe(count => this.maxPages = Math.floor((this.totalElements = count) / this.pageSize));
   }
 
   nextPage(delta: number){
@@ -62,14 +67,9 @@ export class TemplateTypesComponent implements OnInit {
   }
 
   beginEdit(type: TemplateType){
-    this.selectedPositions = [];
-    this.selected.TemplateTypePositions = [];
-    for (let pos of type.TemplateTypePositions){
-      if (pos.Position){
-        this.selectedPositions.push(pos.Position);
-        this.selected.TemplateTypePositions.push(pos);
-      }
-    }
+    this.selected.Positions = [];
+    for (let pos of type.Positions)
+      this.selected.Positions.push(new Position(pos.Id, pos.Name));
     this.selected.Id = type.Id;
     this.selected.Name = type.Name;
   }
@@ -77,6 +77,9 @@ export class TemplateTypesComponent implements OnInit {
   reset(type: TemplateType){
     type.Id = this.selected.Id;
     type.Name = this.selected.Name;
+    type.Positions = [];
+    for (let pos of this.selected.Positions)
+      type.Positions.push(new Position(pos.Id, pos.Name));
     this.selected = new TemplateType(-1, "");
   }
 
@@ -85,13 +88,10 @@ export class TemplateTypesComponent implements OnInit {
       this.alertSvc.error("Заполните обязательные поля", {closeTime: 5000});
       return;
     }
-    
-    for(let p of this.selectedPositions)
-      type.TemplateTypePositions.push({Id: -1, TemplateTypeId: type.Id, Position: p});
-
+    console.log(type);
     this.typesSvc.updateType(type).subscribe(() => {
       this.alertSvc.info("Тип обновлён", {closeTime: 5000, single: true});
-      this.selected = new TemplateType(-1, "");
+      this.selected.Id = -1;
     })
   }
 

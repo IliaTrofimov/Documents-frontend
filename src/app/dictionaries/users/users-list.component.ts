@@ -26,6 +26,7 @@ export class UsersListComponent implements OnInit {
   @Input() pageSize: number = 20;
   @Input() positionId: number = -1;
   @Input() maxPages: number = 0;
+  totalElements: number = 0;
 
   Flag = PermissionFlag;
   has(user: User, flag: PermissionFlag){
@@ -65,7 +66,7 @@ export class UsersListComponent implements OnInit {
       "pageSize": this.pageSize, 
       "positionId":  this.positionId, 
     };
-    this.userSvc.count(query).subscribe(count => this.maxPages = Math.floor(count / this.pageSize));
+    this.userSvc.count(query).subscribe(count => this.maxPages = Math.floor((this.totalElements = count) / this.pageSize));
     this.userSvc.getUsers(query).subscribe(users => this.users = users);
     this.positionsSvc.getPositions().subscribe(positions => this.positions = positions);
   }

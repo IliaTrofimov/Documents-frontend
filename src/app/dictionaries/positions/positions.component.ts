@@ -20,6 +20,7 @@ export class PositionsComponent implements OnInit {
   @Input() page: number = 0;
   @Input() pageSize: number = 20;
   @Input() maxPages: number = 0;
+  totalElements: number = 0;
 
   constructor(private positionsSvc: PositionsService, 
     private router: Router,
@@ -33,7 +34,7 @@ export class PositionsComponent implements OnInit {
       "pageSize": this.pageSize, 
     };
     this.positionsSvc.getPositions(query).subscribe(positions => this.positions = positions);
-    this.positionsSvc.count().subscribe(count => this.maxPages = Math.floor(count / this.pageSize));
+    this.positionsSvc.count().subscribe(count => this.maxPages = Math.floor((this.totalElements = count) / this.pageSize));
   }
 
   nextPage(delta: number){

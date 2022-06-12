@@ -17,6 +17,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { NewDocumentDialog } from './documents-list/new-document-dialog.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
+import { DocumentSignigComponent } from './document-view/document-signing.component';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { MatSelectModule } from '@angular/material/select';
     DocumentTableComponent,
     DocumentFieldComponent,
     NewDocumentDialog,
+    DocumentSignigComponent
   ],
   imports: [
     BrowserModule,

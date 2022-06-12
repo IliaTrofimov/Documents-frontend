@@ -20,6 +20,7 @@ export class DocumentsListComponent implements OnInit {
   @Input() templateId: number = -1;
   @Input() type: DocumentStatus = -1;
   @Input() maxPages: number = 0;
+  totalElements: number = 0;
 
   displayedColumns = ['Name', 'Template', 'AuthorName', 'UpdateDate', 'ExpireDate', 'Actions'];
 
@@ -38,7 +39,7 @@ export class DocumentsListComponent implements OnInit {
       "template": this.templateId
     };
     this.documentsSvc.getDocuments(query).subscribe(data => this.documents = data);
-    this.documentsSvc.count(query).subscribe(count => this.maxPages = Math.floor(count / this.pageSize));
+    this.documentsSvc.count(query).subscribe(count => this.maxPages = Math.floor((this.totalElements = count) / this.pageSize));
   }
 
   nextPage(delta: number){

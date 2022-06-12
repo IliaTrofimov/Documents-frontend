@@ -26,12 +26,12 @@
         </div>
         <div class="col" *ngIf="template.TemplateType">
             <b>Подписанты</b><br>
-            <div *ngIf="template.TemplateType.TemplateTypePositions.length != 0" class="overflow-auto d-flex flex-wrap">
-                <div *ngFor="let pos of template.TemplateType.TemplateTypePositions" class="badge badge-info permission-item">
-                    {{pos.Position?.Name}}
+            <div *ngIf="template.TemplateType.Positions.length != 0" class="overflow-auto d-flex flex-wrap">
+                <div *ngFor="let pos of template.TemplateType.Positions" class="badge badge-info permission-item">
+                    {{pos.Name}}
                 </div>
             </div>
-            <i *ngIf="template.TemplateType.TemplateTypePositions && template.TemplateType.TemplateTypePositions.length == 0">
+            <i *ngIf="template.TemplateType.Positions && template.TemplateType.Positions.length == 0">
                 Не требуется подпись
             </i>
         </div>
