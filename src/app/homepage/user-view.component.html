@@ -5,6 +5,7 @@
     <div class="col">
       <h5 class="card-title">{{user.Lastname}} {{user.Firstname}} {{user.Fathersname}}</h5>
       <p class="muted">Должность: <i>{{user.Position.Name}}</i></p>
+      <p class="muted">Эл. почта: <i>{{user.Email}}</i></p>
     </div>
     <div class="col">
       <h5 class="card-title">Список ваших разрешений</h5>   
@@ -17,7 +18,7 @@
   </div>
   <hr>
   <div *ngIf="user">
-    <div class="container round-border">
+    <div class="container">
       <strong name="templates">Шаблоны</strong>
       <loading [status]="!user.Templates"></loading>
       <ul class="list-group" *ngIf="user.Templates">
@@ -28,7 +29,7 @@
       <i *ngIf="user.Templates && user.Templates.length == 0">Нет шаблонов</i>
     </div>
     <br>
-    <div class="container round-border">
+    <div class="container">
       <strong name="documents">Документы</strong>
       <loading [status]="!user.Documents"></loading>
       <ul class="list-group" *ngIf="user.Documents">
@@ -39,7 +40,7 @@
       <i *ngIf="user.Documents && user.Documents.length == 0">Нет документов</i>
     </div>
     <br>
-    <div class="container round-border">
+    <div class="container">
       <strong name="signs">Подписи</strong>
       <loading [status]="!user.Signs"></loading>
       <ul  class="list-group" *ngIf="user.Signs">

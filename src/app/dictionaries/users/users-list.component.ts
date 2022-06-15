@@ -20,7 +20,7 @@ export class UsersListComponent implements OnInit {
   users?: User[];
   selected: User = new User(-1, "", "");
   positions?: Position[];
-  displayedColumns = ['UserName', 'Position', 'Permissions', 'Edit'];
+  displayedColumns = ['UserName', 'Email', 'Position', 'Permissions', 'Edit'];
 
   @Input() page: number = 0;
   @Input() pageSize: number = 20;
@@ -42,7 +42,8 @@ export class UsersListComponent implements OnInit {
   }
 
   isValid(user: User){
-    return user.Lastname != "" && user.Firstname != "" && user.PositionId != -1;
+    return user.Lastname != "" && user.Firstname != "" && user.PositionId != -1 && 
+      user.Email.match("[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}");
   }
 
   allPermissions = [
@@ -93,7 +94,7 @@ export class UsersListComponent implements OnInit {
 
   editUser(user: User){
     if (!this.isValid(user)){
-      this.alertSvc.error("Заполните обязательные поля");
+      this.alertSvc.error("Недопустимые данные. Проверьте поля");
       return;
     }
 
@@ -119,6 +120,7 @@ export class UsersListComponent implements OnInit {
     this.selected.Fathersname = user.Fathersname;
     this.selected.PositionId = user.PositionId;
     this.selected.Permissions = user.Permissions;
+    this.selected.Email = user.Email;
   }
 
   reset(user: User){
@@ -127,6 +129,7 @@ export class UsersListComponent implements OnInit {
     user.Fathersname = this.selected.Fathersname;
     user.Permissions = this.selected.Permissions;
     user.PositionId = this.selected.PositionId;
+    user.Email = this.selected.Email;
     this.selected = new User(-1, "", "");
   }
 

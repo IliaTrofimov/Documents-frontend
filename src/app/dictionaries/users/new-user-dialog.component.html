@@ -15,6 +15,12 @@
             <input matInput [(ngModel)]="data.user.Fathersname" name="fathersname">
         </mat-form-field>
     </form>
+    <form #emailForm="ngForm" novalidate>
+        <mat-form-field appearance="outline">
+            <mat-label>Электронная почта</mat-label>
+            <input matInput [(ngModel)]="data.user.Email" pattern="[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}" required name="email" type="email">
+        </mat-form-field>
+    </form>
     <form #positionForm="ngForm" novalidate>
         <mat-form-field appearance="outline">
             <mat-label>Должность</mat-label>
@@ -39,7 +45,7 @@
 <div mat-dialog-actions>
     <div class="row">
         <div class="col">
-            <button mat-button (click)="ok()" [disabled]="positionForm.invalid || nameForm.invalid" class="btn btn-primary btn-sm">Принять</button>
+            <button mat-button (click)="ok()" [disabled]="positionForm.invalid || nameForm.invalid || emailForm.invalid" class="btn btn-primary btn-sm">Принять</button>
         </div>
         <div class="col">
             <button mat-button [mat-dialog-close]="undefined" class="btn btn-danger btn-sm">Отменить</button>
