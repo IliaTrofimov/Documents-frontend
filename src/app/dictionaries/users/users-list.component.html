@@ -11,7 +11,8 @@
             <th mat-header-cell *matHeaderCellDef>ФИО</th>
             <td mat-cell *matCellDef="let user">
                 <ng-container *ngIf="selected.Id != user.Id">
-                    {{user | shortname }}
+                   <b *ngIf="currentUserId == user.Id">{{user | shortname }} </b>
+                   <ng-container *ngIf="currentUserId != user.Id">{{user | shortname }}</ng-container>
                 </ng-container>
                 <form #nameForm="ngForm" *ngIf="selected.Id == user.Id">
                     <mat-form-field>
@@ -90,6 +91,8 @@
                     <button (click)="beginEdit(user)" class="btn btn-warning btn-sm btn-icon">✎</button>
                     <button (click)="removeUser(user.Id)" class="btn btn-danger btn-sm btn-icon">✖</button>
                 </ng-container>
+                <small *ngIf="user.Id != currentUserId" class="text-muted"><a class="link" (click)="changeUser(user)">сменить</a></small>
+                <small *ngIf="user.Id == currentUserId" class="text-muted">текущий</small>
             </td>
         </ng-container>
     

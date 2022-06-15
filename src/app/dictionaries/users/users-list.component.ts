@@ -20,6 +20,7 @@ export class UsersListComponent implements OnInit {
   users?: User[];
   selected: User = new User(-1, "", "");
   positions?: Position[];
+  currentUserId: number = -1;
   displayedColumns = ['UserName', 'Email', 'Position', 'Permissions', 'Edit'];
 
   @Input() page: number = 0;
@@ -67,6 +68,7 @@ export class UsersListComponent implements OnInit {
       "pageSize": this.pageSize, 
       "positionId":  this.positionId, 
     };
+    this.userSvc.getCurrent().subscribe(user => this.currentUserId = user.Id);
     this.userSvc.count(query).subscribe(count => this.maxPages = Math.floor((this.totalElements = count) / this.pageSize));
     this.userSvc.getUsers(query).subscribe(users => this.users = users);
     this.positionsSvc.getPositions().subscribe(positions => this.positions = positions);
@@ -140,5 +142,12 @@ export class UsersListComponent implements OnInit {
     else{
       user.Permissions = user.Permissions & ~(+flag);
     }
+  }
+
+  changeUser(user: User){
+    this.userSvc.changeUser(user.Id).subscribe(user => {
+      this.currentUserId = user.Id;
+      this.alertSvc.info(`Текущий пользователь: ${user.Lastname} ${user.Firstname[0]}.` + (user.Fathersname ? `${user.Fathersname[0]}.` : ''));
+    });
   }
 }

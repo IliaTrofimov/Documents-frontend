@@ -22,6 +22,23 @@ export class UsersService{
         return this.http.get<number>(`${this.url}/count`, options);
     }
 
+    changeUser(id: number){
+        return this.getUser(id).pipe(catchError((error) => {
+            if (error instanceof HttpErrorResponse){
+                switch (error.status){
+                    case SiteErrorCodes.NotFound: 
+                        this.alertSvc.error("Не удалось сменить пользователя", {message: "Пользователь с таким Id не найден."}); 
+                        break;
+                    default: 
+                        this.alertSvc.error("Не удалось сменить пользователя", {message: JSON.stringify(error.error, null, 2)}); 
+                        break;
+                }
+            }
+            return throwError(() => new Error(error.message))
+        }), tap(user => this.currentUser = user)
+        )
+    }
+
     getCurrent(){
         if (this.currentUser) 
             return of(this.currentUser);
