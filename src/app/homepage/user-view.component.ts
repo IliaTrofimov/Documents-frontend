@@ -1,6 +1,5 @@
-import { switchMap } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import { ActivatedRoute, Router} from '@angular/router';
+import { Router} from '@angular/router';
 
 import { UsersService } from '../services/users.service';
 import { User } from '../models/user';
@@ -32,7 +31,7 @@ export class UserViewComponent implements OnInit {
     private detector: ChangeDetectorRef) { }
 
   ngOnInit(){
-    this.authSvc.getCurrent().subscribe(current => {
+    this.authSvc.current().subscribe(current => {
       this.usersSvc.getUser(current.Id).subscribe(user => {this.user = user; console.log(user)});
       this.permissions = Permission.toArray(current.Permissions);
     })

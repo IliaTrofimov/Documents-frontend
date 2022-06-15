@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 
 import { User } from '../models/user';
 import { AppConfig } from '../app.config';
-import { catchError, of, tap, throwError } from 'rxjs';
+import { catchError, throwError } from 'rxjs';
 import { SiteErrorCodes } from '../models/site-error';
 import { AlertService } from './alert.service';
 

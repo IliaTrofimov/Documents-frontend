@@ -70,7 +70,7 @@ export class UsersListComponent implements OnInit {
       "pageSize": this.pageSize, 
       "positionId":  this.positionId, 
     };
-    this.authSvc.getCurrent().subscribe(user => this.currentUserId = user.Id);
+    this.authSvc.current().subscribe(user => this.currentUserId = user.Id);
     this.userSvc.count(query).subscribe(count => this.maxPages = Math.floor((this.totalElements = count) / this.pageSize));
     this.userSvc.getUsers(query).subscribe(users => this.users = users);
     this.positionsSvc.getPositions().subscribe(positions => this.positions = positions);
