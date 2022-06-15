@@ -11,7 +11,6 @@ import { AlertService } from './alert.service';
 @Injectable()
 export class UsersService{
     private url = "";
-    private currentUser?: User;
     
     constructor(private http: HttpClient, private configSvc: AppConfig, private alertSvc: AlertService){
         this.url = this.configSvc.apiUrl + "/users";
@@ -20,33 +19,6 @@ export class UsersService{
     count(query?: { [param: string]: number }){
         const options = query ? { params: new HttpParams().appendAll(query) } : {};
         return this.http.get<number>(`${this.url}/count`, options);
-    }
-
-    changeUser(id: number){
-        return this.getUser(id).pipe(catchError((error) => {
-            if (error instanceof HttpErrorResponse){
-                switch (error.status){
-                    case SiteErrorCodes.NotFound: 
-                        this.alertSvc.error("Не удалось сменить пользователя", {message: "Пользователь с таким Id не найден."}); 
-                        break;
-                    default: 
-                        this.alertSvc.error("Не удалось сменить пользователя", {message: JSON.stringify(error.error, null, 2)}); 
-                        break;
-                }
-            }
-            return throwError(() => new Error(error.message))
-        }), tap(user => this.currentUser = user)
-        )
-    }
-
-    getCurrent(){
-        if (this.currentUser) 
-            return of(this.currentUser);
-        else 
-            return this.http.get<User>(`${this.url}/whoami`).pipe(tap(user => 
-                this.currentUser = user
-            ));
-        
     }
 
     getUsers(query?: { [param: string]: number }){

@@ -5,6 +5,7 @@ import { Permission, PermissionFlag } from 'src/app/models/permission';
 import { Position } from 'src/app/models/position';
 import { User } from 'src/app/models/user';
 import { AlertService } from 'src/app/services/alert.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { PositionsService } from 'src/app/services/positions.service';
 import { UsersService } from 'src/app/services/users.service';
 import { NewUserDialog } from './new-users-dialog.component';
@@ -59,6 +60,7 @@ export class UsersListComponent implements OnInit {
     private positionsSvc: PositionsService,
     private dialog: MatDialog,
     private alertSvc: AlertService,
+    private authSvc: AuthService,
     private router: Router,
     private detector: ChangeDetectorRef) { }
 
@@ -68,7 +70,7 @@ export class UsersListComponent implements OnInit {
       "pageSize": this.pageSize, 
       "positionId":  this.positionId, 
     };
-    this.userSvc.getCurrent().subscribe(user => this.currentUserId = user.Id);
+    this.authSvc.getCurrent().subscribe(user => this.currentUserId = user.Id);
     this.userSvc.count(query).subscribe(count => this.maxPages = Math.floor((this.totalElements = count) / this.pageSize));
     this.userSvc.getUsers(query).subscribe(users => this.users = users);
     this.positionsSvc.getPositions().subscribe(positions => this.positions = positions);
@@ -145,7 +147,7 @@ export class UsersListComponent implements OnInit {
   }
 
   changeUser(user: User){
-    this.userSvc.changeUser(user.Id).subscribe(user => {
+    this.authSvc.changeUser(user.Id).subscribe(user => {
       this.currentUserId = user.Id;
       this.alertSvc.info(`Текущий пользователь: ${user.Lastname} ${user.Firstname[0]}.` + (user.Fathersname ? `${user.Fathersname[0]}.` : ''));
     });
