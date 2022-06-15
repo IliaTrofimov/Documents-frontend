@@ -9,9 +9,7 @@ import { TemplateField } from 'src/app/models/template-field';
 import { DocumentDataItem } from 'src/app/models/document-data-item';
 import { TemplateTable } from 'src/app/models/template-table';
 import { AlertService } from 'src/app/services/alert.service';
-import { UsersService } from 'src/app/services/users.service';
 import { SignatoriesService } from 'src/app/services/signatories.service';
-import { Signatory } from 'src/app/models/signatory';
 import { User } from 'src/app/models/user';
 import { DocumentSignigComponent } from './document-signing.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -20,7 +18,7 @@ import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-document-view',
   templateUrl: './document-view.component.html',
-  providers: [DocumentsService, ValidationService, UsersService, SignatoriesService]
+  providers: [DocumentsService, ValidationService, SignatoriesService]
 })
 export class DocumentViewComponent implements OnInit {
   Field = TemplateField;
@@ -40,19 +38,25 @@ export class DocumentViewComponent implements OnInit {
 
   ngOnInit(){
     this.route.paramMap.pipe(switchMap(params => params.getAll('id'))).subscribe(data => this.id = +data);
+
     this.docSvc.getDocument(this.id).subscribe(document => {
       this.document = document;
       if (this.document.Template){
-        for (let p of this.document.Template.TemplateType.Positions)
+        for (let p of this.document.Template.TemplateType.Positions){
           this.selectedSigners.push(new User(-1, "", ""));
+        }
       }
     }); 
   }
 
   sign(){
-    const dialogRef = this.dialog.open(DocumentSignigComponent, {data: this.document});
+    const dialogRef = this.dialog.open(DocumentSignigComponent, {data: this.document?.Template?.TemplateType});
     dialogRef.afterClosed().subscribe(res => {
-      if (res) this.alertSvc.success("Ok");
+      if (res && this.document){
+        this.alertSvc.info("Подписанты сохранены");
+        for (let signer of res)
+          this.signsSvc.createSign(signer.Id, this.document.Id).subscribe();
+      }
     }); 
   }
 

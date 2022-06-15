@@ -25,7 +25,8 @@ export class DocumentFieldComponent implements OnInit {
   ngOnInit(): void {
     if(this.template.RestrictionType == 1 || this.template.RestrictionType == 2)
       this.choices = this.template.Restriction.split(';');
-    this.validSvc.on(() => this.validate())
+    this.validSvc.on(() => this.validate());
+    console.log("field: " + this.template.Name);
   }
 
   validate() {

@@ -1,18 +1,21 @@
 <div mat-dialog-content>
-    <h4>{{data.Name}}</h4>
-    <strong>Выбора подписантов</strong>
+    <strong>Выбор подписантов</strong>
     <hr>
-    <form *ngFor="let signer in users">
-        ssss 
-        <mat-form-field>
-            <mat-label>{{signer}}</mat-label>
-            <mat-select [(ngModel)]="selectedSigners[signer]">
-                <mat-option *ngFor="let user of users[signer]" [value]="user">
-                    {{user | shortname}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-    </form>
+    <i *ngIf="data.Positions.length == 0">Не требуется подпись</i>
+    <ng-component *ngIf="data.Positions.length != 0">
+        <small>Должности подписантов</small>
+        <form *ngFor="let specs of users; let i = index">
+            <mat-form-field>
+                <mat-label>{{specs[0].Position.Name}}</mat-label>
+                <small *ngIf="specs.length == 0">Нет сотрдников с такой должностью</small>
+                <mat-select [(ngModel)]="selectedSigners[i]" *ngIf="specs.length != 0">
+                    <mat-option *ngFor="let user of specs" [value]="user">
+                        {{user | shortname}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </form>
+    </ng-component>
 </div> 
 <div mat-dialog-actions>
     <div class="row"> 

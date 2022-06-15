@@ -25,12 +25,11 @@ export class DocumentTableComponent implements OnInit{
   constructor(private validSvc: ValidationService) {}
   
   ngOnInit() {
-    console.log("table:", this.data)
+    console.log("table: " + this.table.Name)
     for (let col of this.table.TemplateFields)
       this.preparedData.push(
         this.data.filter(item => item.FieldId == col.Id).sort((a, b) => <number>a.Row - <number>b.Row)
       );
-    console.log("prepared:", this.preparedData)
 
     this.validSvc.on(() => {
       let status = true;

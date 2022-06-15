@@ -38,8 +38,8 @@ export class DocumentsListComponent implements OnInit {
       "user": this.authorId, 
       "template": this.templateId
     };
-    this.documentsSvc.getDocuments(query).subscribe(data => this.documents = data);
     this.documentsSvc.count(query).subscribe(count => this.maxPages = Math.floor((this.totalElements = count) / this.pageSize));
+    this.documentsSvc.getDocuments(query).subscribe(data => this.documents = data);
   }
 
   nextPage(delta: number){

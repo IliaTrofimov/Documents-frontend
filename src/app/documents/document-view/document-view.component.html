@@ -15,15 +15,18 @@
             <b>Автор</b><br>
             {{document.AuthorName}}
         </div>
-        <div class="col" *ngIf="document.Template?.TemplateType?.Positions">
-            <b><a (click)="sign()">Подписанты</a></b>
-        </div>
         <div class="col">
             <b>Дата истечения</b><br>
             <input type="date" class="form-control form-control-sm" [(ngModel)]="document.ExpireDate" [readonly]="document.Type != 0" [disabled]="!document"/>
         </div>
+        <div class="col">
+            <b><a (click)="sign()" class="link">Выбрать подписантов</a></b>
+            <p>
+                <i *ngFor="let user of selectedSigners">{{user | shortname}}, </i>
+            </p>
+        </div>
     </div>
-    <p class="text-muted" *ngIf="document">Испольуется шаблон <a class="link" [routerLink]="['/templates', document.TemplateId]">{{document.Template?.Name}}</a></p>
+    <small class="text-muted" *ngIf="document">Используется шаблон <a class="link" [routerLink]="['/templates', document.TemplateId]">{{document.Template?.Name}}</a></small>
 </div>
 
 <loading [status]="!document"></loading>
