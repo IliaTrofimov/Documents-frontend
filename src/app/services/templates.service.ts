@@ -29,7 +29,21 @@ export class TemplatesService{
     }
     
     getTemplate(id: number){
-        return this.http.get<Template>(`${this.url}/${id}/get`);
+        return this.http.get<Template>(`${this.url}/${id}/get`).pipe(
+            catchError((error) => {
+                if (error instanceof HttpErrorResponse){
+                    switch (error.status){
+                        case SiteErrorCodes.NotFound: 
+                            this.alertSvc.error("Не удалось загрузить шаблон", {message: "Данные не найдены."}); 
+                            break;
+                        default: 
+                            this.alertSvc.error("Не удалось загрузить шаблон", {message: JSON.stringify(error.error, null, 2)}); 
+                            break;
+                    }
+                }
+                return throwError(() => new Error(error.message))
+            })
+        );
     }
 
     createTemplate(template: Template){
