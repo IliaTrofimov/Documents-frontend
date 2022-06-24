@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 import { Signatory } from '../models/signatory';
-import { AppConfig } from '../app.config';
+import { AppConfig } from '../configurations/app.config';
 import { catchError, throwError } from 'rxjs';
 import { SiteErrorCodes } from '../models/site-error';
 import { AlertService } from './alert.service';
@@ -62,8 +62,8 @@ export class SignatoriesService{
         ); 
     }
 
-    createSign(userId: number, documentId: number){
-        const body = {userId: userId, documentId: documentId};
+    createSign(userId: number, documentId: number, initiatorId: number, positionId: number){
+        const body = {userId: userId, documentId: documentId, initiatorId: initiatorId, signerPositionId: positionId};
         return this.http.post<number>(`${this.url}/post`, body).pipe(
             catchError((error) => {
                 if (error instanceof HttpErrorResponse){
@@ -81,8 +81,8 @@ export class SignatoriesService{
         ); 
     }
 
-    deleteSign(id: number){
-        return this.http.delete(`${this.url}/${id}/delete`).pipe(
+    deleteSign(userId: number, documentId: number){
+        return this.http.delete(`${this.url}/delete`, {body: {UserId: userId, DocumentId: documentId}}).pipe(
             catchError((error) => {
                 if (error instanceof HttpErrorResponse){
                     switch (error.status){

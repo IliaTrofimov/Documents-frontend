@@ -1,26 +1,25 @@
 <div mat-dialog-content>
     <strong>Выбор подписантов</strong>
     <hr>
-    <i *ngIf="data.Positions.length == 0">Не требуется подпись</i>
-    <ng-component *ngIf="data.Positions.length != 0">
-        <small>Должности подписантов</small>
+    <i *ngIf="data.document.Template?.TemplateType?.Positions?.length == 0">Не требуется подпись</i>
+    <div *ngIf="data.document.Template?.TemplateType?.Positions?.length != 0">
         <form *ngFor="let specs of users; let i = index">
             <mat-form-field>
                 <mat-label>{{specs[0].Position.Name}}</mat-label>
                 <small *ngIf="specs.length == 0">Нет сотрдников с такой должностью</small>
-                <mat-select [(ngModel)]="selectedSigners[i]" *ngIf="specs.length != 0">
-                    <mat-option *ngFor="let user of specs" [value]="user">
+                <mat-select [(ngModel)]="selectedSigners[i].UserId" *ngIf="specs.length != 0" (selectionChange)="onValueChanged(specs[i], $event)">
+                    <mat-option *ngFor="let user of specs" [value]="user.Id">
                         {{user | shortname}}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
         </form>
-    </ng-component>
+    </div>
 </div> 
 <div mat-dialog-actions>
     <div class="row"> 
         <div class="col">
-            <button mat-button (click)="ok()" [disabled]="!isValid()" class="btn btn-primary btn-sm">Принять</button>
+            <button mat-button (click)="ok()" class="btn btn-primary btn-sm">Принять</button>
         </div>
         <div class="col">
             <button mat-button [mat-dialog-close]="false" class="btn btn-danger btn-sm">Отменить</button>

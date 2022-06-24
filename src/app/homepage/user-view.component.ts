@@ -3,12 +3,12 @@ import { Router} from '@angular/router';
 
 import { UsersService } from '../services/users.service';
 import { User } from '../models/user';
-import { AppConfig } from 'src/app/app.config';
 import { Permission } from '../models/permission';
 import { SignatoriesService } from '../services/signatories.service';
 import { Signatory } from '../models/signatory';
 import { AlertService } from '../services/alert.service';
 import { AuthService } from '../services/auth.service';
+import { AppConfig } from '../configurations/app.config';
 
 
 @Component({

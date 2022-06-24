@@ -1,6 +1,7 @@
 import { Signatory } from "./signatory";
 import { Template } from "./template"
 import { DocumentDataItem } from "./document-data-item";
+import { User } from "./user";
 
 
 export enum DocumentStatus {
@@ -15,7 +16,7 @@ export class Document {
     public UpdateDate: Date = new Date();
     public ExpireDate?: Date;
     public AuthorId: number = -1;
-    public AuthorName: string = "неизвестно";
+    public Author?: User;
 
     public Template?: Template;
     public TemplateName?: string;

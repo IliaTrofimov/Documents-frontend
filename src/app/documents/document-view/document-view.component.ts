@@ -1,6 +1,7 @@
 import { switchMap } from 'rxjs/operators';
 import { Component, OnInit} from '@angular/core';
 import { ActivatedRoute, Router} from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 
 import { Document, DocumentStatus } from '../../models/document';
 import { DocumentsService } from '../../services/documents.service';
@@ -10,9 +11,8 @@ import { DocumentDataItem } from 'src/app/models/document-data-item';
 import { TemplateTable } from 'src/app/models/template-table';
 import { AlertService } from 'src/app/services/alert.service';
 import { SignatoriesService } from 'src/app/services/signatories.service';
-import { User } from 'src/app/models/user';
 import { DocumentSignigComponent } from './document-signing.component';
-import { MatDialog } from '@angular/material/dialog';
+import { Signatory } from 'src/app/models/signatory';
 
 
 @Component({
@@ -25,7 +25,7 @@ export class DocumentViewComponent implements OnInit {
   Table = TemplateTable;
 
   document?: Document;
-  selectedSigners: User[] = [];
+  signatories: Signatory[] = [];
   private id: number = -1;
 
   constructor(private docSvc: DocumentsService,
@@ -41,21 +41,24 @@ export class DocumentViewComponent implements OnInit {
 
     this.docSvc.getDocument(this.id).subscribe(document => {
       this.document = document;
-      if (this.document.Template){
-        for (let p of this.document.Template.TemplateType.Positions){
-          this.selectedSigners.push(new User(-1, "", ""));
-        }
-      }
-    }); 
+      this.signsSvc.getSigns({"documentId": this.document.Id}).subscribe(signs => {
+        for (let s of signs)
+          this.signatories.push(s);
+      });
+    });
   }
 
-  sign(){
-    const dialogRef = this.dialog.open(DocumentSignigComponent, {data: this.document?.Template?.TemplateType});
+  setSigners(){
+    const dialogRef = this.dialog.open(DocumentSignigComponent, {data: 
+      {   
+        signatories: this.signatories,
+        document: this.document
+      }
+    });
     dialogRef.afterClosed().subscribe(res => {
       if (res && this.document){
         this.alertSvc.info("Подписанты сохранены");
-        for (let signer of res)
-          this.signsSvc.createSign(signer.Id, this.document.Id).subscribe();
+        this.signatories = res;
       }
     }); 
   }

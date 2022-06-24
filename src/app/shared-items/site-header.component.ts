@@ -11,4 +11,5 @@ import { Component } from '@angular/core';
     </nav>
   `,
 })
-export class SiteHeaderComponent {}
+export class SiteHeaderComponent {
+}

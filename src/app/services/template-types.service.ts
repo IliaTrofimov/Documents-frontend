@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 import { TemplateType } from "../models/template-type";
-import { AppConfig } from '../app.config';
+import { AppConfig } from '../configurations/app.config';
 import { catchError, throwError } from 'rxjs';
 import { SiteErrorCodes } from '../models/site-error';
 import { AlertService } from './alert.service';

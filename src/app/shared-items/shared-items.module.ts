@@ -10,7 +10,7 @@ import { AlertComponent } from './alert.component';
 import { CommonModule } from '@angular/common';
 import { WrongUrlComponent } from './wrong-url.component';
 import { PaginatorComponent } from './paginator.component';
-
+import { DebugComponent } from './debug.component';
 
 
 @NgModule({
@@ -21,7 +21,8 @@ import { PaginatorComponent } from './paginator.component';
     LoadingComponent,
     AlertComponent,
     WrongUrlComponent,
-    PaginatorComponent
+    PaginatorComponent,
+    DebugComponent
   ],
   imports: [
     AppRoutingModule,
@@ -35,7 +36,8 @@ import { PaginatorComponent } from './paginator.component';
     LoadingComponent,
     AlertComponent,
     PaginatorComponent,
-    WrongUrlComponent
+    WrongUrlComponent,
+    DebugComponent
   ]
 })
 export class SharedItemsModule {

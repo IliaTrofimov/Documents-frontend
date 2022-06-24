@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 import { Template } from '../models/template';
-import { AppConfig } from '../app.config';
+import { AppConfig } from '../configurations/app.config';
 import { TemplateTable } from '../models/template-table';
 import { TemplateField } from '../models/template-field';
 import { AlertService } from './alert.service';

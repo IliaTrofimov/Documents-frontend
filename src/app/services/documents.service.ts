@@ -1,8 +1,8 @@
-import { Injectable, Query } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 import { Document } from '../models/document';
-import { AppConfig } from '../app.config';
+import { AppConfig } from '../configurations/app.config';
 import { DocumentDataItem } from '../models/document-data-item';
 import { catchError, throwError } from 'rxjs';
 import { SiteErrorCodes } from '../models/site-error';
@@ -66,7 +66,7 @@ export class DocumentsService{
     }
 
     updateItem(docId: number, item: DocumentDataItem){
-        return this.http.put(`${this.url}/${docId}/put-field`, item).pipe(
+        return this.http.put<Document>(`${this.url}/${docId}/put-field`, item).pipe(
             catchError((error) => {
                 if (error instanceof HttpErrorResponse){
                     switch (error.status){

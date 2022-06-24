@@ -18,7 +18,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { DictionariesModule } from './dictionaries/dictionaries.module';
 import { SharedItemsModule } from './shared-items/shared-items.module';
 
-import { AppConfig } from './app.config';
+import { AppConfig } from './configurations/app.config';
 import { ServerErrorInterceptor } from './interceptors/server-errors.interceptor';
 import { HeadersInterceptor } from './interceptors/headers.interceptor';
 import { PipesModule } from './pipes/pipes.module';

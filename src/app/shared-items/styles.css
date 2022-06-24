@@ -9,3 +9,10 @@
     margin-left: 1em; 
     margin-right: 1em;
 }
+.debug-box{
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-family: Consolas;
+    line-height: 0.8;
+}
