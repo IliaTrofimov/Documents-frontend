@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import config from  "./config.json"
+import { firstValueFrom } from "rxjs";
 
 
 interface IConfiguration{
@@ -25,14 +25,16 @@ export class AppConfig {
     private _config: IConfiguration = defaultConfig;
 
     load(): Promise<any> {
-        return new Promise<void>((resolve, reject) => {
+        return new Promise<void>(async (resolve, reject) => {
             try {
-                this._config = config 
+                this._config = await firstValueFrom<IConfiguration>(this.http.get<IConfiguration>("config.json"));
+                console.log(`App has been initialized ${this._config.Production ? '[DEBUG MODE]' : ''}`);
             }    
-            catch {
-                this._config = defaultConfig
+            catch (e) {
+                this._config = defaultConfig;
+                console.log(`Config file is unavaliable (${e})`);
+                console.log("App has been initialized with default config");
             }
-            console.log("App has been initialized");
             resolve();
         });
     }

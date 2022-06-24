@@ -23,7 +23,7 @@ import { ErrorService } from '../services/errors.service';
 export class ErrorComponent implements OnInit {
   Codes = SiteErrorCodes;
   hidden: boolean = true;
-  error: SiteError = SiteError.Ok
+  error: SiteError = SiteError.Ok;
 
   constructor(private errorSvc: ErrorService){}
 

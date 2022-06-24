@@ -1,7 +1,0 @@
-{
-    "ApiUrl": "http://localhost:80",
-    "LocalApiUrl": "http://localhost:56065/",
-    "Production": false,
-    "Active": false,
-    "ServiceMessage": "Ресурс недоступен, попробуйте обновить страницу позднее."
-}

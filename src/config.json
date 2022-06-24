@@ -1,0 +1,7 @@
+{
+    "ApiUrl": "http://localhost:80/api",
+    "LocalApiUrl": "http://localhost:56065/",
+    "Production": false,
+    "Active": true,
+    "ServiceMessage": "Веб-сайт отключён администратором для проведения обслуживания"
+}
