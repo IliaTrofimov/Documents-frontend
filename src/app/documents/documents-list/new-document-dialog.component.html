@@ -3,14 +3,14 @@
     <hr>
     <form #nameForm="ngForm" novalidate>
         <mat-form-field appearance="outline">
-            <mat-label>Название шаблона</mat-label>
+            <mat-label>Название документа</mat-label>
             <input matInput [(ngModel)]="document.Name" required name="name">
         </mat-form-field>
     </form>
     <loading [status]="!templates"></loading>
     <div class="form-group round-border{{document.TemplateId == -1 ? '-error' : ''}}">
-        <label *ngIf="document.TemplateId == -1" style="color: #f44336">Шаблон <small>обязательное поле</small></label>
-        <label *ngIf="document.TemplateId != -1">Шаблон *</label>
+        <label *ngIf="document.TemplateId == -1" class="label-border">Шаблон <small>обязательное поле</small></label>
+        <label *ngIf="document.TemplateId != -1" class="label-border">Шаблон *</label>
         <div *ngFor="let template of templates" class="form-check">
             <input class="form-check-input" type="radio" [checked]="template.Id == document.TemplateId" (change)="document.TemplateId = template.Id">
             <label class="form-check-label">

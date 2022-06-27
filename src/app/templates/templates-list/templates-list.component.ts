@@ -23,6 +23,7 @@ export class TemplatesListComponent implements OnInit {
   @Input() authorId: number = -1;
   @Input() templateId: number = -1;
   @Input() maxPages: number = 0;
+  @Input() isEmbeded: boolean = false;
   totalElements: number = 0;
   templateTypes?: TemplateType[];
 

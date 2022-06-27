@@ -1,6 +1,9 @@
 <div class="container">
   <h4>Домашняя страница</h4>
   <hr>
+
+  <loading [status]="!user"></loading>
+  
   <div class="row" *ngIf="user">
     <div class="col">
       <h5 class="card-title">{{user.Lastname}} {{user.Firstname}} {{user.Fathersname}}</h5>
@@ -9,50 +12,36 @@
     </div>
     <div class="col">
       <h5 class="card-title">Список ваших разрешений</h5>   
-      <div>
-        <div *ngFor="let p of permissions" class="badge badge-secondary badge-pill">
-          {{p}}
-        </div>
-      </div> 
+      <div *ngFor="let p of permissions" class="badge badge-secondary badge-pill">{{p}}</div>
     </div>
   </div>
-  <hr>
+
   <div *ngIf="user">
-    <div class="container">
-      <strong name="templates">Шаблоны</strong>
-      <loading [status]="!user.Templates"></loading>
-      <ul class="list-group" *ngIf="user.Templates">
-        <li *ngFor="let template of user.Templates" class="list-group-item" style="padding: 2px; margin: 1px;">
-          <a [routerLink]="['/templates', template.Id]">{{template.Name | nullname}}</a>
-        </li>
-      </ul>
-      <i *ngIf="user.Templates && user.Templates.length == 0">Нет шаблонов</i>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item {{currentPage == Pages.Documents ? 'active' : ''}}"><a class="link" (click)="currentPage = Pages.Documents">Документы</a></li>
+        <li class="breadcrumb-item {{currentPage == Pages.Templates ? 'active' : ''}}"><a class="link" (click)="currentPage = Pages.Templates">Шаблоны документов</a></li>
+        <li class="breadcrumb-item {{currentPage == Pages.Signs ? 'active' : ''}}"><a class="link" (click)="currentPage = Pages.Signs">Ожидают подписания</a></li>
+        <li class="breadcrumb-item {{currentPage == Pages.MySigns ? 'active' : ''}}"><a class="link" (click)="currentPage = Pages.MySigns">Мои запросы на подписание</a></li>
+      </ol>
+    </nav>
+
+    <div *ngIf="currentPage == Pages.Documents">
+      <templates-list [authorId]="user.Id" [isEmbeded]="true"></templates-list>
     </div>
-    <br>
-    <div class="container">
-      <strong name="documents">Документы</strong>
-      <loading [status]="!user.Documents"></loading>
-      <ul class="list-group" *ngIf="user.Documents">
-        <li *ngFor="let document of user.Documents" class="list-group-item" style="padding: 2px; margin: 1px;">
-          <a [routerLink]="['/documents', document.Id]">{{document.Name | nullname}}</a>
-        </li>
-      </ul>
-      <i *ngIf="user.Documents && user.Documents.length == 0">Нет документов</i>
+
+    <div *ngIf="currentPage == Pages.Templates">
+      <documents-list [authorId]="user.Id" [isEmbeded]="true"></documents-list>
     </div>
-    <br>
-    <div class="container">
-      <strong name="signs">Подписи</strong>
-      <loading [status]="!user.Signs"></loading>
-      <ul  class="list-group" *ngIf="user.Signs">
-        <li *ngFor="let s of user.Signs" class="list-group-item" style="padding: 2px; margin: 1px;">
-          {{s.DocumentName}} 
-          <button (click)="sign(s)" class="btn btn-sm badge btn-{{s.Signed ? 'danger' : 'primary'}}">
-            {{s.Signed ? 'Отозвать' : 'Подписать'}}
-          </button>
-        </li>
-      </ul>
-      <i *ngIf="user.Signs && user.Signs.length == 0">Нет документов на подписании</i>
+ 
+    <div *ngIf="currentPage == Pages.Signs">
+      <signs-list [signerId]="user.Id"></signs-list>
+    </div>
+
+    <div *ngIf="currentPage == Pages.MySigns">
+      <signs-list [initiatorId]="user.Id"></signs-list>
     </div>
 
   </div>
+
 </div>

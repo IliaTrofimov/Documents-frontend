@@ -9,13 +9,13 @@ import { AlertService } from '../services/alert.service';
   styleUrls: ['styles.css'],
   template: `
   <div *ngIf="alerts.length != 0" class="sticky-top">
-    <div *ngFor="let alert of alerts" class="{{cssClass(alert)}}" style="max-height: 5%;">
+    <div *ngFor="let alert of alerts" class="{{cssClass(alert)}}">
       <ng-container *ngIf="alert.message">
         {{alert.title}} 
         <small><a class="alert-link" *ngIf="alert.message" (click)="select(alert.id)" role="button">
           {{alert.id != getSelectedId() ? 'подробнее' : 'скрыть'}}
         </a></small><br>
-        <pre *ngIf="alert.id == getSelectedId()">{{alert.message}}</pre>
+        <pre *ngIf="alert.id == getSelectedId()" class="info-dropdown">{{alert.message}}</pre>
       </ng-container>
       <ng-container *ngIf="!alert.message">
         {{alert.title}}
@@ -84,10 +84,10 @@ export class AlertComponent implements OnInit {
   cssClass(alert?: Alert) {
     if (!alert) return;
     switch (alert.type){
-      case AlertType.Success: return 'alert alert-dismissible fade show alert-success';
-      case AlertType.Error: return 'alert alert-dismissible fade show alert-danger';
-      case AlertType.Info: return 'alert alert-dismissible fade show alert-info';
-      case AlertType.Warning: return'alert alert-dismissible fade show alert-warning';
+      case AlertType.Success: return 'alert alert-dismissible fade show alert-success alert-panel';
+      case AlertType.Error: return 'alert alert-dismissible fade show alert-danger alert-panel';
+      case AlertType.Info: return 'alert alert-dismissible fade show alert-info alert-panel';
+      case AlertType.Warning: return'alert alert-dismissible fade show alert-warning alert-panel';
     }
   }
 }

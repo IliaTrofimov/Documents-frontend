@@ -22,6 +22,7 @@ import { AppConfig } from './configurations/app.config';
 import { ServerErrorInterceptor } from './interceptors/server-errors.interceptor';
 import { HeadersInterceptor } from './interceptors/headers.interceptor';
 import { PipesModule } from './pipes/pipes.module';
+import { SignsListComponent } from './homepage/signs-list.component';
 
 
 
@@ -34,6 +35,7 @@ export function loadConfig(config: AppConfig) {
   declarations: [
     AppComponent,
     UserViewComponent,
+    SignsListComponent
   ],
   imports: [
     DocumentsModule,

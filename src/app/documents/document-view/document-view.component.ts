@@ -42,8 +42,8 @@ export class DocumentViewComponent implements OnInit {
     this.docSvc.getDocument(this.id).subscribe(document => {
       this.document = document;
       this.signsSvc.getSigns({"documentId": this.document.Id}).subscribe(signs => {
-        for (let s of signs)
-          this.signatories.push(s);
+          this.signatories = signs;
+          console.log("signs: ", signs);
       });
     });
   }
@@ -83,6 +83,8 @@ export class DocumentViewComponent implements OnInit {
       complete: () => {
         validated = true;
         this.save();
+        for (let sign of this.signatories)
+          this.signsSvc.notify(sign);
       },
       error: () => {
         validated = false;

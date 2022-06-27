@@ -8,14 +8,31 @@
     margin: 2px 4px;
 }
 
-.round-border{
+.box{
+    background-color: #eaeff5;
+}
+
+.round-border, .round-border-error{
+    position: relative;
+    border-radius: 0.3rem;
+    padding: 14px 4px 8px 4px;
+}
+
+.round-border {
     border: 1px solid #ced4da;
-    border-radius: 0.2rem;
-    padding: 2px 4px 8px 4px;
 }
 
 .round-border-error{
     border: 3px solid #f44336;
-    border-radius: 0.2rem;
-    padding: 2px 4px 8px 4px;
 }
+
+.label-border{
+    position: absolute;
+    top: -3px;
+    font-size: small;
+}
+
+.round-border-error .label-border{
+   color: #f44336;
+}
+

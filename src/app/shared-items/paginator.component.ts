@@ -4,7 +4,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   selector: 'page',
   styleUrls: ['styles.css'],
   template: `
-  <div class="paginator-container" >
+  <div class="paginator-container" *ngIf="maxPage > 1">
     <button [disabled]="page == 0" (click)="onClick.emit(-1)" [class]="cssClassPrev">
       назад
     </button>

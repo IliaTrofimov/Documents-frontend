@@ -23,7 +23,7 @@ export class SignatoriesService{
 
     getSigns(query?: { [param: string]: number }){
         const options = query ? { params: new HttpParams().appendAll(query) } : {};
-        return this.http.get<Signatory[]>(`${this.url}/get`, options).pipe(
+        return this.http.get<Signatory[]>(`${this.url}/list`, options).pipe(
             catchError((error) => {
                 if (error instanceof HttpErrorResponse){
                     switch (error.status){
@@ -40,12 +40,26 @@ export class SignatoriesService{
         ); 
     }
 
-    getSign(userId: number, documentId: number){
-        return this.getSigns({"userId": userId, "documentId": documentId});
+    getSign(id: number){
+        return this.http.get<Signatory[]>(`${this.url}/${id}/get`).pipe(
+            catchError((error) => {
+                if (error instanceof HttpErrorResponse){
+                    switch (error.status){
+                        case SiteErrorCodes.NotFound: 
+                            this.alertSvc.error("Не удалось найти подпись", {message: "Данные не найдены."}); 
+                            break;
+                        default: 
+                            this.alertSvc.error("Не удалось найти подпись", {message: JSON.stringify(error.error, null, 2)}); 
+                            break;
+                    }
+                }
+                return throwError(() => new Error(error.message))
+            })
+        ); 
     }
 
-    updateSign(sign: Signatory){
-        return this.http.put(`${this.url}/put`, JSON.stringify(sign)).pipe(
+    updateSign(id: number, userId: number, signed?: boolean){
+        return this.http.put(`${this.url}/${id}/put`, JSON.stringify({userId: userId, signed: signed})).pipe(
             catchError((error) => {
                 if (error instanceof HttpErrorResponse){
                     switch (error.status){
@@ -56,6 +70,17 @@ export class SignatoriesService{
                             this.alertSvc.error("Не удалось изменить подпись", {message: JSON.stringify(error.error, null, 2)}); 
                             break;
                     }
+                }
+                return throwError(() => new Error(error.message))
+            })
+        ); 
+    }
+
+    notify(sign: Signatory){
+        return this.http.put(`${this.url}/${sign.Id}/notify`, {}).pipe(
+            catchError((error) => {
+                if (error instanceof HttpErrorResponse){
+                    this.alertSvc.error("Не удалось создать уведомление", {message: JSON.stringify(error.error, null, 2)}); 
                 }
                 return throwError(() => new Error(error.message))
             })
@@ -81,8 +106,8 @@ export class SignatoriesService{
         ); 
     }
 
-    deleteSign(userId: number, documentId: number){
-        return this.http.delete(`${this.url}/delete`, {body: {UserId: userId, DocumentId: documentId}}).pipe(
+    deleteSign(id: number){
+        return this.http.delete(`${this.url}/${id}/delete`).pipe(
             catchError((error) => {
                 if (error instanceof HttpErrorResponse){
                     switch (error.status){

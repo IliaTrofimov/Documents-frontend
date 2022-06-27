@@ -1,10 +1,13 @@
+import { User } from "./user";
+
 export class Signatory {
-    public Firstname: string = "";
-    public Lastname: string = "";
-    public Fathersname: string = "";
+    public Id: number = -1;
+    public Initiator: User = new User(-1, "", "");
+    public InitiatorShortname: string = "неизвестно";  
+    public User: User = new User(-1, "", "");;
     public SignerPositionId: number = -1;
     public DocumentName: string = "";
-    public InitiatorShortname: string = "";
+    public SignerShortname: string = "неизвестно";
 
     constructor(public UserId: number, 
         public DocumentId: number, 

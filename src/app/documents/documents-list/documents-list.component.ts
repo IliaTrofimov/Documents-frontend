@@ -20,7 +20,9 @@ export class DocumentsListComponent implements OnInit {
   @Input() templateId: number = -1;
   @Input() type: DocumentStatus = -1;
   @Input() maxPages: number = 0;
+  @Input() isEmbeded: boolean = false;
   totalElements: number = 0;
+  
 
   displayedColumns = ['Name', 'Template', 'AuthorName', 'UpdateDate', 'ExpireDate', 'Actions'];
 

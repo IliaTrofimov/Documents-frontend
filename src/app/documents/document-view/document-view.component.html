@@ -18,8 +18,8 @@
         <div class="col">
             <b>Участники</b> <span><button (click)="setSigners()" class="btn btn-outline-secondary btn-sm badge">изменить</button></span>
             <p *ngIf="signatories.length > 0">   
-                {{signatories[0] | shortname}}      
-                <ng-container *ngFor="let sign of signatories.slice(1)">, {{sign | shortname}}</ng-container>
+                {{signatories[0].SignerShortname }}      
+                <ng-container *ngFor="let sign of signatories.slice(1)">, {{sign.SignerShortname}}</ng-container>
             </p>
         </div>
     </div>

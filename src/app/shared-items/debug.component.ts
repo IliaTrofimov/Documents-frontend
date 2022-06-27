@@ -3,8 +3,9 @@ import { AppConfig } from '../configurations/app.config';
 
 @Component({
   selector: 'debug',
+  styleUrls: ['styles.css'],
   template: `
-    <small *ngIf="!prod" style="position:absolute;top:0;right: 0;font-family:Consolas;line-height:0.9;">
+    <small *ngIf="!prod" class="debug-box">
       api url <a target="_blank" rel="noopener noreferrer" href='{{url}}'>{{url}}</a><br>
       {{build}}<br>
       {{startUp}}<br>

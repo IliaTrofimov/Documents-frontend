@@ -23,10 +23,8 @@ export class PositionsComponent implements OnInit {
   totalElements: number = 0;
 
   constructor(private positionsSvc: PositionsService, 
-    private router: Router,
     public dialog: MatDialog,
-    private alertSvc: AlertService,
-    private detector: ChangeDetectorRef) { }
+    private alertSvc: AlertService) { }
 
   ngOnInit(): void {
     const query = {
@@ -48,11 +46,8 @@ export class PositionsComponent implements OnInit {
     
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.positions?.push(result);
-        this.alertSvc.info("Должность создана");
-        this.detector.detectChanges();
-        this.detector.detectChanges();
-        this.detector.detectChanges();
+        this.alertSvc.info("Должность создана", {keepAfterRouteChange: true});
+        location.reload();
       }
     });
   }

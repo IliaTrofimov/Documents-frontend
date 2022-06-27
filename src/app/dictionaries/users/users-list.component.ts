@@ -60,9 +60,7 @@ export class UsersListComponent implements OnInit {
     private positionsSvc: PositionsService,
     private dialog: MatDialog,
     private alertSvc: AlertService,
-    private authSvc: AuthService,
-    private router: Router,
-    private detector: ChangeDetectorRef) { }
+    private authSvc: AuthService) { }
 
   ngOnInit(): void {
     const query = {
@@ -89,9 +87,8 @@ export class UsersListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.users?.push(result);
-        this.alertSvc.info("Пользователь создан");
-        this.detector.detectChanges();
+        this.alertSvc.info("Пользователь создан", {keepAfterRouteChange: true});
+        location.reload();
       }
     });
   }

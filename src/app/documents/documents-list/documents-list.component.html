@@ -1,8 +1,13 @@
-<h4>Документы</h4>
-<p *ngIf="documents" class="text-muted">
-    Всего {{totalElements}} элементов.
-    <span><button (click)="createDocument()" class="btn btn-primary btn-sm badge">Создать документ</button></span>
-</p>
+<ng-container *ngIf="isEmbeded">
+    <strong>Документы</strong>, всего {{totalElements}} элементов
+</ng-container>
+<ng-container *ngIf="!isEmbeded">
+    <h4>Документы</h4>
+    <p class="text-muted" *ngIf="documents">
+        Всего {{totalElements}} элементов.
+        <span><button class="btn btn-primary btn-sm badge" (click)="createDocument()">Создать документ</button></span>
+    </p>
+</ng-container>
 
 <loading [status]="!documents"></loading>
 

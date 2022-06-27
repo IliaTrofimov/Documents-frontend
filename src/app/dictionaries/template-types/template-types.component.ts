@@ -28,10 +28,8 @@ export class TemplateTypesComponent implements OnInit {
   totalElements: number = 0;
 
   constructor(private typesSvc: TemplateTypesService, 
-    private router: Router,
     public dialog: MatDialog,
     private alertSvc: AlertService,
-    private detector: ChangeDetectorRef,
     private positionsSvc: PositionsService) { }
 
   public objComparisonFn = function(option:any, value:any) : boolean {
@@ -59,9 +57,8 @@ export class TemplateTypesComponent implements OnInit {
     
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.types?.push(result);
-        this.alertSvc.info("Тип шаблона создан");
-        this.detector.detectChanges();
+        this.alertSvc.info("Тип шаблона создан", {keepAfterRouteChange: true});
+        location.reload();
       }
     });
   }

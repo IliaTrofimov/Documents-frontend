@@ -2,8 +2,9 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'site-header',
+  styleUrls: ['styles.css'],
   template: `
-    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd; margin-bottom: 1em;">
+    <nav class="navbar navbar-expand-lg navbar-light site-header">
       <a class="nav-link {{urlActive}}" [routerLink]="['/home']" routerLinkActive="active">Домой</a>
       <a class="nav-link {{urlActive}}" [routerLink]="['/templates']" routerLinkActive="active">Шаблоны</a>
       <a class="nav-link {{urlActive}}" [routerLink]="['/documents']" routerLinkActive="active">Документы</a>

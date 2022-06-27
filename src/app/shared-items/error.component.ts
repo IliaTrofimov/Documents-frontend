@@ -4,13 +4,14 @@ import { ErrorService } from '../services/errors.service';
 
 @Component({
   selector: 'error',
+  styleUrls: ['styles.css'],
   template: `
     <h2 *ngIf="error.Status != Codes.Ok">Не удалось загрузить страницу :(</h2>
     <h4>{{error.Title}}</h4>
     <b><small class="text-muted">Код: {{error.Status}}</small></b>
     <hr>
     <p>{{error.Message}}</p>
-    <div *ngIf="error.Info" style="width: 80%;">
+    <div *ngIf="error.Info" class="info-dropdown">
       <a (click)="hidden = !hidden" class="link">
         {{hidden ? "Подробности..." : "Скрыть"}}
       </a>

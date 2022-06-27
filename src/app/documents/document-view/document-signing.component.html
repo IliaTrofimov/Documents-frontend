@@ -7,7 +7,7 @@
             <mat-form-field>
                 <mat-label>{{specs[0].Position.Name}}</mat-label>
                 <small *ngIf="specs.length == 0">Нет сотрдников с такой должностью</small>
-                <mat-select [(ngModel)]="selectedSigners[i].UserId" *ngIf="specs.length != 0" (selectionChange)="onValueChanged(specs[i], $event)">
+                <mat-select [(ngModel)]="data.signatories[i].UserId" *ngIf="specs.length != 0" (selectionChange)="onValueChanged(data.signatories[i], $event)">
                     <mat-option *ngFor="let user of specs" [value]="user.Id">
                         {{user | shortname}}
                     </mat-option>

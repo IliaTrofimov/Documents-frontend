@@ -1,10 +1,15 @@
-<h4>Шаблоны документов</h4>
-<loading [status]="!templates"></loading>
+<ng-container *ngIf="isEmbeded">
+    <strong>Шаблоны документов</strong>, всего {{totalElements}} элементов
+</ng-container>
+<ng-container *ngIf="!isEmbeded">
+    <h4>Шаблоны документов</h4>
+    <p class="text-muted" *ngIf="templates">
+        Всего {{totalElements}} элементов.
+        <span><button class="btn btn-primary btn-sm badge" (click)="addTemplate()">Создать шаблон</button></span>
+    </p>
+</ng-container>
 
-<p class="text-muted" *ngIf="templates">
-    Всего {{totalElements}} элементов.
-    <span><button class="btn btn-primary btn-sm badge" (click)="addTemplate()">Создать шаблон</button></span>
-</p>
+<loading [status]="!templates"></loading>
 
 <table mat-table [dataSource]="templates" fixedLayout class="w-100" *ngIf="templates">
     <ng-container matColumnDef="Name">
