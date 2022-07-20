@@ -47,6 +47,7 @@ export class AppConfig {
         return this._config.ApiUrl;
     }
 
+    /** вывод служебной информации о сервере (можно удалить вместе с debug.component) */
     serverTest(){
         return this.http.get<any>(this.apiUrl + '/default/list');
     }

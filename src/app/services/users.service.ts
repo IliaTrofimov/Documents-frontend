@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams, HttpStatusCode } from '@angular/common/http';
 
 import { User } from '../models/user';
 import { AppConfig } from '../configurations/app.config';
@@ -8,6 +8,7 @@ import { SiteErrorCodes } from '../models/site-error';
 import { AlertService } from './alert.service';
 
 
+/** Сервис для работы с пользователями */
 @Injectable()
 export class UsersService{
     private url = "";
@@ -16,22 +17,36 @@ export class UsersService{
         this.url = this.configSvc.apiUrl + "/users";
     }
 
-    count(query?: { [param: string]: number }){
+    /** Возвращает количество элементов
+    * @param query - фильтр, параметры для фильтра:
+    * * page - номер страницы пагинатора
+    * * pageSize - количество элементов на странице
+    * * position - Id должности
+    */
+    count(query?: { [param: string]: number|boolean }){
         const options = query ? { params: new HttpParams().appendAll(query) } : {};
         return this.http.get<number>(`${this.url}/count`, options);
     }
 
-    getUsers(query?: { [param: string]: number }){
+    /** Возвращает список пользователей
+    * @param query - фильтр, параметры для фильтра:
+    * * page - номер страницы пагинатора
+    * * pageSize - количество элементов на странице
+    * * position - Id должности
+    * * permissions - права
+    * * full (boolean) - если true, будет загружать дополнительные поля модели пользователя 
+    */
+    getUsers(query?: { [param: string]: number|boolean }){
         const options = query ? { params: new HttpParams().appendAll(query) } : {};
         return this.http.get<User[]>(`${this.url}/list`, options);
     }
     
-    getUser(id: number){
-        return this.http.get<User>(`${this.url}/${id}/get`);
+    getUser(cwid: string){
+        return this.http.get<User>(`${this.url}/${cwid}/get`);
     }
 
     updateUser(user: User){
-        return this.http.put<User>(`${this.url}/${user.Id}/put`, user).pipe(
+        return this.http.put<User>(`${this.url}/${user.CWID}/put`, user).pipe(
             catchError((error) => {
                 if (error instanceof HttpErrorResponse){
                     switch (error.status){
@@ -49,18 +64,21 @@ export class UsersService{
     }
 
     createUser(user: User){
-        return this.http.post<number>(`${this.url}/post`, user).pipe(
+        return this.http.post<string>(`${this.url}/post`, user).pipe(
             catchError((error) => {
                 if (error instanceof HttpErrorResponse){
-                    this.alertSvc.error("Не удалось создать пользователя", {message: JSON.stringify(error.error, null, 2)}); 
+                    if (error.status == HttpStatusCode.Conflict)
+                        this.alertSvc.error("Не удалось создать пользователя", "Данный CWID уже занят"); 
+                    else
+                        this.alertSvc.error("Не удалось создать пользователя", {message: JSON.stringify(error.error, null, 2)}); 
                 }
                 return throwError(() => new Error(error.message))
             })
         ); 
     }
 
-    deleteUser(id: number){
-        return this.http.delete<number>(`${this.url}/${id}/delete`).pipe(
+    deleteUser(cwid: string){
+        return this.http.delete<number>(`${this.url}/${cwid}/delete`).pipe(
             catchError((error) => {
                 if (error instanceof HttpErrorResponse){
                     switch (error.status){

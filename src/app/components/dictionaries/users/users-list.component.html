@@ -1,0 +1,150 @@
+<div class="panel">
+    <h4>Список пользователей</h4>
+    <loading [status]="!users"></loading>
+
+    <span class="text-muted" *ngIf="users">
+        <span>Всего {{totalElements}} элементов. <button class="badge btn btn-primary btn-sm" (click)="addUser()">Добавить пользователя</button></span>
+    </span>
+    <div class="overflow-auto">
+        <table mat-table [dataSource]="users" *ngIf="users" class="w-100">
+            <ng-container matColumnDef="Email">
+                <th mat-header-cell *matHeaderCellDef>Эл. почта и CWID</th>
+                <td mat-cell *matCellDef="let user">
+                    <ng-container *ngIf="selected.CWID != user.CWID">
+                        {{user.Email}}<br>
+                        <i>{{user.CWID}}</i>
+                    </ng-container>
+                    <form #nameForm="ngForm" *ngIf="selected.CWID == user.CWID">
+                        <mat-form-field>
+                            <mat-label>Email</mat-label>
+                            <input matInput [(ngModel)]="user.Email" required name="email">
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label>CWID</mat-label>
+                            <input matInput [(ngModel)]="user.CWID" required name="cwid">
+                        </mat-form-field>
+                    </form>
+                </td>
+            </ng-container> 
+            <ng-container matColumnDef="UserName">
+                <th mat-header-cell *matHeaderCellDef>ФИО</th>
+                <td mat-cell *matCellDef="let user">
+                    <ng-container *ngIf="selected.CWID != user.CWID">
+                        {{user | shortname }}
+                    </ng-container>
+                    <form #nameForm="ngForm" *ngIf="selected.CWID == user.CWID">
+                        <mat-form-field>
+                        <mat-label>Фамилия</mat-label>
+                        <input matInput [(ngModel)]="user.Lastname" required name="lastname">
+                        </mat-form-field>
+                        <mat-form-field>
+                        <mat-label>Имя</mat-label>
+                        <input matInput [(ngModel)]="user.Firstname" required name="firstname">
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label>Отчество</mat-label>
+                            <input matInput [(ngModel)]="user.Fathersname" name="fathersname">
+                        </mat-form-field>
+                    </form>
+                </td>
+            </ng-container> 
+            <ng-container matColumnDef="Position">
+                <th mat-header-cell *matHeaderCellDef>Должность</th>
+                <td mat-cell *matCellDef="let user">
+                    <ng-container *ngIf="user.CWID != selected.CWID">
+                        {{user.Position.Name}}<br>
+                        {{user.EmployeeType | nullname}}
+                    </ng-container>
+                    <form #positionForm="ngForm" *ngIf="user.CWID == selected.CWID">
+                        <mat-form-field>
+                            <mat-select [(ngModel)]="user.PositionId" required>
+                                <mat-option *ngFor="let pos of positions" [value]="pos.Id">
+                                    {{pos.Name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label>Тип сотрудника</mat-label>
+                            <input matInput [(ngModel)]="user.EmployeeType" required name="empType">
+                        </mat-form-field>
+                    </form>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="Company">
+                <th mat-header-cell *matHeaderCellDef>Разное</th>
+                <td mat-cell *matCellDef="let user">
+                    <ng-container *ngIf="selected.CWID != user.CWID">
+                        {{user.CompanyCode | nullname}}<br>
+                        {{user.LeadingSubgroup | nullname}}<br>
+                        {{user.ExternalCompany | nullname}}<br>
+                        {{user.OrgName | nullname}}<br>
+                    </ng-container>
+                    <form #nameForm="ngForm" *ngIf="selected.CWID == user.CWID">
+                        <mat-form-field>
+                            <mat-label>Код</mat-label>
+                            <input matInput [(ngModel)]="user.CompanyCode" required name="code">
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label>LeadingSubgroup</mat-label>
+                            <input matInput [(ngModel)]="user.LeadingSubgroup" required name="subgroup">
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label>ExternalCompany</mat-label>
+                            <input matInput [(ngModel)]="user.ExternalCompany" required name="ext">
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label>OrgName</mat-label>
+                            <input matInput [(ngModel)]="user.OrgName" required name="org">
+                        </mat-form-field>
+                    </form>
+                </td>
+            </ng-container> 
+            <ng-container matColumnDef="Permissions">
+                <th mat-header-cell *matHeaderCellDef>Разрешения</th>   
+                <td mat-cell *matCellDef="let user">
+                    <div *ngIf="selected.CWID != user.CWID" class="overflow-hidden d-flex flex-wrap">
+                        <ng-container *ngIf="user.Permissions != 0 && user.Permissions != PermissionFlag.FullAccess">
+                            <div *ngFor="let p of permissionArray(user)" class="badge badge-info permission-item">
+                                {{p}}
+                            </div>
+                        </ng-container>
+                        <i *ngIf="user.Permissions == 0">Нет разрешений</i>
+                        <div *ngIf="user.Permissions == PermissionFlag.FullAccess" class="badge badge-info permission-item">
+                            полный доступ
+                        </div>
+                    </div>
+                    <div *ngIf="selected?.CWID == user.CWID" class="overflow-hidden d-flex flex-wrap">
+                        <button *ngFor="let p of allPermissions" 
+                            (click)="togglePermission(user, p)"
+                            class="btn btn-sm badge badge-{{has(user, p) ? 'info' : 'secondary'}} permission-item">
+                            {{p | permission}}
+                        </button>
+                    </div>
+                </td>
+            </ng-container>  
+            <ng-container matColumnDef="Edit" stickyEnd >
+                <th mat-header-cell *matHeaderCellDef>Действия</th>
+                <td mat-cell *matCellDef="let user">
+                    <ng-container *ngIf="selected.CWID == user.CWID" >
+                        <button (click)="editUser(user)" [disabled]="!isValid(user)" class="btn btn-success btn-sm btn-icon">✓</button>
+                        <button (click)="reset(user)" class="btn btn-secondary btn-sm btn-icon">⮌</button>
+                    </ng-container>
+                    <ng-container *ngIf="selected.CWID != user.CWID">
+                        <button (click)="beginEdit(user)" class="btn btn-warning btn-sm btn-icon">✎</button>
+                        <button (click)="removeUser(user.CWID)" class="btn btn-danger btn-sm btn-icon">✖</button>
+                    </ng-container>
+                </td>
+            </ng-container>
+        
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let myRowData; columns: displayedColumns"></tr>     
+        </table>
+    </div>
+    <div class="card" *ngIf="users?.length == 0">
+        <div class="card-body">
+            <h5 class="card-title">Здесь ничего нет</h5>
+            <p class="card-text">Пока не был создан ни один пользователь</p>
+        </div>
+    </div>
+    <page *ngIf="users" [page]="page" [maxPage]="maxPages" (onClick)="nextPage($event)"></page>
+</div>

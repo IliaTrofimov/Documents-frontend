@@ -19,7 +19,7 @@
   <ng-container matColumnDef="User">
       <th mat-header-cell *matHeaderCellDef>{{initiatorId == -1 ? 'Инициатор' : 'Подписант'}}</th>
       <td mat-cell *matCellDef="let sign">
-        {{initiatorId == -1 ? sign.InitiatorShortname : sign.SignerShortname}}
+        {{initiatorId == -1 ? (sign.Initiator | shortname) : (sign.User | shortname)}}
       </td>
   </ng-container>
   <ng-container matColumnDef="Status">

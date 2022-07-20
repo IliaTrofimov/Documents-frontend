@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+/** Выводит "без названия", если value пустое */
 @Pipe({
   name: 'nullname'
 })

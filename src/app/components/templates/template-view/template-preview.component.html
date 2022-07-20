@@ -1,0 +1,28 @@
+<div mat-dialog-title>{{data.name}} <small *ngIf="!htmlTemplateExists">(шаблон ещё не был создан)</small></div>
+<div mat-dialog-content>
+    <div style="width:100%; margin-bottom: 15px;">
+        <div style="height:14pt;"> 
+            <label>
+                <input type="file" #fileForm (change)="changeHtmlTemplateFile(fileForm.files)" style="display:none">
+                <a class="link">Выбрать новый шаблон</a>
+            </label>
+        </div>
+        <small>{{fileForm.files && fileForm.files.length != 0 ? fileForm.files[0].name : "файл не выбран"}}</small>
+        <button *ngIf="fileForm.files && fileForm.files.length != 0" (click)="uploadHtmlTemplate()" class="btn badge badge-primary">
+            выгрузить
+        </button>
+    </div>
+    <div *ngIf="htmlTemplateExists" [innerHTML]="html | safeHtml" 
+          style="background-color: rgba(211, 211, 211, 0.26);">
+    </div>
+</div>
+<div mat-dialog-actions>
+    <div class="row"> 
+        <div class="col">
+            <button [disabled]="!htmlTemplateExists" (click)="downloadTemplate()" class="btn btn-primary btn-sm">Скачать</button>
+        </div>
+        <div class="col">
+            <button mat-button [mat-dialog-close]="true" class="btn btn-danger btn-sm">Закрыть</button>
+        </div>
+    </div>
+</div>

@@ -8,6 +8,7 @@ import { catchError, throwError } from 'rxjs';
 import { AlertService } from './alert.service';
 
 
+/** Сервис для работы с должностями */
 @Injectable()
 export class PositionsService{
     private url = "";
@@ -16,11 +17,23 @@ export class PositionsService{
         this.url = this.config.apiUrl + "/positions";
     }
 
+    
+    /** Возвращает число элементов
+    * @param query - фильтр, параметры для фильтра:
+    * * page - номер страницы пагинатора
+    * * pageSize - количество элементов на странице
+    */
     count(query?: { [param: string]: number }){
         const options = query ? { params: new HttpParams().appendAll(query) } : {};
         return this.http.get<number>(`${this.url}/count`, options);
     }
     
+
+    /** Возвращает список должностей
+    * @param query - фильтр, параметры для фильтра:
+    * * page - номер страницы пагинатора
+    * * pageSize - количество элементов на странице
+    */
     getPositions(query?: { [param: string]: number }){
         const options = query ? { params: new HttpParams().appendAll(query) } : {};
         return this.http.get<Position[]>(`${this.url}/list`, options);

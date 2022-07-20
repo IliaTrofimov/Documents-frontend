@@ -1,0 +1,61 @@
+<ng-container *ngIf="isEmbeded">
+    <strong>Шаблоны документов</strong>, всего {{totalElements}} элементов
+</ng-container>
+<ng-container *ngIf="!isEmbeded">
+    <h4>Шаблоны документов</h4>
+    <p class="text-muted" *ngIf="templates">
+        Всего {{totalElements}} элементов.
+        <span><button class="btn btn-primary btn-sm badge" (click)="addTemplate()">Создать шаблон</button></span>
+    </p>
+</ng-container>
+
+<loading [status]="!templates"></loading>
+
+<table mat-table [dataSource]="templates" fixedLayout class="w-100" *ngIf="templates && templates.length > 0">
+    <ng-container matColumnDef="Name">
+        <th mat-header-cell *matHeaderCellDef>Название</th>
+        <td mat-cell *matCellDef="let template">
+            <a [routerLink]="['/templates', template.Id]">
+                {{(template.Name != null ? template.Name : "Без названия")}}
+            </a><br>
+            <span class="badge badge-secondary">{{template.TemplateType}}</span>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="AuthorName">
+        <th mat-header-cell *matHeaderCellDef>Автор</th>
+        <td mat-cell *matCellDef="let template">{{template.AuthorName}}</td>
+    </ng-container>
+    <ng-container matColumnDef="UpdateDate">
+        <th mat-header-cell *matHeaderCellDef>Изменено</th>
+        <td mat-cell *matCellDef="let template">{{template.UpdateDate | date:"dd.MM.yyyy"}}</td>
+    </ng-container>
+    <ng-container matColumnDef="Depricated">
+        <th mat-header-cell *matHeaderCellDef>Статус</th>
+        <td mat-cell *matCellDef="let template">
+            {{(template.Depricated ? "Устарел": "Актуальный")}}
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="Actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let template">
+            <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Действия</button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item btn-sm" [routerLink]="['/templates', template.Id]">Изменить шаблон</a>
+                <button [disabled]="template.Depricated" class="dropdown-item btn-sm" (click)="createDocument(template.Id)">Создать документ</button>
+                <button class="dropdown-item btn-sm" (click)="removeTemplate(template.Id)">Удалить шаблон</button>
+            </div>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let myRowData; columns: displayedColumns"></tr>     
+</table>
+
+<div class="card" *ngIf="templates?.length == 0">
+    <div class="card-body">
+        <b>Здесь ничего нет</b>
+        <p class="muted">Пока не был создан ни один шаблон документа</p>
+    </div>
+</div>
+
+<page *ngIf="templates" [page]="page" [maxPage]="maxPages" (onClick)="nextPage($event)"></page>

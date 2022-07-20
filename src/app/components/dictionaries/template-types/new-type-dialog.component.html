@@ -1,0 +1,28 @@
+<div mat-dialog-content>
+    <strong>Новый тип шаблона</strong>
+    <hr>
+    <form #nameForm="ngForm" novalidate>
+        <mat-form-field appearance="outline">
+            <mat-label>Название</mat-label>
+            <input matInput [(ngModel)]="data.type.Name" required name="name">
+        </mat-form-field>
+    </form>
+    <form #signersForm="ngForm" novalidate>
+        <mat-form-field appearance="outline" *ngIf="data.positions">
+            <mat-label>Подписанты</mat-label>
+            <mat-select multiple [(ngModel)]="data.type.Positions" (ngModelChange)="data.type.Positions">
+              <mat-option *ngFor="let pos of data.positions" [value]="pos">{{pos.Name}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </form>
+</div>
+<div mat-dialog-actions>
+    <div class="row">
+        <div class="col">
+            <button mat-button (click)="ok()" [disabled]="nameForm.invalid || signersForm.invalid" class="btn btn-primary btn-sm">Принять</button>
+        </div>
+        <div class="col">
+            <button mat-button [mat-dialog-close]="undefined" class="btn btn-danger btn-sm">Отменить</button>
+        </div>
+    </div>
+</div>

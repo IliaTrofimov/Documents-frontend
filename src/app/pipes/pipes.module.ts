@@ -2,10 +2,10 @@ import { NgModule } from '@angular/core';
 import { DocumentStatusPipe } from './document-status.pipe';
 import { FieldTypePipe } from './field-type.pipe';
 import { HTMLInputTypePipe } from './html-input-type.pipe';
-import { JoinPipe } from './join.pipe';
 import { NullNamePipe } from './null-name.pipe';
 import { PermissionPipe } from './permission.pipe';
 import { RestrictionPipe } from './restriction.pipe';
+import { SafeHtmlPipe } from './safe-html.pipe copy';
 import { ShortNamePipe } from './shortname.pipe';
 
 
@@ -18,7 +18,7 @@ import { ShortNamePipe } from './shortname.pipe';
     PermissionPipe,
     ShortNamePipe,
     NullNamePipe,
-    JoinPipe
+    SafeHtmlPipe
   ],
   providers: [],
   bootstrap: [],
@@ -30,7 +30,7 @@ import { ShortNamePipe } from './shortname.pipe';
     PermissionPipe,
     ShortNamePipe,
     NullNamePipe,
-    JoinPipe
+    SafeHtmlPipe
   ],
 })
 export class PipesModule { }

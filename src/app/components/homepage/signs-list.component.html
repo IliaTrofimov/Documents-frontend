@@ -1,0 +1,66 @@
+<strong>{{initiatorId ? 'Ваши запросы на подписание' : 'Ожидают вашей подписи'}}</strong>, {{totalElements}} документов
+
+<loading [status]="!signs"></loading>
+
+<table mat-table [dataSource]="signs" fixedLayout class="w-100" *ngIf="signs && signs.length > 0">
+  <ng-container matColumnDef="Document">
+      <th mat-header-cell *matHeaderCellDef>Документ</th>
+      <td mat-cell *matCellDef="let sign">
+        <a [routerLink]="['/documents', sign.DocumentId]">{{sign.DocumentName | nullname}}</a>
+      </td>
+  </ng-container>
+  <ng-container matColumnDef="Created">
+    <th mat-header-cell *matHeaderCellDef>Дата запроса</th>
+    <td mat-cell *matCellDef="let sign">
+      {{sign.CreateDate | date:"dd.MM.yyyy"}}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="SignedAt">
+    <th mat-header-cell *matHeaderCellDef>Дата рассмотрения</th>
+    <td mat-cell *matCellDef="let sign">
+      {{sign.Signed == undefined ? 'не рассмотрен' : (sign.UpdateDate | date:"dd.MM.yyyy") }}
+    </td>
+</ng-container>
+  <ng-container matColumnDef="User">
+      <th mat-header-cell *matHeaderCellDef>{{initiatorId ? 'Подписант' : 'Инициатор'}}</th>
+      <td mat-cell *matCellDef="let sign">
+        {{initiatorId ? sign.SignerShortname : sign.InitiatorShortname}}
+      </td>
+  </ng-container>
+  <ng-container matColumnDef="Status">
+      <th mat-header-cell *matHeaderCellDef>Действия</th>
+      <td mat-cell *matCellDef="let sign">
+        <i *ngIf="initiatorId">{{sign.Signed == undefined ? 'Ожидает' : sign.Signed == true ? 'Подписан' : 'Отклонён'}}</i>
+        
+        <ng-container *ngIf="!initiatorId">
+          <ng-container *ngIf="sign.Signed == undefined">
+            <button (click)="resign(sign, true)" class="btn btn-sm badge btn-primary">
+              Подписать
+            </button>
+            <button (click)="resign(sign, false)" class="btn btn-sm badge btn-danger">
+              Отклонить
+            </button>
+          </ng-container>
+          <button *ngIf="sign.Signed == true" (click)="resign(sign, false)" class="btn btn-sm badge btn-danger">
+            Отозвать
+          </button>
+          <button *ngIf="sign.Signed == false" (click)="resign(sign, true)" class="btn btn-sm badge btn-primary">
+            Подписать
+          </button>
+        </ng-container>
+        
+        
+      </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let myRowData; columns: displayedColumns"></tr>     
+</table>
+
+<div class="card" *ngIf="signs && signs.length == 0">
+  <div class="card-body">
+      <b>Здесь ничего нет</b>
+  </div>
+</div>
+
+<page *ngIf="signs" [page]="page" [maxPage]="maxPages" (onClick)="nextPage($event)"></page>

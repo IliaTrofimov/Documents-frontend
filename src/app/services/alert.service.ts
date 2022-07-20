@@ -4,7 +4,7 @@ import { filter } from 'rxjs/operators';
 
 import { Alert, AlertType } from '../models/alert';
 
-
+/** Сервис для отображения уведомлений */
 @Injectable({ providedIn: 'root' })
 export class AlertService {
     private subject = new Subject<Alert>();
@@ -16,18 +16,22 @@ export class AlertService {
       return this.subject.asObservable().pipe(filter(x => x && x.root === root));
     }
 
+    /** @param options - остальные поля класса Alert, оставьте пустым, чтобы получить параметры по умолчанию */
     success(title: string, options?: any) {
       this.alert(new Alert({ ...options, type: AlertType.Success, title: title, closeTime: 5000 }));
     }
 
+    /** @param options - остальные поля класса Alert, оставьте пустым, чтобы получить параметры по умолчанию */
     error(title: string, options?: any) {
       this.alert(new Alert({ ...options, type: AlertType.Error, title: title }));
     }
 
+    /** @param options - остальные поля класса Alert, оставьте пустым, чтобы получить параметры по умолчанию */
     info(title: string, options?: any) {
       this.alert(new Alert({ ...options, type: AlertType.Info, title: title, single: true, closeTime: 5000 }));
     }
 
+    /** @param options - остальные поля класса Alert, оставьте пустым, чтобы получить параметры по умолчанию */
     warn(title: string, options?: any) {
       this.alert(new Alert({ ...options, type: AlertType.Warning, title: title }));
     }
@@ -40,6 +44,7 @@ export class AlertService {
       return this.currentId;
     }
 
+    
     alert(alert: Alert) {
       alert.id = ++this.maxId;
       this.currentId = alert.message.length >= 400 ? -1 : this.maxId;

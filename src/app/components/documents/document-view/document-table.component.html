@@ -1,0 +1,28 @@
+<table>
+    <tr><td [colSpan]="table.TemplateFields.length">
+        <strong>{{table.Name}}</strong> 
+        <small style="margin-left: 15px;">[{{table.Rows}} x {{table.TemplateFields.length}}]</small>
+    </td></tr>
+    <tr><td *ngFor="let col of table.TemplateFields; let c = index">
+        <table class="table table-sm table-bordered table-hover">
+            <thead>
+                <tr><td>
+                    <i>{{col.Name}}</i><span *ngIf="col.Required" class="badge badge-pill badge-info">*</span>
+                </td></tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let cell of preparedData[c]; let r = index; trackBy:trackByFn"><td>
+                    <input type="{{col.DataType | inputtype}}"
+                        class="form-control form-control-sm {{error.error != ValidationErrors.Ok && error.row == r && error.col == c ? 'is-invalid' : ''}}"
+                        [(ngModel)]="cell.Value"
+                        [readonly]="readonly"
+                        (blur)="save(cell)"
+                    >
+                </td></tr>
+            </tbody>
+        </table>
+    </td></tr>
+</table>
+<div *ngIf="error.error != ValidationErrors.Ok" class="alert alert-danger">
+    {{errorMsg()}}
+</div>

@@ -8,6 +8,7 @@ import { SiteError, SiteErrorCodes } from '../models/site-error';
 import { AlertService } from '../services/alert.service';
 
 
+/** Перехват критических ошибок и автоматическое перенаправление на страницу с ошибкой */
 @Injectable()
 export class ServerErrorInterceptor implements HttpInterceptor {
 

@@ -8,6 +8,7 @@ import { SiteErrorCodes } from '../models/site-error';
 import { AlertService } from './alert.service';
 
 
+/** Сервис для работы с подписями */
 @Injectable()
 export class SignatoriesService{
     private url = "";
@@ -16,12 +17,33 @@ export class SignatoriesService{
         this.url = this.config.apiUrl + "/signs";
     }
 
-    count(query?: { [param: string]: number }){
+    
+    /** Возвращает список пользователей
+    * @param query - фильтр, параметры для фильтра:
+    * * page - номер страницы пагинатора
+    * * pageSize - количество элементов на странице
+    * * documentId - Id докуметна  (-1 без фильтра)
+    * * userId - (string) CWID подписанта  (undefined без фильтра)
+    * * initiatorId - (string) CWID инициатора (undefined без фильтра)
+    * * showOld (bool) - выводить уже рассмотренные подписи
+    * * showUnassigned (bool) - выводить подписи, для которых не назначен подписант 
+    */
+    count(query?: { [param: string]: any }){
         const options = query ? { params: new HttpParams().appendAll(query) } : {};
         return this.http.get<number>(`${this.url}/count`, options);
     }
 
-    getSigns(query?: { [param: string]: number }){
+    /** Возвращает список подписей
+    * @param query - фильтр, параметры для фильтра:
+    * * page - номер страницы пагинатора
+    * * pageSize - количество элементов на странице
+    * * documentId - Id докуметна  (-1 без фильтра)
+    * * userId - (string) CWID подписанта  (undefined без фильтра)
+    * * initiatorId - (string) CWID инициатора (undefined без фильтра)
+    * * showOld (bool) - выводить уже рассмотренные подписи
+    * * showUnassigned (bool) - выводить подписи, для которых не назначен подписант 
+    */
+    getSigns(query?: { [param: string]: any }){
         const options = query ? { params: new HttpParams().appendAll(query) } : {};
         return this.http.get<Signatory[]>(`${this.url}/list`, options).pipe(
             catchError((error) => {
@@ -58,14 +80,15 @@ export class SignatoriesService{
         ); 
     }
 
-    updateSign(id: number, userId: number, signed?: boolean){
-        return this.http.put(`${this.url}/${id}/put`, JSON.stringify({userId: userId, signed: signed})).pipe(
+    updateSign(sign: Signatory){
+        const body = {userCWID: sign.UserCWID, signed: sign.Signed, documentId: sign.DocumentId};
+        return this.http.put<Signatory>(`${this.url}/${sign.Id}/put`, body).pipe(
             catchError((error) => {
                 if (error instanceof HttpErrorResponse){
                     switch (error.status){
-                        case SiteErrorCodes.NotFound: 
-                            this.alertSvc.error("Не удалось изменить подпись", {message: "Данные не найдены."}); 
-                            break;
+                        //case SiteErrorCodes.NotFound: 
+                        //    this.alertSvc.error("Не удалось изменить подпись", {message: "Данные не найдены."}); 
+                        //    break;
                         default: 
                             this.alertSvc.error("Не удалось изменить подпись", {message: JSON.stringify(error.error, null, 2)}); 
                             break;
@@ -87,8 +110,8 @@ export class SignatoriesService{
         ); 
     }
 
-    createSign(userId: number, documentId: number, initiatorId: number, positionId: number){
-        const body = {userId: userId, documentId: documentId, initiatorId: initiatorId, signerPositionId: positionId};
+    createSign(userId: string, documentId: number, initiatorId: string, positionId: number){
+        const body = {userCWID: userId, documentId: documentId, initiatorCWID: initiatorId, signerPositionId: positionId};
         return this.http.post<number>(`${this.url}/post`, body).pipe(
             catchError((error) => {
                 if (error instanceof HttpErrorResponse){

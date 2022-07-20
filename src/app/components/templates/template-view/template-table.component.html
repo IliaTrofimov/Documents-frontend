@@ -1,0 +1,32 @@
+<div class="row">
+    <div class="col-5">
+        <mat-form-field appearance="outline">
+            <mat-label>Название таблицы</mat-label>
+            <input matInput (blur)="save()" [(ngModel)]="table.Name" name="name-{{table.Id}}">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Количество строк</mat-label>
+            <input matInput type="number" (blur)="save()" [(ngModel)]="table.Rows" [readonly]="readonly" name="rows-{{table.Id}}">
+        </mat-form-field>
+    </div>
+    <div class="col">
+        <button *ngIf="!readonly" class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Действия
+        </button>
+        <div class="dropdown-menu">
+            <button class="dropdown-item btn-sm" (click)="changeOrder(-1)">Двигать вверх</button>
+            <button class="dropdown-item btn-sm" (click)="changeOrder(1)">Двигать вниз</button>
+            <button class="dropdown-item btn-sm" (click)="save()">Сохранить</button>
+            <button class="dropdown-item btn-sm" (click)="delete()">Удалить</button>
+        </div>
+    </div>
+</div>
+<button *ngIf="!readonly" class="btn badge badge-success" (click)="addColumn()"><b>+</b></button>&nbsp;Столбцы таблицы ({{columns.length}}):
+<p *ngFor="let c of columns; let i = index">
+    <field-template [field]="c" 
+        [readonly]="readonly"
+        (onDelete)="deleteColumn(c)" 
+        (onSave)="save(c)"
+        (onChangeOrder)="onColumnChangeOrder(i, $event)">
+    </field-template> 
+</p>

@@ -15,7 +15,7 @@ export class Document {
     public Type: DocumentStatus = DocumentStatus.InWork;
     public UpdateDate: Date = new Date();
     public ExpireDate?: Date;
-    public AuthorId: number = -1;
+    public AuthorCWID: string = "";
     public Author?: User;
 
     public Template?: Template;

@@ -1,0 +1,31 @@
+<div mat-dialog-content>
+    <strong>Новый шаблон</strong>
+    <hr>
+    <form #nameForm="ngForm" novalidate>
+        <mat-form-field appearance="outline">
+            <mat-label>Название шаблона</mat-label>
+            <input matInput [(ngModel)]="template.Name" required name="name">
+        </mat-form-field>
+    </form>
+    <loading [status]="!types"></loading>
+    <div class="form-group round-border{{template.TemplateTypeId == -1 ? '-error' : ''}}">
+        <label *ngIf="template.TemplateTypeId == -1" class="label-border">Тип шаблона <small>обязательное поле</small></label>
+        <label *ngIf="template.TemplateTypeId != -1" class="label-border">Тип шаблона *</label>
+        <div *ngFor="let type of types" class="form-check">
+            <input class="form-check-input" type="radio" [checked]="type.Id == template.TemplateTypeId" (change)="template.TemplateTypeId = type.Id">
+            <label class="form-check-label">
+                {{type.Name | nullname}}
+            </label>
+        </div>
+    </div>
+</div>
+<div mat-dialog-actions>
+    <div class="row">
+        <div class="col">
+            <button mat-button [mat-dialog-close]="template" [disabled]="nameForm.invalid || template.TemplateTypeId == -1" class="btn btn-primary btn-sm">Принять</button>
+        </div>
+        <div class="col">
+            <button mat-button [mat-dialog-close]="undefined" class="btn btn-danger btn-sm">Отменить</button>
+        </div>
+    </div>
+</div>

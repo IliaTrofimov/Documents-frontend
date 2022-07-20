@@ -29,17 +29,17 @@ export class Permission {
         let res: string[] = []; 
 
         if (this.has(permission, PermissionFlag.WriteReadDocuments))
-            res.push("чтение/редактирование документов");
+            res.push("чтение/изменение документов");
         else if (this.has(permission, PermissionFlag.ReadDocuments))
             res.push("чтение документов");
 
         if (this.has(permission, PermissionFlag.WriteReadTemplates))
-            res.push("чтение/редактирование шаблонов");
+            res.push("чтение/изменение шаблонов");
         else if (this.has(permission, PermissionFlag.ReadTemplates))
             res.push("чтение шаблонов");
 
         if (this.has(permission, PermissionFlag.EditDictionares))
-            res.push("редактирование вспомогательной информации");
+            res.push("изменение служебной информации");
         
         return res;
     }

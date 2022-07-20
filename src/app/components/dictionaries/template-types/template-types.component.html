@@ -1,0 +1,73 @@
+<div class="panel">
+    <h4>Типы шаблонов</h4>
+    <span class="text-muted" *ngIf="types">
+        <span>Всего {{totalElements}} элементов. <button class="badge btn btn-primary btn-sm" (click)="addType()">Добавить тип</button></span>
+    </span>
+
+    <loading [status]="!types || !positions"></loading>
+
+    <table mat-table [dataSource]="types" fixedLayout class="w-100" *ngIf="types && positions">
+        <ng-container matColumnDef="Id">
+            <th mat-header-cell *matHeaderCellDef>Id</th>
+            <td mat-cell *matCellDef="let type">{{type.Id}}</td>
+        </ng-container>
+        <ng-container matColumnDef="Name">
+            <th mat-header-cell *matHeaderCellDef>Название</th>
+            <td mat-cell *matCellDef="let type">
+                <ng-container *ngIf="selected.Id != type.Id">
+                    {{(type.Name != null ? type.Name : "Без названия")}}
+                </ng-container>
+                <form #nameForm="ngForm" *ngIf="selected.Id == type.Id">
+                    <form #nameForm="ngForm" *ngIf="selected.Id == type.Id">
+                        <mat-form-field>
+                            <input matInput [(ngModel)]="type.Name" required name="name">
+                        </mat-form-field>
+                    </form>
+                </form>
+            </td>
+        </ng-container>    
+        <ng-container matColumnDef="Position">
+            <th mat-header-cell *matHeaderCellDef>Подписанты</th>
+            <td mat-cell *matCellDef="let type">
+                <div *ngIf="selected.Id != type.Id" class="overflow-auto d-flex flex-wrap">
+                    <div *ngFor="let pos of type.Positions" class="badge badge-info permission-item">
+                        {{pos.Name}}
+                    </div>
+                    <i *ngIf="type.Positions && type.Positions.length == 0">
+                        Не требуется подпись
+                    </i>
+                </div>
+                <div class="form-group" *ngIf="selected.Id == type.Id" >
+                    <select multiple [(ngModel)]="type.Positions" [compareWith]="objComparisonFn" class="form-control select-box">
+                        <option *ngFor="let pos of positions" [ngValue]="pos">{{pos.Name}}</option>
+                    </select>
+                    <small class="form-text text-muted">Зажмите <span class="badge badge-pill badge-secondary">Ctrl</span>, чтобы выбрать несколько элементов</small>
+                </div>
+            </td>
+        </ng-container>  
+        <ng-container matColumnDef="Edit">
+            <th mat-header-cell *matHeaderCellDef>Действия</th>
+            <td mat-cell *matCellDef="let type">
+                <ng-container *ngIf="selected.Id == type.Id" >
+                    <button (click)="editType(type)" [disabled]="!type.Name" class="btn btn-success btn-sm btn-icon">✓</button>
+                    <button (click)="reset(type)" class="btn btn-secondary btn-sm btn-icon">⮌</button>
+                </ng-container>
+                <ng-container *ngIf="selected.Id != type.Id">
+                    <button (click)="beginEdit(type)" class="btn btn-warning btn-sm btn-icon">✎</button>
+                    <button (click)="removeType(type.Id)" class="btn btn-danger btn-sm btn-icon">✖</button>
+                </ng-container>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let myRowData; columns: displayedColumns"></tr>  
+    </table>
+
+    <div class="card" *ngIf="types && types.length == 0">
+        <div class="card-body">
+            <h5 class="card-title">Здесь ничего нет</h5>
+            <p class="card-text">Пока не был создан ни один тип</p>
+        </div>
+    </div>
+
+    <page *ngIf="types" [page]="page" [maxPage]="maxPages" (onClick)="nextPage($event)"></page>
+</div>

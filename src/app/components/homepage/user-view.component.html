@@ -1,0 +1,68 @@
+<div class="container">
+  <h4>Домашняя страница</h4>
+  <hr>
+
+  <loading [status]="!user"></loading>
+  
+  <div class="row" *ngIf="user">
+    <div class="col">
+      <h5 class="card-title">
+        {{user.Lastname}} {{user.Firstname}} {{user.Fathersname}} [{{user.CWID}}]
+      </h5>
+      <label class="muted">Должность: <i>{{user.Position.Name}}</i></label><br>
+      <label class="muted">Эл. почта: <i>{{user.Email}}</i></label><br>
+      <label class="muted">Руководитель: <i>{{user.ManagerCWID ? (user.Manager | shortname) : 'отсутствует'}}</i></label>
+    </div>
+    <div class="col">
+      <h5 class="card-title">Список ваших разрешений</h5>   
+      <div *ngFor="let p of permissions" class="badge badge-secondary badge-pill">{{p}}</div>
+      <ng-container *ngIf="user.Permissions == PermissionFlag.FullAccess">
+        <br><div class="badge badge-primary badge-pill">полный доступ</div>
+      </ng-container>
+    </div>
+  </div>
+  <div class="round-border" style="margin-bottom: 20px; margin-top: 10px" *ngIf="user">
+    <label class="label-border">Дополнительная информация</label>
+    <span class="muted" style="margin-right: 20px;">Leading Subgroup:&nbsp;<i>{{user.LeadingSubgroup | nullname}}</i></span>
+    <span class="muted" style="margin-right: 20px;">External Company:&nbsp;<i>{{user.ExternalCompany | nullname}}</i></span>
+    <span class="muted" style="margin-right: 20px;">Company Code:&nbsp;<i>{{user.CompanyCode | nullname}}</i></span>
+    <span class="muted" style="margin-right: 20px;">Organization name:&nbsp;<i>{{user.OrgName | nullname}}</i></span>
+  </div>
+  <hr>
+  <div *ngIf="user">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a class="link {{currentPage == Pages.Documents ? 'disabled-link' : ''}}" (click)="currentPage = Pages.Documents">Документы</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a class="link {{currentPage == Pages.Templates ? 'disabled-link' : ''}}" (click)="currentPage = Pages.Templates">Шаблоны документов</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a class="link {{currentPage == Pages.Signs ? 'disabled-link' : ''}}" (click)="currentPage = Pages.Signs">Ожидают вашей подписи</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a class="link {{currentPage == Pages.MySigns ? 'disabled-link' : ''}}" (click)="currentPage = Pages.MySigns">Ваши запросы на подписание</a>
+        </li>
+      </ol>
+    </nav>
+
+    <div *ngIf="currentPage == Pages.Documents">
+      <documents-list [authorId]="user.CWID" [isEmbeded]="true"></documents-list>
+    </div>
+
+    <div *ngIf="currentPage == Pages.Templates">
+      <templates-list [authorId]="user.CWID" [isEmbeded]="true"></templates-list>
+    </div>
+ 
+    <div *ngIf="currentPage == Pages.Signs">
+      <signs-list [signerId]="user.CWID"></signs-list>
+    </div>
+
+    <div *ngIf="currentPage == Pages.MySigns">
+      <signs-list [initiatorId]="user.CWID"></signs-list>
+    </div>
+
+  </div>
+
+</div>

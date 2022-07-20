@@ -15,22 +15,24 @@
       <div *ngFor="let p of permissions" class="badge badge-secondary badge-pill">{{p}}</div>
     </div>
   </div>
+  <hr>
+  <br>
 
   <div *ngIf="user">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item {{currentPage == Pages.Documents ? 'active' : ''}}"><a class="link" (click)="currentPage = Pages.Documents">Документы</a></li>
-        <li class="breadcrumb-item {{currentPage == Pages.Templates ? 'active' : ''}}"><a class="link" (click)="currentPage = Pages.Templates">Шаблоны документов</a></li>
-        <li class="breadcrumb-item {{currentPage == Pages.Signs ? 'active' : ''}}"><a class="link" (click)="currentPage = Pages.Signs">Ожидают подписания</a></li>
-        <li class="breadcrumb-item {{currentPage == Pages.MySigns ? 'active' : ''}}"><a class="link" (click)="currentPage = Pages.MySigns">Мои запросы на подписание</a></li>
+        <li *ngIf="currentPage != Pages.Documents" class="breadcrumb-item"><a class="link" (click)="currentPage = Pages.Documents">Документы</a></li>
+        <li *ngIf="currentPage != Pages.Templates" class="breadcrumb-item"><a class="link" (click)="currentPage = Pages.Templates">Шаблоны документов</a></li>
+        <li *ngIf="currentPage != Pages.Signs" class="breadcrumb-item"><a class="link" (click)="currentPage = Pages.Signs">Ожидают вашей подписи</a></li>
+        <li *ngIf="currentPage != Pages.MySigns" class="breadcrumb-item"><a class="link" (click)="currentPage = Pages.MySigns">Ваши запросы на подписание</a></li>
       </ol>
     </nav>
 
-    <div *ngIf="currentPage == Pages.Documents">
+    <div *ngIf="currentPage == Pages.Templates">
       <templates-list [authorId]="user.Id" [isEmbeded]="true"></templates-list>
     </div>
 
-    <div *ngIf="currentPage == Pages.Templates">
+    <div *ngIf="currentPage == Pages.Documents">
       <documents-list [authorId]="user.Id" [isEmbeded]="true"></documents-list>
     </div>
  

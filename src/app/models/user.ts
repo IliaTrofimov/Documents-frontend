@@ -10,14 +10,17 @@ export class User {
     public Permissions: number = 0;
     public Position: Position = new Position(-1, "нет должности");
     public Email: string = ""; 
+    public CWID: string = "";
+    public LeadingSubgroup: string = "";
+    public ExternalCompany: string = "";
+    public OrgName: string = "";
+    public CompanyCode: string = "";
+    public ManagerCWID?: number;
+    public Manager?: User;
+    public EmployeeType: string = "";
 
-    constructor(public Id: number, 
-        public Firstname: string,
+    constructor(public Firstname: string,
         public Lastname: string,
         public Fathersname?: string,
         public PositionId: number = -1) { }
-
-    getShortName(){
-        return `${this.Firstname} ${this.Lastname}`;
-    }
 }

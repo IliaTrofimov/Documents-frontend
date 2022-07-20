@@ -1,5 +1,5 @@
 {
-    "ApiUrl": "http://localhost:80/api",
+    "ApiUrl": "http://localhost:4000/api",
     "LocalApiUrl": "http://localhost:56065/",
     "Production": false,
     "Active": true,

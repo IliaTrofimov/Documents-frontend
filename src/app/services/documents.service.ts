@@ -9,6 +9,7 @@ import { SiteErrorCodes } from '../models/site-error';
 import { AlertService } from './alert.service';
 
 
+/** Сревис для работы с документами. Автомматически обрабатывает ошибки, выводит уведомления через alert.service */
 @Injectable()
 export class DocumentsService{
     private url = "";
@@ -19,12 +20,29 @@ export class DocumentsService{
         this.url = this.config.apiUrl + "/documents";
     }
 
-    count(query?: { [param: string]: number }){
+    /** Возвращает число элементов
+    * @param query - фильтр, параметры для фильтра:
+    * * page - номер страницы пагинатора
+    * * pageSize - количество элементов на странице
+    * * user - (string) CWID автора документа (по умолчанию undefined - без фильтра)
+    * * template - Id шаблона документа (по умолчанию -1 - без фильтра)
+    * * type - значение статуса в документа (по умолчанию -1 - без фильтра)
+    */
+    count(query?: { [param: string]: any }){
         const options = query ? { params: new HttpParams().appendAll(query) } : {};
         return this.http.get<number>(`${this.url}/count`, options);
     }
 
-    getDocuments(query?: { [param: string]: number }){
+    
+    /** Возвращает список документов
+    * @param query - фильтр, параметры для фильтра:
+    * * page - номер страницы пагинатора
+    * * pageSize - количество элементов на странице
+    * * user - (string) CWID автора документа (по умолчанию undefined - без фильтра)
+    * * templateId - Id шаблона документа (по умолчанию -1 - без фильтра)
+    * * type - значение статуса в документа (по умолчанию -1 - без фильтра)
+    */
+    getDocuments(query?: { [param: string]: any }){
         const options = query ? { params: new HttpParams().appendAll(query) } : {};
         return this.http.get<Document[]>(`${this.url}/list`, options);
     }
@@ -48,7 +66,12 @@ export class DocumentsService{
     }
 
     updateDocument(document: Document){
-        return this.http.put(`${this.url}/${document.Id}/put`, document).pipe(
+        const body = {
+            Name: document.Name,
+            ExpireDate: document.ExpireDate,
+            Type: document.Type
+        }
+        return this.http.put(`${this.url}/${document.Id}/put`, body).pipe(
             catchError((error) => {
                 if (error instanceof HttpErrorResponse){
                     switch (error.status){

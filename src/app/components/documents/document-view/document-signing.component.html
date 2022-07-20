@@ -1,0 +1,30 @@
+<div mat-dialog-content>
+    <strong>Выбор подписантов</strong>
+    <hr>
+    <i *ngIf="data.signatories.length == 0">Не требуется подпись</i>
+    <div *ngIf="data.signatories.length != 0">
+        <form *ngFor="let sign of data.signatories; let i = index">
+            <mat-form-field appearance="outline">
+                <mat-label>{{data.positions[i].Name}}</mat-label>
+                <mat-select [(ngModel)]="sign.UserCWID" (selectionChange)="onValueChanged(sign, $event)">
+                    <mat-option [value]="undefined">
+                        <i>пусто</i>
+                    </mat-option>
+                    <mat-option *ngFor="let user of users[i]" [value]="user.CWID">
+                        {{user | shortname}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </form>
+    </div>
+</div> 
+<div mat-dialog-actions>
+    <div class="row"> 
+        <div class="col">
+            <button mat-button [mat-dialog-close]="data.signatories" class="btn btn-primary btn-sm">Принять</button>
+        </div>
+        <div class="col">
+            <button mat-button [mat-dialog-close]="false" class="btn btn-danger btn-sm">Отменить</button>
+        </div>
+    </div>
+</div>

@@ -2,15 +2,15 @@ import { User } from "./user";
 
 export class Signatory {
     public Id: number = -1;
-    public Initiator: User = new User(-1, "", "");
+    public Initiator: User = new User("", "");
     public InitiatorShortname: string = "неизвестно";  
-    public User: User = new User(-1, "", "");;
+    public PositionName: string = "неизвестно";  
     public SignerPositionId: number = -1;
     public DocumentName: string = "";
-    public SignerShortname: string = "неизвестно";
+    public SignerShortname: string = "не назначен";
 
-    constructor(public UserId: number, 
-        public DocumentId: number, 
-        public InitiatorId: number, 
+    constructor(public UserCWID: number, 
+        public DocumentId: string, 
+        public InitiatorCWID: string, 
         public Signed: boolean = false) { }
 }

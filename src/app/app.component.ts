@@ -6,7 +6,6 @@ import { AppConfig } from './configurations/app.config';
   selector: 'app-root',
   template: `
     <site-header *ngIf="active"></site-header>
-    <debug></debug>
     <div *ngIf="active" class="container">
       <alert></alert>
       <router-outlet></router-outlet>

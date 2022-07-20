@@ -1,0 +1,55 @@
+<div class="container panel">
+    <h4>Редактирование документа</h4>
+    <button [disabled]="!document || readonly" class="btn btn-outline-secondary dropdown-toggle btn-sm badge" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Действия</button>
+    <div class="dropdown-menu">
+        <button [disabled]="htmlTemplateExists" class="dropdown-item btn-sm" (click)="getPdf()">Печать</button>
+        <button *ngIf="document?.Type == 0" class="dropdown-item btn-sm" (click)="save()">Сохранить</button>
+        <button *ngIf="document?.Type == 0" class="dropdown-item btn-sm" (click)="delete()">Удалить</button>
+    </div>
+    <a class="btn btn-sm" *ngIf="document?.Type == 0" (click)="validate()">Передать на подписание</a>
+    <a class="btn btn-sm" *ngIf="document?.Type == 1">На подписании</a>
+    <a class="btn btn-sm" *ngIf="document?.Type == 2" (click)="retire()">Отметить устаревшим</a>
+    <div class="row" *ngIf="document">
+        <div class="col">
+            <b>Название</b><br>
+            <input class="form-control form-control-sm" [(ngModel)]="document.Name" [readonly]="readonly" [disabled]="!document"/>
+            <b>Дата истечения</b><br>
+            <input type="datetime-local" class="form-control form-control-sm" [(ngModel)]="document.ExpireDate" [readonly]="readonly" [disabled]="!document"/>
+            <small class="text-muted" *ngIf="document">Используется шаблон <a class="link" [routerLink]="['/templates', document.TemplateId]">{{document.Template?.Name}}</a></small>
+        </div>
+        <div class="col">
+            <b>Участники</b> 
+            <span *ngIf="document.Type == 0 && signatories.length != 0"><button (click)="setSigners()" class="btn btn-outline-secondary btn-sm badge">изменить</button></span>
+            <div class="overflow-auto d-flex flex-wrap round-border-simple">
+                <i *ngIf="signatories.length == 0">Подпись не требуется</i>
+                <div *ngFor="let sign of signatories" style="margin-right: 15px;">
+                    {{sign.UserCWID ? sign.SignerShortname : "не назначен"}} <small>[{{sign.PositionName}}]</small>
+                </div>   
+            </div>
+        </div>
+    </div>
+</div>
+
+<loading [status]="!document"></loading>
+
+<div class="container panel" *ngIf="document">
+    <hr>
+    <p *ngFor="let item of document.Template?.TemplateItems">
+        <doc-field *ngIf="!item.IsTable" 
+            [template]="item" 
+            [data]="$any(getItem(item.Id))"
+            [readonly]="readonly"
+            (onSave)="save($event)">
+        </doc-field>
+        <doc-table *ngIf="item.IsTable"
+            [table]="item"
+            [data]="getColumns(item)"
+            [readonly]="readonly"
+            (onSave)="save($event)">
+        </doc-table>                     
+    </p>
+    <hr>
+    <p class="text-muted">
+        Обязательные поля отмечены <span class="badge badge-pill badge-info">*</span>
+    </p>  
+</div>

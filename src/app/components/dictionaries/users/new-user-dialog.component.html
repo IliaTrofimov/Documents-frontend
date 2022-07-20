@@ -1,0 +1,90 @@
+<div mat-dialog-content>
+    <strong>Новый пользователь</strong>
+    <hr>
+    <form #nameForm="ngForm" novalidate>
+        <mat-form-field appearance="outline">
+            <mat-label>Фамилия</mat-label>
+            <input matInput [(ngModel)]="data.user.Lastname" required name="lastname">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Имя</mat-label>
+            <input matInput [(ngModel)]="data.user.Firstname" required name="firstname">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Отчество</mat-label>
+            <input matInput [(ngModel)]="data.user.Fathersname" name="fathersname">
+        </mat-form-field>
+    </form>
+    <form #emailForm="ngForm" novalidate>
+        <mat-form-field appearance="outline">
+            <mat-label>Электронная почта</mat-label>
+            <input matInput [(ngModel)]="data.user.Email" pattern="[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}" required name="email" type="email">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>CWID</mat-label>
+            <input matInput [(ngModel)]="data.user.CWID" required name="cwid">
+        </mat-form-field>
+    </form>
+    <form #positionForm="ngForm" novalidate>
+        <mat-form-field appearance="outline">
+            <mat-label>Должность</mat-label>
+            <mat-select [(ngModel)]="data.user.PositionId" required>
+                <mat-option *ngFor="let pos of data.positions" [value]="pos.Id">
+                    {{pos.Name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Тип сотрудника</mat-label>
+            <input matInput [(ngModel)]="data.user.EmployeeType" name="cwid">
+        </mat-form-field>
+    </form>
+    <form #companyForm="ngForm" novalidate>
+        <mat-form-field appearance="outline">
+            <mat-label>Company code</mat-label>
+            <input matInput [(ngModel)]="data.user.CompanyCode" name="companyCode">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Organization name</mat-label>
+            <input matInput [(ngModel)]="data.user.OrgName" name="orgName">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Leading Subgroup</mat-label>
+            <input matInput [(ngModel)]="data.user.LeadingSubgroup" name="subgroup">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>External Company</mat-label>
+            <input matInput [(ngModel)]="data.user.ExternalCompany" name="ext">
+        </mat-form-field>
+    </form>
+    <form #positionForm="ngForm" novalidate>
+        <mat-form-field appearance="outline">
+            <mat-label>Руководитель</mat-label>
+            <mat-select [(ngModel)]="data.user.ManagerCWID" required>
+                <mat-option *ngFor="let user of users" [value]="user.CWID">
+                    {{user | shortname}} <small>[{{user.Position.Name}}]</small>
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </form>
+    <div class="form-group">
+        <label>Разрешения</label>
+        <div class="overflow-auto d-flex flex-wrap">
+            <button *ngFor="let p of allPermissions" 
+                (click)="toggle(p)"
+                class="permission-item btn btn-sm badge badge-{{has(p) ? 'info' : 'secondary'}}">
+                {{p | permission}}
+            </button>
+        </div>
+    </div>
+</div>
+<div mat-dialog-actions>
+    <div class="row">
+        <div class="col">
+            <button mat-button (click)="ok()" [disabled]="positionForm.invalid || nameForm.invalid || emailForm.invalid" class="btn btn-primary btn-sm">Принять</button>
+        </div>
+        <div class="col">
+            <button mat-button [mat-dialog-close]="undefined" class="btn btn-danger btn-sm">Отменить</button>
+        </div>
+    </div>
+</div>

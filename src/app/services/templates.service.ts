@@ -10,6 +10,7 @@ import { catchError, throwError } from 'rxjs';
 import { SiteErrorCodes } from '../models/site-error';
 
 
+/** Сервис для работы с типами шаблонов */
 @Injectable()
 export class TemplatesService{
     private url = "";
@@ -18,12 +19,24 @@ export class TemplatesService{
         this.url = this.config.apiUrl + "/templates";
     }
 
-    count(query?: { [param: string]: number }){
+    /** Возвращает количество элементов
+    * @param query - фильтр, параметры для фильтра:
+    * * page - номер страницы пагинатора
+    * * pageSize - количество элементов на странице
+    * * user - (string) CWID автора (undefined - без фильтра)
+    */
+    count(query?: { [param: string]: any }){
         const options = query ? { params: new HttpParams().appendAll(query) } : {};
         return this.http.get<number>(`${this.url}/count`, options);
     }
     
-    getTemplates(query?: { [param: string]: number }){
+    /** Возвращает список типов
+    * @param query - фильтр, параметры для фильтра:
+    * * page - номер страницы пагинатора
+    * * pageSize - количество элементов на странице
+    * * user - (string) CWID автора (undefined - без фильтра)
+    */
+    getTemplates(query?: { [param: string]: any }){
         const options = query ? { params: new HttpParams().appendAll(query) } : {};
         return this.http.get<Template[]>(`${this.url}/list`, options);
     }

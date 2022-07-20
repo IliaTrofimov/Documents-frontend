@@ -8,6 +8,7 @@ import { SiteErrorCodes } from '../models/site-error';
 import { AlertService } from './alert.service';
 
 
+/** Сервис для работы с типами шаблонов */
 @Injectable()
 export class TemplateTypesService{
     private url = "";
@@ -16,11 +17,21 @@ export class TemplateTypesService{
         this.url = this.config.apiUrl + "/templatetypes";
     }
 
+    /** Возвращает число элементов
+    * @param query - фильтр, параметры для фильтра:
+    * * page - номер страницы пагинатора
+    * * pageSize - количество элементов на странице
+    */
     count(query?: { [param: string]: number }){
         const options = query ? { params: new HttpParams().appendAll(query) } : {};
         return this.http.get<number>(`${this.url}/count`, options);
     }
     
+    /** Возвращает список типов
+    * @param query - фильтр, параметры для фильтра:
+    * * page - номер страницы пагинатора
+    * * pageSize - количество элементов на странице
+    */
     getTypes(query?: { [param: string]: number }){
         const options = query ? { params: new HttpParams().appendAll(query) } : {};
         return this.http.get<TemplateType[]>(`${this.url}/list`, options);

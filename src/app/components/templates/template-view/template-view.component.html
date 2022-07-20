@@ -1,0 +1,73 @@
+<div class="container panel">
+    <h4>Редактирование шаблона 
+        <small>
+            <button [disabled]="!template" class="btn btn-outline-secondary dropdown-toggle btn-sm badge" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Действия
+            </button>
+            <div class="dropdown-menu">
+                <button class="dropdown-item btn-sm" (click)="save()">Сохранить</button>
+                <button *ngIf="template" class="dropdown-item btn-sm" (click)="template.Depricated = !template.Depricated">
+                    {{template.Depricated  ? "Отметить актуальным" : "Отметить устаревшим"}}
+                </button>
+                <button class="dropdown-item btn-sm" (click)="delete()">Удалить</button>
+            </div>
+        </small>
+    </h4>
+    <div class="row" *ngIf="template">
+        <div class="col">
+            <b>Название</b><br>
+            <input [(ngModel)]="template.Name" class="form-control form-control-sm"/>
+            <b>Тип</b><br>
+            <select [disabled]="!template || !templateTypes" [(ngModel)]="template.TemplateTypeId" (ngModelChange)="selectType($event)" class="form-control form-control-sm">
+                <option *ngFor="let t of templateTypes" [ngValue]="t.Id">{{t.Name}}</option>
+            </select>
+            <b><a (click)="previewTemplate()" class="link">HTML-шаблон</a></b> 
+        </div>
+        <div class="col" *ngIf="template.TemplateType">
+            <b>Должности подписантов</b><br>
+            <div *ngIf="template.TemplateType.Positions.length != 0" class="overflow-auto d-flex flex-wrap">
+                <div *ngFor="let pos of template.TemplateType.Positions" class="badge badge-info permission-item">
+                    {{pos.Name}}
+                </div>
+            </div>
+            <i *ngIf="template.TemplateType.Positions && template.TemplateType.Positions.length == 0">
+                Не требуется подпись
+            </i>
+        </div>
+    </div>
+    <hr>
+</div>
+
+<loading [status]="!template"></loading>
+
+<div class="container panel" *ngIf="template">
+    <h5>Список полей ({{template.TemplateItems.length}})</h5>
+
+    <p *ngIf="!template.Depricated">
+        <button [disabled]="!template" (click)="addField()" class="btn badge badge-success">добавить поле</button> или 
+        <button [disabled]="!template"  (click)="addTable()" class="btn badge badge-success">добавить таблицу</button>
+    </p>
+    <ul class="list-group" *ngIf="template">
+        <li *ngIf="template.TemplateItems.length == 0" class="list-group-item">
+            <b>Пусто</b>
+        </li>                
+        <li *ngFor="let f of template.TemplateItems; let i = index" class="list-group-item template-item">
+            <table-template *ngIf="f.IsTable" 
+                [readonly]="template.Depricated"
+                [columns]="$any(f).TemplateFields" 
+                [table]="$any(f)"
+                (onDelete)="deleteItem($event)"
+                (onSave)="updateItem($event)"
+                (onAddColumn)="addColumn($event)"
+                (onChangeOrder)="changeOrder(i, $event)">
+            </table-template>
+            <field-template *ngIf="!f.IsTable" 
+                [readonly]="template.Depricated"
+                [field]="$any(f)" 
+                (onDelete)="deleteItem(f)"
+                (onSave)="updateItem(f)"
+                (onChangeOrder)="changeOrder(i, $event)">
+            </field-template>
+        </li>
+    </ul>    
+</div>

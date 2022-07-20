@@ -1,0 +1,5 @@
+.template-item:hover{
+    border-top-width: 1px;
+    border-color: var(--secondary);
+    background-color: rgba(247, 247, 247, 0.562);
+}
